@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/docx@7.7.0/build/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas2image@1.0.5/canvas2image.min.js"></script>
     <style>
         :root {
             --primary-color: #2c5aa0;
@@ -1012,7 +1013,7 @@
             </div>
 
             <div class="form-section">
-                <h2 class="section-header"><i class="fas fa-tasks"></i> إجراءات التنفيذ</h2>
+                <<h2 class="section-header"><i class="fas fa-tasks"></i> إجراءات التنفيذ</h2>
                 <p class="section-subtitle">الخطوات والإجراءات التي تم اتباعها لتنفيذ النشاط</p>
                 
                 <div class="form-group">
@@ -1242,8 +1243,8 @@
             }
             
             function handleImageUpload(files) {
-                if (uploadedImages.length + files.length > 2) {
-                    showError('يمكنك رفع صورتين كحد أقصى فقط');
+                if (uploadedImages.length + files.length > 4) {
+                    showError('يمكنك رفع 4 صور كحد أقصى فقط');
                     return;
                 }
                 
@@ -1440,538 +1441,711 @@
                 }
             }
             
+            // دالة مساعدة لتحويل base64 إلى Blob
+            function base64ToBlob(base64, mimeType) {
+                const byteCharacters = atob(base64.split(',')[1]);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                return new Blob([byteArray], { type: mimeType });
+            }
+            
+            // إصلاح مشكلة PageNumberFormat
+            function getPageNumberFormat() {
+                // إذا كانت الخاصية موجودة نستخدمها، وإلا نستخدم القيمة الرقمية
+                const docx = window.docx;
+                if (docx && docx.PageNumberFormat && docx.PageNumberFormat.DECIMAL) {
+                    return docx.PageNumberFormat.DECIMAL;
+                }
+                // القيمة الافتراضية للترقيم العشري
+                return 0; // 0 = DECIMAL في معظم إصدارات docx
+            }
+            
             async function exportToWord() {
                 const docx = window.docx;
+                const { AlignmentType, BorderStyle, WidthType } = docx;
                 
+                const children = [];
+                
+                // إضافة الهيدر الرئيسي
+                children.push(
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: "الإدارة العامة للتعليم",
+                                bold: true,
+                                size: 32,
+                                font: "Traditional Arabic",
+                                color: "2c5aa0"
+                            })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 200 }
+                    }),
+                    
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: `بمنطقة ${currentReportData.region}`,
+                                bold: true,
+                                size: 28,
+                                font: "Traditional Arabic",
+                                color: "2c5aa0"
+                            })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { after: 400 }
+                    }),
+                    
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: currentReportData.title,
+                                bold: true,
+                                size: 36,
+                                font: "Traditional Arabic",
+                                color: "000000"
+                            })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        border: {
+                            bottom: {
+                                color: "2c5aa0",
+                                size: 6,
+                                space: 1,
+                                style: BorderStyle.SINGLE
+                            }
+                        },
+                        spacing: { after: 600 }
+                    }),
+                    
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: `رقم التقرير: ${currentReportData.reportNumber}`,
+                                size: 22,
+                                font: "Traditional Arabic"
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing: { after: 200 }
+                    }),
+                    
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: `تاريخ البرنامج: ${currentReportData.programDate}`,
+                                size: 22,
+                                font: "Traditional Arabic"
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing: { after: 600 }
+                    })
+                );
+                
+                // إضافة عنوان البيانات الأساسية
+                children.push(
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: "البيانات الأساسية",
+                                bold: true,
+                                size: 28,
+                                font: "Traditional Arabic",
+                                color: "2c5aa0"
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing: { before: 400, after: 300 }
+                    })
+                );
+                
+                // جدول البيانات الأساسية (مكون من عمودين)
+                const tableRows = [
+                    new docx.TableRow({
+                        children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: "المدرسة",
+                                        bold: true,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                shading: { fill: "f0f4f8" },
+                                width: { size: 40, type: WidthType.PERCENTAGE }
+                            }),
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.school,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                width: { size: 60, type: WidthType.PERCENTAGE }
+                            })
+                        ]
+                    }),
+                    new docx.TableRow({
+                        children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: "مدير المدرسة",
+                                        bold: true,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                shading: { fill: "f0f4f8" }
+                            }),
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.principal,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            })
+                        ]
+                    }),
+                    new docx.TableRow({
+                        children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: "معد التقرير",
+                                        bold: true,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                shading: { fill: "f0f4f8" }
+                            }),
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.reporter,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            })
+                        ]
+                    }),
+                    new docx.TableRow({
+                        children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: "مكان التنفيذ",
+                                        bold: true,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                shading: { fill: "f0f4f8" }
+                            }),
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.location,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            })
+                        ]
+                    }),
+                    new docx.TableRow({
+                        children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: "المستهدفون",
+                                        bold: true,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                shading: { fill: "f0f4f8" }
+                            }),
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.target,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            })
+                        ]
+                    }),
+                    new docx.TableRow({
+                        children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: "عدد المستفيدين",
+                                        bold: true,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                shading: { fill: "f0f4f8" }
+                            }),
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.beneficiaries,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            })
+                        ]
+                    }),
+                    new docx.TableRow({
+                        children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: "تابع للمناهج",
+                                        bold: true,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                shading: { fill: "f0f4f8" }
+                            }),
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.curriculumRelated,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            })
+                        ]
+                    })
+                ];
+                
+                children.push(
+                    new docx.Table({
+                        rows: tableRows,
+                        width: { size: 100, type: WidthType.PERCENTAGE },
+                        columnWidths: [4000, 6000],
+                        borders: {
+                            top: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                            bottom: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                            left: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                            right: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                            insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
+                            insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" }
+                        }
+                    })
+                );
+                
+                // إضافة وصف النشاط
+                children.push(
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: "وصف مختصر لما تم تنفيذه",
+                                bold: true,
+                                size: 28,
+                                font: "Traditional Arabic",
+                                color: "2c5aa0"
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing: { before: 600, after: 300 }
+                    }),
+                    
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: currentReportData.description,
+                                size: 24,
+                                font: "Traditional Arabic"
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing: { after: 400 }
+                    })
+                );
+                
+                // إضافة إجراءات التنفيذ
+                if (currentReportData.procedures && currentReportData.procedures.length > 0) {
+                    children.push(
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({
+                                    text: "إجراءات التنفيذ",
+                                    bold: true,
+                                    size: 28,
+                                    font: "Traditional Arabic",
+                                    color: "2c5aa0"
+                                })
+                            ],
+                            alignment: AlignmentType.RIGHT,
+                            spacing: { before: 400, after: 300 }
+                        })
+                    );
+                    
+                    currentReportData.procedures.forEach((procedure, index) => {
+                        children.push(
+                            new docx.Paragraph({
+                                children: [
+                                    new docx.TextRun({
+                                        text: `${index + 1}. ${procedure}`,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })
+                                ],
+                                alignment: AlignmentType.RIGHT,
+                                spacing: { after: 150 }
+                            })
+                        );
+                    });
+                }
+                
+                // إضافة النتائج
+                if (currentReportData.results && currentReportData.results.length > 0) {
+                    children.push(
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({
+                                    text: "النتائج",
+                                    bold: true,
+                                    size: 28,
+                                    font: "Traditional Arabic",
+                                    color: "2c5aa0"
+                                })
+                            ],
+                            alignment: AlignmentType.RIGHT,
+                            spacing: { before: 600, after: 300 }
+                        })
+                    );
+                    
+                    currentReportData.results.forEach((result, index) => {
+                        children.push(
+                            new docx.Paragraph({
+                                children: [
+                                    new docx.TextRun({
+                                        text: `${index + 1}. ${result}`,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })
+                                ],
+                                alignment: AlignmentType.RIGHT,
+                                spacing: { after: 150 }
+                            })
+                        );
+                    });
+                }
+                
+                // إضافة التوصيات
+                children.push(
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: "التوصيات",
+                                bold: true,
+                                size: 28,
+                                font: "Traditional Arabic",
+                                color: "2c5aa0"
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing: { before: 600, after: 300 }
+                    }),
+                    
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: currentReportData.recommendations,
+                                size: 24,
+                                font: "Traditional Arabic"
+                            })
+                        ],
+                        alignment: AlignmentType.RIGHT,
+                        spacing: { after: 600 }
+                    })
+                );
+                
+                // إضافة الصور إذا وجدت
+                if (uploadedImages.length > 0) {
+                    children.push(
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({
+                                    text: "صور توثيقية",
+                                    bold: true,
+                                    size: 28,
+                                    font: "Traditional Arabic",
+                                    color: "2c5aa0"
+                                })
+                            ],
+                            alignment: AlignmentType.RIGHT,
+                            spacing: { before: 600, after: 300 }
+                        }),
+                        
+                        new docx.Paragraph({
+                            children: [
+                                new docx.TextRun({
+                                    text: "الصور التالية توثق عملية التنفيذ:",
+                                    size: 24,
+                                    font: "Traditional Arabic"
+                                })
+                            ],
+                            alignment: AlignmentType.RIGHT,
+                            spacing: { after: 300 }
+                        })
+                    );
+                    
+                    // إضافة الصور (أول 4 صور)
+                    const imagesToAdd = uploadedImages.slice(0, 4);
+                    
+                    for (let i = 0; i < imagesToAdd.length; i++) {
+                        const imgData = imagesToAdd[i];
+                        
+                        try {
+                            // تحويل base64 إلى Blob ثم إلى Uint8Array
+                            const base64Data = imgData.data.split(',')[1];
+                            const binaryString = atob(base64Data);
+                            const bytes = new Uint8Array(binaryString.length);
+                            for (let j = 0; j < binaryString.length; j++) {
+                                bytes[j] = binaryString.charCodeAt(j);
+                            }
+                            
+                            children.push(
+                                new docx.Paragraph({
+                                    children: [
+                                        new docx.ImageRun({
+                                            data: bytes,
+                                            transformation: {
+                                                width: 400,
+                                                height: 300
+                                            }
+                                        })
+                                    ],
+                                    alignment: AlignmentType.CENTER,
+                                    spacing: { before: 200, after: 100 }
+                                }),
+                                
+                                new docx.Paragraph({
+                                    children: [
+                                        new docx.TextRun({
+                                            text: `صورة ${i + 1}: ${imgData.name}`,
+                                            size: 20,
+                                            font: "Traditional Arabic",
+                                            italics: true,
+                                            color: "666666"
+                                        })
+                                    ],
+                                    alignment: AlignmentType.CENTER,
+                                    spacing: { after: 300 }
+                                })
+                            );
+                        } catch (error) {
+                            console.error('Error adding image:', error);
+                            // إذا فشل تحميل الصورة، نضيف نص بديل
+                            children.push(
+                                new docx.Paragraph({
+                                    children: [
+                                        new docx.TextRun({
+                                            text: `[صورة ${i + 1}: ${imgData.name} - تعذر تحميل الصورة]`,
+                                            size: 20,
+                                            font: "Traditional Arabic",
+                                            color: "FF0000",
+                                            italics: true
+                                        })
+                                    ],
+                                    alignment: AlignmentType.CENTER,
+                                    spacing: { after: 150 }
+                                })
+                            );
+                        }
+                    }
+                }
+                
+                // إضافة التوقيعات
+                children.push(
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: "التوقيعات",
+                                bold: true,
+                                size: 28,
+                                font: "Traditional Arabic",
+                                color: "2c5aa0"
+                            })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { before: 800, after: 400 }
+                    }),
+                    
+                    new docx.Table({
+                        rows: [
+                            new docx.TableRow({
+                                children: [
+                                    new docx.TableCell({
+                                        children: [
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: "مدير المدرسة",
+                                                        bold: true,
+                                                        size: 24,
+                                                        font: "Traditional Arabic"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            }),
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: currentReportData.principal,
+                                                        size: 22,
+                                                        font: "Traditional Arabic"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            }),
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: "________________________",
+                                                        size: 24,
+                                                        font: "Traditional Arabic"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            }),
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: "التوقيع",
+                                                        size: 20,
+                                                        font: "Traditional Arabic",
+                                                        color: "666666"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            })
+                                        ],
+                                        margins: { top: 200, bottom: 200 }
+                                    }),
+                                    new docx.TableCell({
+                                        children: [
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: "معد التقرير",
+                                                        bold: true,
+                                                        size: 24,
+                                                        font: "Traditional Arabic"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            }),
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: currentReportData.reporter,
+                                                        size: 22,
+                                                        font: "Traditional Arabic"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            }),
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: "________________________",
+                                                        size: 24,
+                                                        font: "Traditional Arabic"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            }),
+                                            new docx.Paragraph({
+                                                children: [
+                                                    new docx.TextRun({
+                                                        text: "التوقيع",
+                                                        size: 20,
+                                                        font: "Traditional Arabic",
+                                                        color: "666666"
+                                                    })
+                                                ],
+                                                alignment: AlignmentType.CENTER
+                                            })
+                                        ],
+                                        margins: { top: 200, bottom: 200 }
+                                    })
+                                ]
+                            })
+                        ],
+                        width: { size: 100, type: WidthType.PERCENTAGE }
+                    })
+                );
+                
+                // إضافة تذييل الصفحة
+                children.push(
+                    new docx.Paragraph({
+                        children: [
+                            new docx.TextRun({
+                                text: `تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير الإلكتروني - ${new Date().toLocaleDateString('ar-SA')}`,
+                                size: 18,
+                                font: "Traditional Arabic",
+                                color: "666666",
+                                italics: true
+                            })
+                        ],
+                        alignment: AlignmentType.CENTER,
+                        spacing: { before: 800 }
+                    })
+                );
+                
+                // إنشاء الوثيقة مع الهوامش المطلوبة (2.5 سم)
                 const doc = new docx.Document({
+                    creator: "نظام إعداد التقارير",
+                    title: currentReportData.title,
+                    description: "تقرير تنفيذ استراتيجية",
                     sections: [{
                         properties: {
                             page: {
                                 margin: {
-                                    top: 1440,
-                                    right: 1440,
-                                    bottom: 1440,
-                                    left: 1440
+                                    top: 1417,    // 2.5 سم = 1417 twips
+                                    right: 1417,
+                                    bottom: 1417,
+                                    left: 1417
                                 }
                             }
                         },
-                        children: [
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: "الإدارة العامة للتعليم",
-                                        bold: true,
-                                        size: 32,
-                                        font: "Arial"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.CENTER,
-                                spacing: { after: 400 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: `بمنطقة ${currentReportData.region}`,
-                                        bold: true,
-                                        size: 28,
-                                        font: "Arial"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.CENTER,
-                                spacing: { after: 600 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: currentReportData.title,
-                                        bold: true,
-                                        size: 36,
-                                        font: "Arial",
-                                        color: "2c5aa0"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.CENTER,
-                                border: {
-                                    bottom: {
-                                        color: "2c5aa0",
-                                        size: 8,
-                                        space: 1,
-                                        style: docx.BorderStyle.SINGLE
-                                    }
-                                },
-                                spacing: { after: 600 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: `رقم التقرير: ${currentReportData.reportNumber}`,
-                                        size: 22,
-                                        font: "Arial"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { after: 200 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: `تاريخ البرنامج: ${currentReportData.programDate}`,
-                                        size: 22,
-                                        font: "Arial"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { after: 400 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: "البيانات الأساسية",
-                                        bold: true,
-                                        size: 28,
-                                        font: "Arial",
-                                        color: "2c5aa0"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { before: 400, after: 300 }
-                            }),
-                            
-                            new docx.Table({
-                                rows: [
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: "المدرسة:",
-                                                        bold: true,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                shading: { fill: "f0f4f8" },
-                                                width: { size: 30, type: docx.WidthType.PERCENTAGE }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: currentReportData.school,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                width: { size: 70, type: docx.WidthType.PERCENTAGE }
-                                            })
-                                        ]
-                                    }),
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: "مدير المدرسة:",
-                                                        bold: true,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                shading: { fill: "f0f4f8" }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: currentReportData.principal,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })]
-                                            })
-                                        ]
-                                    }),
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: "معد التقرير:",
-                                                        bold: true,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                shading: { fill: "f0f4f8" }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: currentReportData.reporter,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })]
-                                            })
-                                        ]
-                                    }),
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: "مكان التنفيذ:",
-                                                        bold: true,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                shading: { fill: "f0f4f8" }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: currentReportData.location,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })]
-                                            })
-                                        ]
-                                    }),
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: "المستهدفون:",
-                                                        bold: true,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                shading: { fill: "f0f4f8" }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: currentReportData.target,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })]
-                                            })
-                                        ]
-                                    }),
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: "عدد المستفيدين:",
-                                                        bold: true,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                shading: { fill: "f0f4f8" }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: currentReportData.beneficiaries,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })]
-                                            })
-                                        ]
-                                    }),
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: "تابع للمناهج:",
-                                                        bold: true,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })],
-                                                shading: { fill: "f0f4f8" }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [new docx.Paragraph({
-                                                    children: [new docx.TextRun({
-                                                        text: currentReportData.curriculumRelated,
-                                                        size: 24,
-                                                        font: "Arial"
-                                                    })]
-                                                })]
-                                            })
-                                        ]
-                                    })
-                                ],
-                                width: { size: 100, type: docx.WidthType.PERCENTAGE },
-                                borders: {
-                                    insideHorizontal: {
-                                        style: docx.BorderStyle.SINGLE,
-                                        size: 1,
-                                        color: "CCCCCC"
-                                    },
-                                    insideVertical: {
-                                        style: docx.BorderStyle.SINGLE,
-                                        size: 1,
-                                        color: "CCCCCC"
-                                    }
-                                }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: "وصف مختصر لما تم تنفيذه",
-                                        bold: true,
-                                        size: 28,
-                                        font: "Arial",
-                                        color: "2c5aa0"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { before: 600, after: 300 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: currentReportData.description,
-                                        size: 24,
-                                        font: "Arial"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { after: 400 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: "إجراءات التنفيذ",
-                                        bold: true,
-                                        size: 28,
-                                        font: "Arial",
-                                        color: "2c5aa0"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { before: 400, after: 300 }
-                            }),
-                            
-                            ...(currentReportData.procedures || []).map((procedure, index) => 
-                                new docx.Paragraph({
-                                    children: [
-                                        new docx.TextRun({
-                                            text: `${index + 1}. ${procedure}`,
-                                            size: 24,
-                                            font: "Arial"
-                                        })
-                                    ],
-                                    alignment: docx.AlignmentType.RIGHT,
-                                    spacing: { after: 150 },
-                                    bullet: { level: 0 }
-                                })
-                            ),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: "النتائج",
-                                        bold: true,
-                                        size: 28,
-                                        font: "Arial",
-                                        color: "2c5aa0"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { before: 600, after: 300 }
-                            }),
-                            
-                            ...(currentReportData.results || []).map((result, index) => 
-                                new docx.Paragraph({
-                                    children: [
-                                        new docx.TextRun({
-                                            text: `${index + 1}. ${result}`,
-                                            size: 24,
-                                            font: "Arial"
-                                        })
-                                    ],
-                                    alignment: docx.AlignmentType.RIGHT,
-                                    spacing: { after: 150 },
-                                    bullet: { level: 0 }
-                                })
-                            ),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: "التوصيات",
-                                        bold: true,
-                                        size: 28,
-                                        font: "Arial",
-                                        color: "2c5aa0"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { before: 600, after: 300 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: currentReportData.recommendations,
-                                        size: 24,
-                                        font: "Arial"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.RIGHT,
-                                spacing: { after: 600 }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: "التوقيعات",
-                                        bold: true,
-                                        size: 28,
-                                        font: "Arial",
-                                        color: "2c5aa0"
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.CENTER,
-                                spacing: { before: 800, after: 400 }
-                            }),
-                            
-                            new docx.Table({
-                                rows: [
-                                    new docx.TableRow({
-                                        children: [
-                                            new docx.TableCell({
-                                                children: [
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: "مدير المدرسة",
-                                                                bold: true,
-                                                                size: 24,
-                                                                font: "Arial"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    }),
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: currentReportData.principal,
-                                                                size: 22,
-                                                                font: "Arial"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    }),
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: "________________________",
-                                                                size: 24,
-                                                                font: "Arial"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    }),
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: "التوقيع",
-                                                                size: 20,
-                                                                font: "Arial",
-                                                                color: "666666"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    })
-                                                ],
-                                                margins: { top: 200, bottom: 200 }
-                                            }),
-                                            new docx.TableCell({
-                                                children: [
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: "معد التقرير",
-                                                                bold: true,
-                                                                size: 24,
-                                                                font: "Arial"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    }),
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: currentReportData.reporter,
-                                                                size: 22,
-                                                                font: "Arial"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    }),
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: "________________________",
-                                                                size: 24,
-                                                                font: "Arial"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    }),
-                                                    new docx.Paragraph({
-                                                        children: [
-                                                            new docx.TextRun({
-                                                                text: "التوقيع",
-                                                                size: 20,
-                                                                font: "Arial",
-                                                                color: "666666"
-                                                            })
-                                                        ],
-                                                        alignment: docx.AlignmentType.CENTER
-                                                    })
-                                                ],
-                                                margins: { top: 200, bottom: 200 }
-                                            })
-                                        ]
-                                    })
-                                ],
-                                width: { size: 100, type: docx.WidthType.PERCENTAGE }
-                            }),
-                            
-                            new docx.Paragraph({
-                                children: [
-                                    new docx.TextRun({
-                                        text: `تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير - ${new Date().toLocaleDateString('ar-SA')}`,
-                                        size: 18,
-                                        font: "Arial",
-                                        color: "666666",
-                                        italics: true
-                                    })
-                                ],
-                                alignment: docx.AlignmentType.CENTER,
-                                spacing: { before: 800 }
-                            })
-                        ]
+                        children: children
                     }]
                 });
                 

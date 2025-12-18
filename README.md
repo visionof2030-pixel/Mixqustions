@@ -1,11 +1,15 @@
-<!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إعداد تقرير تنفيذ استراتيجية - أداء الواجبات الوظيفية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/docx@7.7.0/build/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
+        /* جميع الأنماط السابقة تبقى كما هي */
         /* Reset & Base Styles */
         * {
             box-sizing: border-box;
@@ -338,6 +342,112 @@
             gap: 10px;
         }
 
+        /* Export Options Modal */
+        .export-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .export-modal-content {
+            background-color: white;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            animation: modalFade 0.3s;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .export-modal-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .export-modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .export-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .export-modal-body {
+            padding: 30px;
+        }
+
+        .export-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .export-option {
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .export-option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+
+        .export-option i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .export-option-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .export-option-desc {
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+
+        .export-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
         /* Scroll Indicator */
         .scroll-indicator {
             position: fixed;
@@ -384,6 +494,10 @@
             
             .report-form-container {
                 padding: 20px;
+            }
+            
+            .export-options {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -442,6 +556,11 @@
                 padding: 12px;
                 font-size: 15px;
             }
+            
+            .export-modal-content {
+                width: 95%;
+                margin: 10px;
+            }
         }
 
         /* Custom Scrollbar */
@@ -481,6 +600,7 @@
 
         <!-- Report Form -->
         <div class="report-form-container">
+            <!-- جميع أقسام النموذج تبقى كما هي -->
             <!-- Section 1: Report Type -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-file-signature"></i> اختيار نوع التقرير</h2>
@@ -513,20 +633,20 @@
                     
                     <div class="form-group">
                         <label class="form-label required">اسم المدرسة</label>
-                        <input type="text" class="form-input" id="school" placeholder="اسم المدرسة">
+                        <input type="text" class="form-input" id="school" placeholder="اسم المدرسة" value="مدرسة النموذجية الثانوية">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label required">مدير المدرسة</label>
-                        <input type="text" class="form-input" id="principal" placeholder="مدير المدرسة">
+                        <input type="text" class="form-input" id="principal" placeholder="مدير المدرسة" value="أ. علي محمد أحمد">
                         <div class="form-example">مثال: أ. علي محمد أحمد</div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label required">معد التقرير</label>
-                        <input type="text" class="form-input" id="reporter" placeholder="معد التقرير">
+                        <input type="text" class="form-input" id="reporter" placeholder="معد التقرير" value="أ. أحمد عبدالله السعيد">
                         <div class="form-example">مثال: أ. أحمد عبدالله السعيد</div>
                     </div>
                 </div>
@@ -558,7 +678,7 @@
                     
                     <div class="form-group">
                         <label class="form-label required">مكان التنفيذ</label>
-                        <input type="text" class="form-input" id="location" placeholder="مثال: قاعة مصادر التعلم">
+                        <input type="text" class="form-input" id="location" placeholder="مثال: قاعة مصادر التعلم" value="قاعة مصادر التعلم">
                         <div class="form-example">مثال: قاعة مصادر التعلم - الفصل الدراسي</div>
                     </div>
                 </div>
@@ -566,7 +686,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label required">المستهدفون</label>
-                        <input type="text" class="form-input" id="target" placeholder="مثال: طلاب الصف الثالث ثانوي">
+                        <input type="text" class="form-input" id="target" placeholder="مثال: طلاب الصف الثالث ثانوي" value="طلاب الصف الثالث ثانوي">
                         <div class="form-example">مثال: طلاب الصف الثالث ثانوي</div>
                     </div>
                     
@@ -667,8 +787,51 @@
         </div>
     </div>
 
+    <!-- Export Options Modal -->
+    <div class="export-modal" id="exportModal">
+        <div class="export-modal-content">
+            <div class="export-modal-header">
+                <div class="export-modal-title">
+                    <i class="fas fa-download"></i> تصدير التقرير
+                </div>
+                <button class="export-modal-close" id="closeExportModal">&times;</button>
+            </div>
+            <div class="export-modal-body">
+                <p style="text-align: center; margin-bottom: 20px; color: var(--gray-color);">
+                    اختر الصيغة المناسبة لتصدير التقرير
+                </p>
+                
+                <div class="export-options">
+                    <div class="export-option" data-format="pdf">
+                        <i class="fas fa-file-pdf"></i>
+                        <div class="export-option-title">PDF</div>
+                        <div class="export-option-desc">نسخة للطباعة والمراجعة</div>
+                    </div>
+                    
+                    <div class="export-option" data-format="word">
+                        <i class="fas fa-file-word"></i>
+                        <div class="export-option-title">Microsoft Word</div>
+                        <div class="export-option-desc">نسخة قابلة للتعديل</div>
+                    </div>
+                    
+                    <div class="export-option" data-format="html">
+                        <i class="fas fa-file-code"></i>
+                        <div class="export-option-title">HTML</div>
+                        <div class="export-option-desc">نسخة ويب تفاعلية</div>
+                    </div>
+                </div>
+                
+                <div class="export-actions">
+                    <button class="btn btn-outline" id="cancelExport">
+                        إلغاء
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scroll to Top Button -->
-    <div class="scroll-indicator" id="scrollToTop">
+    <div class="scroll-indicator hidden" id="scrollToTop">
         <i class="fas fa-arrow-up"></i>
     </div>
 
@@ -683,9 +846,14 @@
             const saveDraftBtn = document.getElementById('saveDraft');
             const previewReportBtn = document.getElementById('previewReport');
             const submitReportBtn = document.getElementById('submitReport');
+            const exportModal = document.getElementById('exportModal');
+            const closeExportModal = document.getElementById('closeExportModal');
+            const cancelExport = document.getElementById('cancelExport');
+            const exportOptions = document.querySelectorAll('.export-option');
             
             // ========== متغيرات التطبيق ==========
             let uploadedImages = [];
+            let currentReportData = null;
             
             // ========== تهيئة الأحداث ==========
             setupEventListeners();
@@ -766,6 +934,30 @@
                         }
                     });
                 });
+                
+                // التحكم في نافذة التصدير
+                closeExportModal.addEventListener('click', function() {
+                    exportModal.style.display = 'none';
+                });
+                
+                cancelExport.addEventListener('click', function() {
+                    exportModal.style.display = 'none';
+                });
+                
+                // اختيار صيغة التصدير
+                exportOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const format = this.dataset.format;
+                        exportReport(format);
+                    });
+                });
+                
+                // إغلاق نافذة التصدير عند النقر خارجها
+                window.addEventListener('click', function(event) {
+                    if (event.target === exportModal) {
+                        exportModal.style.display = 'none';
+                    }
+                });
             }
             
             // ========== معالجة رفع الصور ==========
@@ -794,7 +986,11 @@
                     const reader = new FileReader();
                     
                     reader.onload = function(e) {
-                        uploadedImages.push(e.target.result);
+                        uploadedImages.push({
+                            data: e.target.result,
+                            name: file.name,
+                            type: file.type
+                        });
                         updateImagePreview();
                     };
                     
@@ -809,12 +1005,12 @@
             function updateImagePreview() {
                 imagePreview.innerHTML = '';
                 
-                uploadedImages.forEach((imgSrc, index) => {
+                uploadedImages.forEach((imgData, index) => {
                     const item = document.createElement('div');
                     item.className = 'preview-item';
                     
                     item.innerHTML = `
-                        <img src="${imgSrc}" class="preview-img" alt="صورة ${index + 1}">
+                        <img src="${imgData.data}" class="preview-img" alt="صورة ${index + 1}">
                         <button class="preview-remove" data-index="${index}">
                             <i class="fas fa-times"></i>
                         </button>
@@ -835,21 +1031,44 @@
             
             // ========== تحميل البيانات الأولية ==========
             function loadInitialData() {
-                // تعبئة البيانات الافتراضية
-                const userData = {
-                    school: 'مدرسة النموذجية الثانوية',
-                    principal: 'أ. علي محمد أحمد',
-                    reporter: 'أ. أحمد عبدالله السعيد',
-                    region: 'الرياض'
-                };
-                
-                document.getElementById('school').value = userData.school;
-                document.getElementById('principal').value = userData.principal;
-                document.getElementById('reporter').value = userData.reporter;
-                document.getElementById('region').value = userData.region;
-                
                 // إخفاء زر التمرير للأعلى في البداية
                 scrollToTopBtn.classList.add('hidden');
+                
+                // تحميل المسودة المحفوظة إن وجدت
+                const savedDraft = localStorage.getItem('reportDraft');
+                if (savedDraft) {
+                    try {
+                        const draftData = JSON.parse(savedDraft);
+                        if (confirm('يوجد تقرير محفوظ كمسودة. هل تريد استكماله؟')) {
+                            loadDraftData(draftData);
+                        }
+                    } catch (e) {
+                        console.error('Error loading draft:', e);
+                    }
+                }
+            }
+            
+            // ========== تحميل بيانات المسودة ==========
+            function loadDraftData(draftData) {
+                document.getElementById('reportType').value = draftData.type || 'strategy';
+                document.getElementById('reportTitle').value = draftData.title || 'تقرير تنفيذ استراتيجية';
+                document.getElementById('curriculumRelated').value = draftData.curriculumRelated || 'نعم';
+                document.getElementById('programDate').value = draftData.programDate || '1447-06-12';
+                document.getElementById('location').value = draftData.location || '';
+                document.getElementById('target').value = draftData.target || '';
+                document.getElementById('beneficiaries').value = draftData.beneficiaries || '25';
+                document.getElementById('description').value = draftData.description || '';
+                document.getElementById('procedures').value = draftData.procedures ? (Array.isArray(draftData.procedures) ? draftData.procedures.join(', ') : draftData.procedures) : '';
+                document.getElementById('results').value = draftData.results ? (Array.isArray(draftData.results) ? draftData.results.join(', ') : draftData.results) : '';
+                document.getElementById('recommendations').value = draftData.recommendations || '';
+                
+                // تحميل الصور
+                if (draftData.images && draftData.images.length > 0) {
+                    uploadedImages = [...draftData.images];
+                    updateImagePreview();
+                }
+                
+                alert('تم تحميل بيانات المسودة بنجاح');
             }
             
             // ========== التحقق من الحقول ==========
@@ -886,11 +1105,12 @@
                 
                 const reportData = collectReportData();
                 reportData.status = 'draft';
+                reportData.savedAt = new Date().toLocaleString('ar-SA');
                 
-                // محاكاة حفظ البيانات
+                // حفظ البيانات
                 localStorage.setItem('reportDraft', JSON.stringify(reportData));
                 
-                alert('تم حفظ التقرير كمسودة بنجاح!');
+                alert('تم حفظ التقرير كمسودة بنجاح!\n' + reportData.savedAt);
             }
             
             // ========== معاينة التقرير ==========
@@ -900,11 +1120,11 @@
                     return;
                 }
                 
-                const reportData = collectReportData();
+                currentReportData = collectReportData();
                 
                 // فتح نافذة جديدة للمعاينة
                 const previewWindow = window.open('', '_blank');
-                previewWindow.document.write(generatePreviewHTML(reportData));
+                previewWindow.document.write(generatePreviewHTML(currentReportData));
                 previewWindow.document.close();
             }
             
@@ -915,23 +1135,357 @@
                     return;
                 }
                 
-                if (!confirm('هل أنت متأكد من إنشاء التقرير النهائي؟')) {
+                currentReportData = collectReportData();
+                currentReportData.status = 'completed';
+                currentReportData.submissionDate = new Date().toLocaleDateString('ar-SA');
+                currentReportData.reportNumber = generateReportNumber();
+                
+                // عرض نافذة اختيار صيغة التصدير
+                exportModal.style.display = 'flex';
+            }
+            
+            // ========== تصدير التقرير ==========
+            async function exportReport(format) {
+                if (!currentReportData) {
+                    alert('لا توجد بيانات للتقرير');
                     return;
                 }
                 
-                const reportData = collectReportData();
-                reportData.status = 'completed';
-                reportData.submissionDate = new Date().toLocaleDateString('ar-SA');
-                reportData.reportNumber = generateReportNumber();
+                exportModal.style.display = 'none';
                 
-                // محاكاة حفظ التقرير النهائي
-                localStorage.setItem('completedReport', JSON.stringify(reportData));
+                switch(format) {
+                    case 'pdf':
+                        await exportToPDF();
+                        break;
+                    case 'word':
+                        await exportToWord();
+                        break;
+                    case 'html':
+                        exportToHTML();
+                        break;
+                }
+                
+                // حفظ التقرير النهائي
+                currentReportData.exportedAt = new Date().toLocaleString('ar-SA');
+                currentReportData.exportFormat = format;
+                localStorage.setItem('lastReport', JSON.stringify(currentReportData));
                 
                 // عرض رسالة النجاح
-                alert(`تم إنشاء التقرير بنجاح!\nرقم التقرير: ${reportData.reportNumber}\nتاريخ الإصدار: ${reportData.submissionDate}`);
+                alert(`تم تصدير التقرير بنجاح إلى صيغة ${format.toUpperCase()}!\nرقم التقرير: ${currentReportData.reportNumber}`);
                 
                 // إعادة تعيين النموذج
-                resetForm();
+                setTimeout(() => {
+                    if (confirm('هل تريد إعادة تعيين النموذج لبدء تقرير جديد؟')) {
+                        resetForm();
+                    }
+                }, 1000);
+            }
+            
+            // ========== تصدير إلى PDF ==========
+            async function exportToPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                // إضافة دعم النصوص العربية
+                doc.setFont('Times', 'normal');
+                doc.setFontSize(12);
+                
+                // العنوان الرئيسي
+                doc.setFontSize(16);
+                doc.setTextColor(44, 90, 160);
+                doc.text(currentReportData.title, 105, 20, { align: 'center' });
+                
+                // معلومات التقرير
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`الإدارة العامة للتعليم بمنطقة ${currentReportData.region}`, 105, 30, { align: 'center' });
+                doc.text(`تاريخ البرنامج: ${currentReportData.programDate}`, 105, 35, { align: 'center' });
+                
+                // الخط الفاصل
+                doc.setDrawColor(44, 90, 160);
+                doc.setLineWidth(0.5);
+                doc.line(20, 40, 190, 40);
+                
+                let yPos = 50;
+                
+                // البيانات الأساسية
+                doc.setFontSize(14);
+                doc.setTextColor(44, 90, 160);
+                doc.text('البيانات الأساسية', 190, yPos, { align: 'right' });
+                yPos += 10;
+                
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`المدرسة: ${currentReportData.school}`, 190, yPos, { align: 'right' });
+                yPos += 7;
+                doc.text(`مدير المدرسة: ${currentReportData.principal}`, 190, yPos, { align: 'right' });
+                yPos += 7;
+                doc.text(`معد التقرير: ${currentReportData.reporter}`, 190, yPos, { align: 'right' });
+                yPos += 7;
+                doc.text(`مكان التنفيذ: ${currentReportData.location}`, 190, yPos, { align: 'right' });
+                yPos += 7;
+                doc.text(`المستهدفون: ${currentReportData.target}`, 190, yPos, { align: 'right' });
+                yPos += 7;
+                doc.text(`عدد المستفيدين: ${currentReportData.beneficiaries}`, 190, yPos, { align: 'right' });
+                yPos += 7;
+                doc.text(`تابع للمناهج: ${currentReportData.curriculumRelated}`, 190, yPos, { align: 'right' });
+                yPos += 15;
+                
+                // وصف النشاط
+                doc.setFontSize(14);
+                doc.setTextColor(44, 90, 160);
+                doc.text('وصف مختصر لما تم تنفيذه', 190, yPos, { align: 'right' });
+                yPos += 10;
+                
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                const descriptionLines = doc.splitTextToSize(currentReportData.description, 170);
+                doc.text(descriptionLines, 190, yPos, { align: 'right' });
+                yPos += (descriptionLines.length * 7) + 10;
+                
+                // إجراءات التنفيذ
+                if (currentReportData.procedures && currentReportData.procedures.length > 0) {
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 90, 160);
+                    doc.text('إجراءات التنفيذ', 190, yPos, { align: 'right' });
+                    yPos += 10;
+                    
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 0, 0);
+                    currentReportData.procedures.forEach((procedure, index) => {
+                        const procLines = doc.splitTextToSize(`${index + 1}. ${procedure}`, 170);
+                        doc.text(procLines, 190, yPos, { align: 'right' });
+                        yPos += (procLines.length * 7) + 5;
+                    });
+                    yPos += 5;
+                }
+                
+                // إذا تجاوزنا صفحة، نضيف صفحة جديدة
+                if (yPos > 250) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                
+                // النتائج
+                if (currentReportData.results && currentReportData.results.length > 0) {
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 90, 160);
+                    doc.text('النتائج', 190, yPos, { align: 'right' });
+                    yPos += 10;
+                    
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 0, 0);
+                    currentReportData.results.forEach((result, index) => {
+                        const resultLines = doc.splitTextToSize(`${index + 1}. ${result}`, 170);
+                        doc.text(resultLines, 190, yPos, { align: 'right' });
+                        yPos += (resultLines.length * 7) + 5;
+                    });
+                    yPos += 5;
+                }
+                
+                // التوصيات
+                doc.setFontSize(14);
+                doc.setTextColor(44, 90, 160);
+                doc.text('التوصيات', 190, yPos, { align: 'right' });
+                yPos += 10;
+                
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                const recommendationLines = doc.splitTextToSize(currentReportData.recommendations, 170);
+                doc.text(recommendationLines, 190, yPos, { align: 'right' });
+                yPos += (recommendationLines.length * 7) + 15;
+                
+                // التوقيعات
+                doc.setLineWidth(0.3);
+                doc.line(20, yPos, 190, yPos);
+                yPos += 10;
+                
+                doc.setFontSize(12);
+                doc.text(`مدير المدرسة: ${currentReportData.principal}`, 40, yPos);
+                doc.text('التوقيع: _______________', 40, yPos + 7);
+                
+                doc.text(`معد التقرير: ${currentReportData.reporter}`, 140, yPos);
+                doc.text('التوقيع: _______________', 140, yPos + 7);
+                
+                // حفظ الملف
+                doc.save(`تقرير_${currentReportData.reportNumber}.pdf`);
+            }
+            
+            // ========== تصدير إلى Word ==========
+            async function exportToWord() {
+                const docx = window.docx;
+                
+                // إنشاء محتوى الوثيقة
+                const doc = new docx.Document({
+                    sections: [{
+                        properties: {
+                            direction: "rtl"
+                        },
+                        children: [
+                            // العنوان
+                            new docx.Paragraph({
+                                text: currentReportData.title,
+                                heading: docx.HeadingLevel.TITLE,
+                                alignment: docx.AlignmentType.CENTER,
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            
+                            // معلومات التقرير
+                            new docx.Paragraph({
+                                text: `الإدارة العامة للتعليم بمنطقة ${currentReportData.region}`,
+                                alignment: docx.AlignmentType.CENTER
+                            }),
+                            new docx.Paragraph({
+                                text: `تاريخ البرنامج: ${currentReportData.programDate}`,
+                                alignment: docx.AlignmentType.CENTER,
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            
+                            // البيانات الأساسية
+                            new docx.Paragraph({
+                                text: "البيانات الأساسية",
+                                heading: docx.HeadingLevel.HEADING_1,
+                                spacing: {
+                                    before: 200
+                                }
+                            }),
+                            new docx.Paragraph({
+                                text: `المدرسة: ${currentReportData.school}`
+                            }),
+                            new docx.Paragraph({
+                                text: `مدير المدرسة: ${currentReportData.principal}`
+                            }),
+                            new docx.Paragraph({
+                                text: `معد التقرير: ${currentReportData.reporter}`
+                            }),
+                            new docx.Paragraph({
+                                text: `مكان التنفيذ: ${currentReportData.location}`
+                            }),
+                            new docx.Paragraph({
+                                text: `المستهدفون: ${currentReportData.target}`
+                            }),
+                            new docx.Paragraph({
+                                text: `عدد المستفيدين: ${currentReportData.beneficiaries}`,
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            
+                            // وصف النشاط
+                            new docx.Paragraph({
+                                text: "وصف مختصر لما تم تنفيذه",
+                                heading: docx.HeadingLevel.HEADING_1
+                            }),
+                            new docx.Paragraph({
+                                text: currentReportData.description,
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            
+                            // إجراءات التنفيذ
+                            new docx.Paragraph({
+                                text: "إجراءات التنفيذ",
+                                heading: docx.HeadingLevel.HEADING_1
+                            }),
+                            ...(currentReportData.procedures || []).map(procedure => 
+                                new docx.Paragraph({
+                                    text: `• ${procedure}`,
+                                    bullet: {
+                                        level: 0
+                                    }
+                                })
+                            ),
+                            
+                            new docx.Paragraph({
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            
+                            // النتائج
+                            new docx.Paragraph({
+                                text: "النتائج",
+                                heading: docx.HeadingLevel.HEADING_1
+                            }),
+                            ...(currentReportData.results || []).map(result => 
+                                new docx.Paragraph({
+                                    text: `• ${result}`,
+                                    bullet: {
+                                        level: 0
+                                    }
+                                })
+                            ),
+                            
+                            new docx.Paragraph({
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            
+                            // التوصيات
+                            new docx.Paragraph({
+                                text: "التوصيات",
+                                heading: docx.HeadingLevel.HEADING_1
+                            }),
+                            new docx.Paragraph({
+                                text: currentReportData.recommendations,
+                                spacing: {
+                                    after: 200
+                                }
+                            }),
+                            
+                            // التوقيعات
+                            new docx.Paragraph({
+                                children: [
+                                    new docx.TextRun({
+                                        text: "مدير المدرسة: ",
+                                        bold: true
+                                    }),
+                                    new docx.TextRun(currentReportData.principal)
+                                ]
+                            }),
+                            new docx.Paragraph({
+                                text: "التوقيع: _______________",
+                                spacing: {
+                                    after: 100
+                                }
+                            }),
+                            
+                            new docx.Paragraph({
+                                children: [
+                                    new docx.TextRun({
+                                        text: "معد التقرير: ",
+                                        bold: true
+                                    }),
+                                    new docx.TextRun(currentReportData.reporter)
+                                ]
+                            }),
+                            new docx.Paragraph({
+                                text: "التوقيع: _______________"
+                            })
+                        ]
+                    }]
+                });
+                
+                // تحميل الوثيقة
+                const buffer = await docx.Packer.toBlob(doc);
+                saveAs(buffer, `تقرير_${currentReportData.reportNumber}.docx`);
+            }
+            
+            // ========== تصدير إلى HTML ==========
+            function exportToHTML() {
+                const htmlContent = generatePreviewHTML(currentReportData);
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                saveAs(blob, `تقرير_${currentReportData.reportNumber}.html`);
             }
             
             // ========== جمع بيانات التقرير ==========
@@ -964,86 +1518,182 @@
                     <head>
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>معاينة التقرير</title>
+                        <title>${reportData.title}</title>
                         <style>
-                            body { font-family: Arial, sans-serif; padding: 20px; direction: rtl; }
-                            h1 { color: #2c5aa0; text-align: center; }
-                            .header { text-align: center; margin-bottom: 30px; }
-                            .section { margin-bottom: 25px; }
-                            .section-title { color: #2c5aa0; border-right: 3px solid #2c5aa0; padding-right: 10px; }
-                            .images { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
-                            .image { max-width: 300px; border: 1px solid #ddd; padding: 10px; }
-                            .image img { width: 100%; height: auto; }
+                            body { 
+                                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                                padding: 30px; 
+                                direction: rtl; 
+                                line-height: 1.8;
+                                color: #333;
+                                background-color: #f9f9f9;
+                            }
+                            .report-container {
+                                max-width: 1000px;
+                                margin: 0 auto;
+                                background: white;
+                                padding: 40px;
+                                box-shadow: 0 0 20px rgba(0,0,0,0.1);
+                                border-radius: 10px;
+                            }
+                            h1 { 
+                                color: #2c5aa0; 
+                                text-align: center; 
+                                margin-bottom: 20px;
+                                font-size: 28px;
+                            }
+                            .header { 
+                                text-align: center; 
+                                margin-bottom: 40px;
+                                padding-bottom: 20px;
+                                border-bottom: 2px solid #2c5aa0;
+                            }
+                            .section { 
+                                margin-bottom: 35px;
+                                padding: 20px;
+                                background: #f8fafc;
+                                border-radius: 8px;
+                                border-right: 4px solid #2c5aa0;
+                            }
+                            .section-title { 
+                                color: #2c5aa0; 
+                                border-right: 3px solid #2c5aa0; 
+                                padding-right: 15px;
+                                margin-bottom: 20px;
+                                font-size: 22px;
+                            }
+                            .info-item {
+                                margin-bottom: 12px;
+                                font-size: 16px;
+                            }
+                            .info-item strong {
+                                color: #2c5aa0;
+                                min-width: 150px;
+                                display: inline-block;
+                            }
+                            .images { 
+                                display: flex; 
+                                gap: 20px; 
+                                flex-wrap: wrap; 
+                                margin-top: 15px; 
+                                justify-content: center;
+                            }
+                            .image-container { 
+                                max-width: 300px; 
+                                border: 1px solid #ddd; 
+                                padding: 15px;
+                                border-radius: 8px;
+                                background: white;
+                            }
+                            .image-container img { 
+                                width: 100%; 
+                                height: auto;
+                                border-radius: 4px;
+                            }
+                            .signatures {
+                                display: flex;
+                                justify-content: space-around;
+                                margin-top: 60px;
+                                padding-top: 30px;
+                                border-top: 2px solid #2c5aa0;
+                            }
+                            .signature-box {
+                                text-align: center;
+                                width: 300px;
+                            }
+                            .signature-line {
+                                width: 200px;
+                                height: 2px;
+                                background: #333;
+                                margin: 30px auto 10px;
+                            }
+                            @media print {
+                                body { background: white; }
+                                .report-container { box-shadow: none; }
+                                .images { page-break-inside: avoid; }
+                            }
                         </style>
                     </head>
                     <body>
-                        <div class="header">
-                            <h1>${reportData.title}</h1>
-                            <p>الإدارة العامة للتعليم بمنطقة ${reportData.region}</p>
-                            <p>تاريخ البرنامج: ${reportData.programDate}</p>
-                        </div>
-                        
-                        <div class="section">
-                            <h3 class="section-title">البيانات الأساسية</h3>
-                            <p><strong>المدرسة:</strong> ${reportData.school}</p>
-                            <p><strong>مدير المدرسة:</strong> ${reportData.
-                            <p><strong>معد التقرير:</strong> ${reportData.reporter}</p>
-                            <p><strong>مكان التنفيذ:</strong> ${reportData.location}</p>
-                            <p><strong>المستهدفون:</strong> ${reportData.target}</p>
-                            <p><strong>عدد المستفيدين:</strong> ${reportData.beneficiaries}</p>
-                            <p><strong>تابع للمناهج:</strong> ${reportData.curriculumRelated}</p>
-                        </div>
-                        
-                        <div class="section">
-                            <h3 class="section-title">وصف مختصر لما تم تنفيذه</h3>
-                            <p>${reportData.description}</p>
-                        </div>
-                        
-                        <div class="section">
-                            <h3 class="section-title">إجراءات التنفيذ</h3>
-                            <ol>
-                                ${reportData.procedures.map(proc => `<li>${proc}</li>`).join('')}
-                            </ol>
-                        </div>
-                        
-                        <div class="section">
-                            <h3 class="section-title">النتائج</h3>
-                            <ol>
-                                ${reportData.results.map(result => `<li>${result}</li>`).join('')}
-                            </ol>
-                        </div>
-                        
-                        <div class="section">
-                            <h3 class="section-title">التوصيات</h3>
-                            <p>${reportData.recommendations}</p>
-                        </div>
-                        
-                        ${reportData.images.length > 0 ? `
-                        <div class="section">
-                            <h3 class="section-title">الصور المرفقة</h3>
-                            <div class="images">
-                                ${reportData.images.map((img, idx) => `
-                                    <div class="image">
-                                        <img src="${img}" alt="صورة ${idx + 1}">
-                                        <p style="text-align:center; margin-top:5px;">صورة ${idx + 1}</p>
-                                    </div>
-                                `).join('')}
+                        <div class="report-container">
+                            <div class="header">
+                                <h1>${reportData.title}</h1>
+                                <p style="font-size: 18px;">الإدارة العامة للتعليم بمنطقة ${reportData.region}</p>
+                                <p style="font-size: 16px; color: #666;">تاريخ البرنامج: ${reportData.programDate}</p>
+                                <p style="font-size: 14px; color: #888;">رقم التقرير: ${reportData.reportNumber || 'TR-' + new Date().getTime()}</p>
                             </div>
-                        </div>
-                        ` : ''}
-                        
-                        <div style="margin-top: 50px; padding-top: 20px; border-top: 2px solid #2c5aa0;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <div>
+                            
+                            <div class="section">
+                                <h3 class="section-title">البيانات الأساسية</h3>
+                                <div class="info-item"><strong>المدرسة:</strong> ${reportData.school}</div>
+                                <div class="info-item"><strong>مدير المدرسة:</strong> ${reportData.principal}</div>
+                                <div class="info-item"><strong>معد التقرير:</strong> ${reportData.reporter}</div>
+                                <div class="info-item"><strong>مكان التنفيذ:</strong> ${reportData.location}</div>
+                                <div class="info-item"><strong>المستهدفون:</strong> ${reportData.target}</div>
+                                <div class="info-item"><strong>عدد المستفيدين:</strong> ${reportData.beneficiaries}</div>
+                                <div class="info-item"><strong>تابع للمناهج:</strong> ${reportData.curriculumRelated}</div>
+                            </div>
+                            
+                            <div class="section">
+                                <h3 class="section-title">وصف مختصر لما تم تنفيذه</h3>
+                                <p style="font-size: 16px; text-align: justify;">${reportData.description}</p>
+                            </div>
+                            
+                            ${reportData.procedures && reportData.procedures.length > 0 ? `
+                            <div class="section">
+                                <h3 class="section-title">إجراءات التنفيذ</h3>
+                                <ol style="padding-right: 20px; font-size: 16px;">
+                                    ${reportData.procedures.map(proc => `<li style="margin-bottom: 10px;">${proc}</li>`).join('')}
+                                </ol>
+                            </div>
+                            ` : ''}
+                            
+                            ${reportData.results && reportData.results.length > 0 ? `
+                            <div class="section">
+                                <h3 class="section-title">النتائج</h3>
+                                <ol style="padding-right: 20px; font-size: 16px;">
+                                    ${reportData.results.map(result => `<li style="margin-bottom: 10px;">${result}</li>`).join('')}
+                                </ol>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="section">
+                                <h3 class="section-title">التوصيات</h3>
+                                <p style="font-size: 16px; text-align: justify;">${reportData.recommendations}</p>
+                            </div>
+                            
+                            ${reportData.images && reportData.images.length > 0 ? `
+                            <div class="section">
+                                <h3 class="section-title">الصور المرفقة</h3>
+                                <div class="images">
+                                    ${reportData.images.map((img, idx) => `
+                                        <div class="image-container">
+                                            <img src="${img.data}" alt="صورة ${idx + 1}">
+                                            <p style="text-align:center; margin-top:10px; color: #666;">صورة ${idx + 1}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            ` : ''}
+                            
+                            <div class="signatures">
+                                <div class="signature-box">
                                     <p><strong>مدير المدرسة:</strong></p>
                                     <p>${reportData.principal}</p>
-                                    <p>التوقيع: _______________</p>
+                                    <div class="signature-line"></div>
+                                    <p>التوقيع</p>
                                 </div>
-                                <div>
+                                
+                                <div class="signature-box">
                                     <p><strong>معد التقرير:</strong></p>
                                     <p>${reportData.reporter}</p>
-                                    <p>التوقيع: _______________</p>
+                                    <div class="signature-line"></div>
+                                    <p>التوقيع</p>
                                 </div>
+                            </div>
+                            
+                            <div style="text-align: center; margin-top: 40px; color: #888; font-size: 14px;">
+                                <p>تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير - ${new Date().toLocaleDateString('ar-SA')}</p>
                             </div>
                         </div>
                     </body>
@@ -1055,13 +1705,15 @@
             function generateReportNumber() {
                 const prefix = 'TR';
                 const year = new Date().getFullYear();
-                const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-                return `${prefix}-${year}-${random}`;
+                const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
+                const day = new Date().getDate().toString().padStart(2, '0');
+                const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                return `${prefix}-${year}${month}${day}-${random}`;
             }
             
             // ========== إعادة تعيين النموذج ==========
             function resetForm() {
-                // إعادة تعيين الحقول (باستثناء بعض البيانات الأساسية)
+                // إعادة تعيين الحقول
                 document.getElementById('programDate').value = '1447-06-12';
                 document.getElementById('location').value = '';
                 document.getElementById('target').value = '';
@@ -1075,71 +1727,25 @@
                 uploadedImages = [];
                 imagePreview.innerHTML = '';
                 
+                // حذف المسودة
+                localStorage.removeItem('reportDraft');
+                
                 // التمرير للأعلى
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
-                
-                // إظهار رسالة تأكيد
-                setTimeout(() => {
-                    alert('يمكنك الآن البدء في إعداد تقرير جديد');
-                }, 500);
             }
             
-            // ========== التحقق عند تحميل الصفحة ==========
-            // التحقق إذا كان هناك مسودة محفوظة
-            const savedDraft = localStorage.getItem('reportDraft');
-            if (savedDraft) {
-                if (confirm('يوجد تقرير محفوظ كمسودة. هل تريد استكماله؟')) {
-                    try {
-                        const draftData = JSON.parse(savedDraft);
-                        loadDraftData(draftData);
-                    } catch (e) {
-                        console.error('Error loading draft:', e);
-                    }
-                }
-            }
-            
-            // ========== تحميل بيانات المسودة ==========
-            function loadDraftData(draftData) {
-                document.getElementById('reportType').value = draftData.type || 'strategy';
-                document.getElementById('reportTitle').value = draftData.title || 'تقرير تنفيذ استراتيجية';
-                document.getElementById('curriculumRelated').value = draftData.curriculumRelated || 'نعم';
-                document.getElementById('programDate').value = draftData.programDate || '1447-06-12';
-                document.getElementById('location').value = draftData.location || '';
-                document.getElementById('target').value = draftData.target || '';
-                document.getElementById('beneficiaries').value = draftData.beneficiaries || '25';
-                document.getElementById('description').value = draftData.description || '';
-                document.getElementById('procedures').value = draftData.procedures ? draftData.procedures.join(', ') : '';
-                document.getElementById('results').value = draftData.results ? draftData.results.join(', ') : '';
-                document.getElementById('recommendations').value = draftData.recommendations || '';
-                
-                // تحميل الصور
-                if (draftData.images && draftData.images.length > 0) {
-                    uploadedImages = [...draftData.images];
-                    updateImagePreview();
-                }
-                
-                alert('تم تحميل بيانات المسودة بنجاح');
-            }
-            
-            // ========== حفظ التقرير تلقائيًا ==========
-            // حفظ تلقائي كل دقيقة
+            // ========== الحفظ التلقائي ==========
             setInterval(() => {
                 if (validateForm()) {
                     const reportData = collectReportData();
                     reportData.status = 'draft';
                     reportData.autoSaved = new Date().toLocaleTimeString('ar-SA');
                     localStorage.setItem('reportDraft', JSON.stringify(reportData));
-                    console.log('تم الحفظ التلقائي:', reportData.autoSaved);
                 }
-            }, 60000); // كل دقيقة
-            
-            // ========== عرض رسالة ترحيبية ==========
-            setTimeout(() => {
-                console.log('نظام إعداد التقارير جاهز للاستخدام!');
-            }, 1000);
+            }, 30000);
         });
     </script>
 </body>

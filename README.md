@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -21,6 +21,7 @@
             --success-color: #28a745;
             --warning-color: #ffc107;
             --danger-color: #dc3545;
+            --info-color: #17a2b8;
             --shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
             --shadow-lg: 0 5px 25px rgba(0, 0, 0, 0.1);
             --radius: 10px;
@@ -372,6 +373,14 @@
 
         .btn-success:hover {
             background-color: #218838;
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
         }
 
         .btn-outline {
@@ -839,6 +848,240 @@
         .validation-error i {
             font-size: 16px;
         }
+
+        /* تنسيقات الطباعة */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .print-container, .print-container * {
+                visibility: visible;
+            }
+            
+            .print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+                background: white;
+                padding: 20mm;
+                direction: rtl;
+                font-family: 'Cairo', 'Traditional Arabic', 'Segoe UI', sans-serif;
+                font-size: 12pt;
+                line-height: 1.6;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+            
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+            
+            .print-header {
+                text-align: center;
+                margin-bottom: 30px;
+                border-bottom: 3px solid #2c5aa0;
+                padding-bottom: 20px;
+            }
+            
+            .print-title {
+                color: #2c5aa0;
+                font-size: 24pt;
+                margin-bottom: 15px;
+                font-weight: bold;
+            }
+            
+            .print-subtitle {
+                color: #666;
+                font-size: 16pt;
+                margin-bottom: 10px;
+            }
+            
+            .print-info {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+                margin: 20px 0;
+                border-right: 4px solid #2c5aa0;
+            }
+            
+            .print-section {
+                margin: 25px 0;
+                page-break-inside: avoid;
+            }
+            
+            .print-section-title {
+                color: #2c5aa0;
+                font-size: 20pt;
+                margin-bottom: 15px;
+                border-right: 4px solid #2c5aa0;
+                padding-right: 15px;
+                font-weight: bold;
+            }
+            
+            .print-content {
+                font-size: 14pt;
+                line-height: 1.8;
+                text-align: justify;
+            }
+            
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 15px 0;
+                font-size: 12pt;
+            }
+            
+            .print-table th {
+                background-color: #2c5aa0;
+                color: white;
+                padding: 10px;
+                text-align: right;
+                font-weight: bold;
+                border: 1px solid #1e3d6f;
+            }
+            
+            .print-table td {
+                padding: 8px 10px;
+                border: 1px solid #ddd;
+                text-align: right;
+            }
+            
+            .print-table tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+            
+            .print-list {
+                padding-right: 20px;
+                margin: 15px 0;
+            }
+            
+            .print-list-item {
+                margin-bottom: 8px;
+                padding-right: 10px;
+                position: relative;
+            }
+            
+            .print-list-item::before {
+                content: "•";
+                color: #2c5aa0;
+                font-size: 18pt;
+                position: absolute;
+                right: -15px;
+            }
+            
+            .print-images {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin: 20px 0;
+                justify-content: center;
+            }
+            
+            .print-image {
+                width: 45%;
+                max-width: 300px;
+                border: 1px solid #ddd;
+                padding: 5px;
+                page-break-inside: avoid;
+                margin-bottom: 15px;
+            }
+            
+            .print-image img {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                display: block;
+            }
+            
+            .print-image-caption {
+                text-align: center;
+                font-size: 10pt;
+                color: #666;
+                padding: 5px;
+                background: #f8f9fa;
+            }
+            
+            .print-signatures {
+                display: flex;
+                justify-content: space-around;
+                margin-top: 60px;
+                padding-top: 30px;
+                border-top: 2px solid #2c5aa0;
+                flex-wrap: wrap;
+                page-break-inside: avoid;
+            }
+            
+            .print-signature {
+                text-align: center;
+                min-width: 200px;
+                margin-bottom: 20px;
+            }
+            
+            .print-signature-name {
+                font-size: 14pt;
+                font-weight: bold;
+                margin: 15px 0;
+            }
+            
+            .print-signature-line {
+                width: 150px;
+                height: 1px;
+                background: #333;
+                margin: 20px auto;
+                border-top: 2px dashed #333;
+            }
+            
+            .print-footer {
+                text-align: center;
+                margin-top: 40px;
+                padding-top: 20px;
+                border-top: 1px dashed #ddd;
+                color: #666;
+                font-size: 10pt;
+            }
+            
+            .page-break {
+                page-break-before: always;
+            }
+            
+            /* تجنب قطع الجداول بين الصفحات */
+            table, tr, td, th {
+                page-break-inside: avoid;
+            }
+            
+            /* تجنب قطع العناوين في نهاية الصفحة */
+            .print-section-title {
+                page-break-after: avoid;
+            }
+            
+            /* تجنب وضع عنصر واحد فقط في نهاية الصفحة */
+            ul, ol {
+                page-break-inside: avoid;
+            }
+            
+            /* تجنب قطع الصور */
+            .print-image {
+                page-break-inside: avoid;
+                page-break-before: auto;
+            }
+            
+            /* تحسين التباعد للطباعة */
+            .print-container p {
+                margin-bottom: 10px;
+            }
+            
+            /* إخفاء الروابط في الطباعة */
+            a {
+                color: #000 !important;
+                text-decoration: none !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -916,8 +1159,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label required"><i class="fas fa-user-tie"></i> مدير المدرسة</label>
-                        <input type="text" class="form-input" id="principal" placeholder="مدير المدرسة" value="أ. علي محمد أحمد">
-                        <div class="form-example">مثال: أ. علي محمد أحمد، د. محمد بن عبدالله</div>
+                        <input type="text" class="form-input" id="principal" placeholder="مدير المدرسة" value="أ. نايف اللحياني">
+                        <div class="form-example">مثال: أ. نايف اللحياني، د. محمد بن عبدالله</div>
                         <div id="principalError" class="validation-error" style="display: none;">
                             <i class="fas fa-exclamation-circle"></i> هذا الحقل مطلوب
                         </div>
@@ -925,8 +1168,8 @@
                     
                     <div class="form-group">
                         <label class="form-label required"><i class="fas fa-user-edit"></i> معد التقرير</label>
-                        <input type="text" class="form-input" id="reporter" placeholder="معد التقرير" value="أ. أحمد عبدالله السعيد">
-                        <div class="form-example">مثال: أ. أحمد عبدالله السعيد، م. خالد محمد</div>
+                        <input type="text" class="form-input" id="reporter" placeholder="معد التقرير" value="أ. فهد الخالدي">
+                        <div class="form-example">مثال: أ. فهد الخالدي، م. خالد محمد</div>
                         <div id="reporterError" class="validation-error" style="display: none;">
                             <i class="fas fa-exclamation-circle"></i> هذا الحقل مطلوب
                         </div>
@@ -969,7 +1212,7 @@
                     
                     <div class="form-group">
                         <label class="form-label required"><i class="fas fa-map-marker"></i> مكان التنفيذ</label>
-                        <input type="text" class="form-input" id="location" placeholder="مثال: قاعة مصادر التعلم" value="قاعة مصادر التعلم">
+                        <input type="text" class="form-input" id="location" placeholder="مثال: الصف الثالث المتوسط" value="الصف الثالث المتوسط">
                         <div class="form-example">مثال: قاعة مصادر التعلم، الفصل الدراسي، الساحة المدرسية</div>
                         <div id="locationError" class="validation-error" style="display: none;">
                             <i class="fas fa-exclamation-circle"></i> هذا الحقل مطلوب
@@ -980,7 +1223,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label required"><i class="fas fa-users"></i> المستهدفون</label>
-                        <input type="text" class="form-input" id="target" placeholder="مثال: طلاب الصف الثالث ثانوي" value="طلاب الصف الثالث ثانوي">
+                        <input type="text" class="form-input" id="target" placeholder="مثال: الطلاب" value="الطلاب">
                         <div class="form-example">مثال: طلاب الصف الثالث ثانوي، معلمو المرحلة الابتدائية</div>
                         <div id="targetError" class="validation-error" style="display: none;">
                             <i class="fas fa-exclamation-circle"></i> هذا الحقل مطلوب
@@ -989,7 +1232,7 @@
                     
                     <div class="form-group">
                         <label class="form-label required"><i class="fas fa-user-check"></i> عدد المستفيدين</label>
-                        <input type="number" class="form-input" id="beneficiaries" placeholder="مثال: 25 طالباً" value="25" min="1">
+                        <input type="number" class="form-input" id="beneficiaries" placeholder="مثال: 25" value="25" min="1">
                         <div class="form-example">أدخل عدد المستفيدين من البرنامج (رقم فقط)</div>
                         <div id="beneficiariesError" class="validation-error" style="display: none;">
                             <i class="fas fa-exclamation-circle"></i> هذا الحقل مطلوب
@@ -1013,7 +1256,7 @@
             </div>
 
             <div class="form-section">
-                <<h2 class="section-header"><i class="fas fa-tasks"></i> إجراءات التنفيذ</h2>
+                <h2 class="section-header"><i class="fas fa-tasks"></i> إجراءات التنفيذ</h2>
                 <p class="section-subtitle">الخطوات والإجراءات التي تم اتباعها لتنفيذ النشاط</p>
                 
                 <div class="form-group">
@@ -1063,7 +1306,7 @@
                         <i class="fas fa-cloud-upload-alt"></i>
                     </div>
                     <div class="upload-text">انقر لرفع الصور أو اسحبها إلى هنا</div>
-                    <div class="upload-hint">الحجم الأقصى: 5MB لكل صورة | الصيغ المدعومة: JPG, PNG, GIF | الحد الأقصى: صورتان</div>
+                    <div class="upload-hint">الحجم الأقصى: 5MB لكل صورة | الصيغ المدعومة: JPG, PNG, GIF | الحد الأقصى: 4 صور</div>
                     <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
                 </div>
                 
@@ -1088,6 +1331,9 @@
                 <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                     <button class="btn btn-outline" id="previewReport">
                         <i class="fas fa-eye"></i> معاينة التقرير
+                    </button>
+                    <button class="btn btn-info" id="printReport">
+                        <i class="fas fa-print"></i> طباعة التقرير
                     </button>
                     <button class="btn btn-success" id="submitReport">
                         <i class="fas fa-check-circle"></i> إنشاء التقرير النهائي
@@ -1145,6 +1391,7 @@
             const scrollToTopBtn = document.getElementById('scrollToTop');
             const saveDraftBtn = document.getElementById('saveDraft');
             const previewReportBtn = document.getElementById('previewReport');
+            const printReportBtn = document.getElementById('printReport');
             const submitReportBtn = document.getElementById('submitReport');
             const exportModal = document.getElementById('exportModal');
             const closeExportModal = document.getElementById('closeExportModal');
@@ -1200,6 +1447,7 @@
                 
                 saveDraftBtn.addEventListener('click', saveAsDraft);
                 previewReportBtn.addEventListener('click', previewReport);
+                printReportBtn.addEventListener('click', printReport);
                 submitReportBtn.addEventListener('click', submitReport);
                 
                 document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(input => {
@@ -1395,6 +1643,24 @@
                 previewWindow.document.close();
             }
             
+            function printReport() {
+                if (!validateForm()) {
+                    showError('يرجى ملء جميع الحقول المطلوبة قبل الطباعة');
+                    return;
+                }
+                
+                currentReportData = collectReportData();
+                currentReportData.reportNumber = generateReportNumber();
+                
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(generatePrintHTML(currentReportData));
+                printWindow.document.close();
+                
+                setTimeout(() => {
+                    printWindow.print();
+                }, 500);
+            }
+            
             function submitReport() {
                 if (!validateForm()) {
                     showError('يرجى ملء جميع الحقول المطلوبة قبل الإنشاء');
@@ -1439,28 +1705,6 @@
                     hideLoading();
                     showError(`حدث خطأ أثناء التصدير: ${error.message}`);
                 }
-            }
-            
-            // دالة مساعدة لتحويل base64 إلى Blob
-            function base64ToBlob(base64, mimeType) {
-                const byteCharacters = atob(base64.split(',')[1]);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
-                }
-                const byteArray = new Uint8Array(byteNumbers);
-                return new Blob([byteArray], { type: mimeType });
-            }
-            
-            // إصلاح مشكلة PageNumberFormat
-            function getPageNumberFormat() {
-                // إذا كانت الخاصية موجودة نستخدمها، وإلا نستخدم القيمة الرقمية
-                const docx = window.docx;
-                if (docx && docx.PageNumberFormat && docx.PageNumberFormat.DECIMAL) {
-                    return docx.PageNumberFormat.DECIMAL;
-                }
-                // القيمة الافتراضية للترقيم العشري
-                return 0; // 0 = DECIMAL في معظم إصدارات docx
             }
             
             async function exportToWord() {
@@ -1563,10 +1807,21 @@
                     })
                 );
                 
-                // جدول البيانات الأساسية (مكون من عمودين)
+                // جدول البيانات الأساسية (مكون من عمودين) - مصحح للاتجاه من اليمين
                 const tableRows = [
                     new docx.TableRow({
                         children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.school,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })],
+                                width: { size: 60, type: WidthType.PERCENTAGE }
+                            }),
                             new docx.TableCell({
                                 children: [new docx.Paragraph({
                                     children: [new docx.TextRun({
@@ -1579,22 +1834,21 @@
                                 })],
                                 shading: { fill: "f0f4f8" },
                                 width: { size: 40, type: WidthType.PERCENTAGE }
-                            }),
-                            new docx.TableCell({
-                                children: [new docx.Paragraph({
-                                    children: [new docx.TextRun({
-                                        text: currentReportData.school,
-                                        size: 24,
-                                        font: "Traditional Arabic"
-                                    })],
-                                    alignment: AlignmentType.RIGHT
-                                })],
-                                width: { size: 60, type: WidthType.PERCENTAGE }
                             })
                         ]
                     }),
                     new docx.TableRow({
                         children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.principal,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            }),
                             new docx.TableCell({
                                 children: [new docx.Paragraph({
                                     children: [new docx.TextRun({
@@ -1606,21 +1860,21 @@
                                     alignment: AlignmentType.RIGHT
                                 })],
                                 shading: { fill: "f0f4f8" }
-                            }),
-                            new docx.TableCell({
-                                children: [new docx.Paragraph({
-                                    children: [new docx.TextRun({
-                                        text: currentReportData.principal,
-                                        size: 24,
-                                        font: "Traditional Arabic"
-                                    })],
-                                    alignment: AlignmentType.RIGHT
-                                })]
                             })
                         ]
                     }),
                     new docx.TableRow({
                         children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.reporter,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            }),
                             new docx.TableCell({
                                 children: [new docx.Paragraph({
                                     children: [new docx.TextRun({
@@ -1632,21 +1886,21 @@
                                     alignment: AlignmentType.RIGHT
                                 })],
                                 shading: { fill: "f0f4f8" }
-                            }),
-                            new docx.TableCell({
-                                children: [new docx.Paragraph({
-                                    children: [new docx.TextRun({
-                                        text: currentReportData.reporter,
-                                        size: 24,
-                                        font: "Traditional Arabic"
-                                    })],
-                                    alignment: AlignmentType.RIGHT
-                                })]
                             })
                         ]
                     }),
                     new docx.TableRow({
                         children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.location,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            }),
                             new docx.TableCell({
                                 children: [new docx.Paragraph({
                                     children: [new docx.TextRun({
@@ -1658,21 +1912,21 @@
                                     alignment: AlignmentType.RIGHT
                                 })],
                                 shading: { fill: "f0f4f8" }
-                            }),
-                            new docx.TableCell({
-                                children: [new docx.Paragraph({
-                                    children: [new docx.TextRun({
-                                        text: currentReportData.location,
-                                        size: 24,
-                                        font: "Traditional Arabic"
-                                    })],
-                                    alignment: AlignmentType.RIGHT
-                                })]
                             })
                         ]
                     }),
                     new docx.TableRow({
                         children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.target,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            }),
                             new docx.TableCell({
                                 children: [new docx.Paragraph({
                                     children: [new docx.TextRun({
@@ -1684,21 +1938,21 @@
                                     alignment: AlignmentType.RIGHT
                                 })],
                                 shading: { fill: "f0f4f8" }
-                            }),
-                            new docx.TableCell({
-                                children: [new docx.Paragraph({
-                                    children: [new docx.TextRun({
-                                        text: currentReportData.target,
-                                        size: 24,
-                                        font: "Traditional Arabic"
-                                    })],
-                                    alignment: AlignmentType.RIGHT
-                                })]
                             })
                         ]
                     }),
                     new docx.TableRow({
                         children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.beneficiaries,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            }),
                             new docx.TableCell({
                                 children: [new docx.Paragraph({
                                     children: [new docx.TextRun({
@@ -1710,21 +1964,21 @@
                                     alignment: AlignmentType.RIGHT
                                 })],
                                 shading: { fill: "f0f4f8" }
-                            }),
-                            new docx.TableCell({
-                                children: [new docx.Paragraph({
-                                    children: [new docx.TextRun({
-                                        text: currentReportData.beneficiaries,
-                                        size: 24,
-                                        font: "Traditional Arabic"
-                                    })],
-                                    alignment: AlignmentType.RIGHT
-                                })]
                             })
                         ]
                     }),
                     new docx.TableRow({
                         children: [
+                            new docx.TableCell({
+                                children: [new docx.Paragraph({
+                                    children: [new docx.TextRun({
+                                        text: currentReportData.curriculumRelated,
+                                        size: 24,
+                                        font: "Traditional Arabic"
+                                    })],
+                                    alignment: AlignmentType.RIGHT
+                                })]
+                            }),
                             new docx.TableCell({
                                 children: [new docx.Paragraph({
                                     children: [new docx.TextRun({
@@ -1736,16 +1990,6 @@
                                     alignment: AlignmentType.RIGHT
                                 })],
                                 shading: { fill: "f0f4f8" }
-                            }),
-                            new docx.TableCell({
-                                children: [new docx.Paragraph({
-                                    children: [new docx.TextRun({
-                                        text: currentReportData.curriculumRelated,
-                                        size: 24,
-                                        font: "Traditional Arabic"
-                                    })],
-                                    alignment: AlignmentType.RIGHT
-                                })]
                             })
                         ]
                     })
@@ -1755,7 +1999,7 @@
                     new docx.Table({
                         rows: tableRows,
                         width: { size: 100, type: WidthType.PERCENTAGE },
-                        columnWidths: [4000, 6000],
+                        columnWidths: [6000, 4000], // تم تعديل العرض ليكون 60% للبيانات و40% للعناوين
                         borders: {
                             top: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
                             bottom: { style: BorderStyle.SINGLE, size: 1, color: "CCCCCC" },
@@ -2159,6 +2403,378 @@
                 saveAs(blob, `تقرير_${currentReportData.reportNumber}.html`);
             }
             
+            function generatePrintHTML(reportData) {
+                const currentDate = new Date().toLocaleDateString('ar-SA', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                let imagesHTML = '';
+                if (uploadedImages.length > 0) {
+                    imagesHTML = `
+                    <div class="print-section">
+                        <h3 class="print-section-title">الصور المرفقة</h3>
+                        <div class="print-images">
+                            ${uploadedImages.map((img, idx) => `
+                            <div class="print-image">
+                                <img src="${img.data}" alt="صورة ${idx + 1}">
+                                <div class="print-image-caption">صورة ${idx + 1}: ${img.name}</div>
+                            </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+                }
+                
+                return `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${reportData.title} - طباعة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Cairo', 'Traditional Arabic', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #000;
+            direction: rtl;
+            padding: 20mm;
+            background: white;
+        }
+        
+        .print-container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            .print-container, .print-container * {
+                visibility: visible;
+            }
+            
+            .print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+                padding: 20mm;
+            }
+            
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+        }
+        
+        .print-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #2c5aa0;
+            padding-bottom: 20px;
+        }
+        
+        .print-title {
+            color: #2c5aa0;
+            font-size: 24pt;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .print-subtitle {
+            color: #666;
+            font-size: 16pt;
+            margin-bottom: 10px;
+        }
+        
+        .print-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-right: 4px solid #2c5aa0;
+        }
+        
+        .print-section {
+            margin: 25px 0;
+            page-break-inside: avoid;
+        }
+        
+        .print-section-title {
+            color: #2c5aa0;
+            font-size: 20pt;
+            margin-bottom: 15px;
+            border-right: 4px solid #2c5aa0;
+            padding-right: 15px;
+            font-weight: bold;
+        }
+        
+        .print-content {
+            font-size: 14pt;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        .print-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 12pt;
+        }
+        
+        .print-table th {
+            background-color: #2c5aa0;
+            color: white;
+            padding: 10px;
+            text-align: right;
+            font-weight: bold;
+            border: 1px solid #1e3d6f;
+        }
+        
+        .print-table td {
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            text-align: right;
+        }
+        
+        .print-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .print-list {
+            padding-right: 20px;
+            margin: 15px 0;
+        }
+        
+        .print-list-item {
+            margin-bottom: 8px;
+            padding-right: 10px;
+            position: relative;
+        }
+        
+        .print-list-item::before {
+            content: "•";
+            color: #2c5aa0;
+            font-size: 18pt;
+            position: absolute;
+            right: -15px;
+        }
+        
+        .print-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .print-image {
+            width: 45%;
+            max-width: 300px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            page-break-inside: avoid;
+            margin-bottom: 15px;
+        }
+        
+        .print-image img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .print-image-caption {
+            text-align: center;
+            font-size: 10pt;
+            color: #666;
+            padding: 5px;
+            background: #f8f9fa;
+        }
+        
+        .print-signatures {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid #2c5aa0;
+            flex-wrap: wrap;
+            page-break-inside: avoid;
+        }
+        
+        .print-signature {
+            text-align: center;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .print-signature-name {
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .print-signature-line {
+            width: 150px;
+            height: 1px;
+            background: #333;
+            margin: 20px auto;
+            border-top: 2px dashed #333;
+        }
+        
+        .print-footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+            color: #666;
+            font-size: 10pt;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
+        /* تجنب قطع الجداول بين الصفحات */
+        table, tr, td, th {
+            page-break-inside: avoid;
+        }
+        
+        /* تجنب قطع العناوين في نهاية الصفحة */
+        .print-section-title {
+            page-break-after: avoid;
+        }
+        
+        /* تجنب وضع عنصر واحد فقط في نهاية الصفحة */
+        ul, ol {
+            page-break-inside: avoid;
+        }
+        
+        /* تجنب قطع الصور */
+        .print-image {
+            page-break-inside: avoid;
+            page-break-before: auto;
+        }
+        
+        /* تحسين التباعد للطباعة */
+        .print-container p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="print-container">
+        <div class="print-header">
+            <h1 class="print-title">${reportData.title}</h1>
+            <div class="print-subtitle">الإدارة العامة للتعليم بمنطقة ${reportData.region}</div>
+            <div class="print-info">
+                <strong>رقم التقرير:</strong> ${reportData.reportNumber} | 
+                <strong>تاريخ البرنامج:</strong> ${reportData.programDate}
+            </div>
+        </div>
+        
+        <div class="print-section">
+            <h3 class="print-section-title">البيانات الأساسية</h3>
+            <table class="print-table">
+                <tr>
+                    <td>${reportData.school}</td>
+                    <th>المدرسة</th>
+                </tr>
+                <tr>
+                    <td>${reportData.principal}</td>
+                    <th>مدير المدرسة</th>
+                </tr>
+                <tr>
+                    <td>${reportData.reporter}</td>
+                    <th>معد التقرير</th>
+                </tr>
+                <tr>
+                    <td>${reportData.location}</td>
+                    <th>مكان التنفيذ</th>
+                </tr>
+                <tr>
+                    <td>${reportData.target}</td>
+                    <th>المستهدفون</th>
+                </tr>
+                <tr>
+                    <td>${reportData.beneficiaries}</td>
+                    <th>عدد المستفيدين</th>
+                </tr>
+                <tr>
+                    <td>${reportData.curriculumRelated}</td>
+                    <th>تابع للمناهج</th>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="print-section">
+            <h3 class="print-section-title">وصف مختصر لما تم تنفيذه</h3>
+            <div class="print-content">
+                ${reportData.description.split('\n').map(p => `<p>${p}</p>`).join('')}
+            </div>
+        </div>
+        
+        ${reportData.procedures && reportData.procedures.length > 0 ? `
+        <div class="print-section">
+            <h3 class="print-section-title">إجراءات التنفيذ</h3>
+            <div class="print-list">
+                ${reportData.procedures.map((procedure, index) => `
+                <div class="print-list-item">${procedure}</div>
+                `).join('')}
+            </div>
+        </div>` : ''}
+        
+        ${reportData.results && reportData.results.length > 0 ? `
+        <div class="print-section">
+            <h3 class="print-section-title">النتائج</h3>
+            <div class="print-list">
+                ${reportData.results.map((result, index) => `
+                <div class="print-list-item">${result}</div>
+                `).join('')}
+            </div>
+        </div>` : ''}
+        
+        <div class="print-section">
+            <h3 class="print-section-title">التوصيات</h3>
+            <div class="print-content">
+                ${reportData.recommendations.split('\n').map(p => `<p>${p}</p>`).join('')}
+            </div>
+        </div>
+        
+        ${imagesHTML}
+        
+        <div class="print-signatures">
+            <div class="print-signature">
+                <div class="print-signature-name">${reportData.principal}</div>
+                <div class="print-signature-line"></div>
+                <div>مدير المدرسة</div>
+            </div>
+            <div class="print-signature">
+                <div class="print-signature-name">${reportData.reporter}</div>
+                <div class="print-signature-line"></div>
+                <div>معد التقرير</div>
+            </div>
+        </div>
+        
+        <div class="print-footer">
+            <p>تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير الإلكتروني</p>
+            <p>${currentDate}</p>
+        </div>
+    </div>
+</body>
+</html>`;
+            }
+            
             function collectReportData() {
                 return {
                     type: document.getElementById('reportType').value,
@@ -2408,6 +3024,114 @@
 </html>`;
             }
             
+            function generatePreviewHTML(reportData) {
+                return `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>معاينة: ${reportData.title}</title>
+    <style>
+        body { font-family: 'Cairo', sans-serif; direction: rtl; padding: 20px; background: #f5f5f5; }
+        .report { background: white; padding: 40px; max-width: 1000px; margin: 0 auto; box-shadow: 0 0 20px rgba(0,0,0,0.1); border-radius: 10px; }
+        .header { text-align: center; border-bottom: 3px solid #2c5aa0; padding-bottom: 20px; margin-bottom: 30px; }
+        h1 { color: #2c5aa0; margin-bottom: 10px; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0; }
+        .info-item { background: #f8f9fa; padding: 15px; border-radius: 8px; border-right: 4px solid #2c5aa0; }
+        .info-label { color: #2c5aa0; font-weight: bold; }
+        .section { margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+        .section h3 { color: #2c5aa0; border-bottom: 2px solid #2c5aa0; padding-bottom: 10px; margin-bottom: 15px; }
+        .images { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; }
+        .image { width: 200px; border: 1px solid #ddd; padding: 5px; background: white; }
+        .image img { width: 100%; height: 150px; object-fit: cover; }
+        .image-caption { text-align: center; font-size: 12px; color: #666; padding: 5px; }
+        .signatures { display: flex; justify-content: space-around; margin-top: 50px; padding-top: 30px; border-top: 2px solid #2c5aa0; }
+        .signature { text-align: center; }
+        @media print { body { padding: 0; } .report { box-shadow: none; } }
+    </style>
+</head>
+<body>
+    <div class="report">
+        <div class="header">
+            <h1>${reportData.title}</h1>
+            <div>الإدارة العامة للتعليم بمنطقة ${reportData.region}</div>
+            <div style="margin-top: 15px; color: #666;">
+                <strong>رقم التقرير:</strong> ${reportData.reportNumber} | 
+                <strong>تاريخ البرنامج:</strong> ${reportData.programDate}
+            </div>
+        </div>
+        
+        <div class="info-grid">
+            <div class="info-item"><span class="info-label">المدرسة:</span><br>${reportData.school}</div>
+            <div class="info-item"><span class="info-label">مدير المدرسة:</span><br>${reportData.principal}</div>
+            <div class="info-item"><span class="info-label">معد التقرير:</span><br>${reportData.reporter}</div>
+            <div class="info-item"><span class="info-label">مكان التنفيذ:</span><br>${reportData.location}</div>
+            <div class="info-item"><span class="info-label">المستهدفون:</span><br>${reportData.target}</div>
+            <div class="info-item"><span class="info-label">عدد المستفيدين:</span><br>${reportData.beneficiaries}</div>
+            <div class="info-item"><span class="info-label">تابع للمناهج:</span><br>${reportData.curriculumRelated}</div>
+        </div>
+        
+        <div class="section">
+            <h3>وصف مختصر لما تم تنفيذه</h3>
+            <p>${reportData.description}</p>
+        </div>
+        
+        ${reportData.procedures && reportData.procedures.length > 0 ? `
+        <div class="section">
+            <h3>إجراءات التنفيذ</h3>
+            <ol>${reportData.procedures.map(p => `<li>${p}</li>`).join('')}</ol>
+        </div>` : ''}
+        
+        ${reportData.results && reportData.results.length > 0 ? `
+        <div class="section">
+            <h3>النتائج</h3>
+            <ul>${reportData.results.map(r => `<li>${r}</li>`).join('')}</ul>
+        </div>` : ''}
+        
+        <div class="section">
+            <h3>التوصيات</h3>
+            <p>${reportData.recommendations}</p>
+        </div>
+        
+        ${uploadedImages.length > 0 ? `
+        <div class="section">
+            <h3>الصور المرفقة</h3>
+            <div class="images">
+                ${uploadedImages.map((img, idx) => `
+                <div class="image">
+                    <img src="${img.data}" alt="صورة ${idx + 1}">
+                    <div class="image-caption">صورة ${idx + 1}</div>
+                </div>`).join('')}
+            </div>
+        </div>` : ''}
+        
+        <div class="signatures">
+            <div class="signature">
+                <div style="font-weight: bold; margin-bottom: 10px;">مدير المدرسة</div>
+                <div>${reportData.principal}</div>
+                <div style="margin-top: 20px; border-top: 1px solid #000; width: 150px; margin: 20px auto 0; padding-top: 5px;">التوقيع</div>
+            </div>
+            <div class="signature">
+                <div style="font-weight: bold; margin-bottom: 10px;">معد التقرير</div>
+                <div>${reportData.reporter}</div>
+                <div style="margin-top: 20px; border-top: 1px solid #000; width: 150px; margin: 20px auto 0; padding-top: 5px;">التوقيع</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px; color: #666; font-size: 14px; border-top: 1px dashed #ddd; padding-top: 20px;">
+            تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير الإلكتروني - ${new Date().toLocaleDateString('ar-SA')}
+        </div>
+    </div>
+    
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    <\/script>
+</body>
+</html>`;
+            }
+            
             function generateReportNumber() {
                 const prefix = 'REP';
                 const year = new Date().getFullYear();
@@ -2468,6 +3192,7 @@
             setupEventListeners();
             loadInitialData();
             
+            // الحفظ التلقائي كل 30 ثانية
             setInterval(() => {
                 if (validateForm()) {
                     const reportData = collectReportData();

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -42,7 +42,6 @@
             direction: rtl;
         }
 
-        /* Header */
         .header {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
@@ -68,7 +67,6 @@
             font-weight: 300;
         }
 
-        /* Main Container */
         .main-container {
             margin-top: 120px;
             padding: 0 20px 40px;
@@ -77,7 +75,6 @@
             margin-right: auto;
         }
 
-        /* Report Form Container */
         .report-form-container {
             background-color: white;
             border-radius: var(--radius);
@@ -99,7 +96,6 @@
             background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
         }
 
-        /* Section Headers */
         .section-header {
             color: var(--primary-color);
             border-right: 5px solid var(--primary-color);
@@ -133,7 +129,6 @@
             line-height: 1.7;
         }
 
-        /* Form Styles */
         .form-group {
             margin-bottom: 30px;
         }
@@ -190,7 +185,6 @@
             gap: 30px;
         }
 
-        /* Form Example */
         .form-example {
             font-size: 14px;
             color: var(--gray-color);
@@ -199,7 +193,6 @@
             padding-right: 5px;
         }
 
-        /* Upload Area */
         .upload-section {
             margin-top: 40px;
             border-top: 2px dashed var(--border-color);
@@ -258,7 +251,6 @@
             margin: 0 auto;
         }
 
-        /* Image Preview */
         .image-preview {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -316,7 +308,6 @@
             transform: scale(1.1);
         }
 
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -398,7 +389,6 @@
             width: 100%;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
             justify-content: space-between;
@@ -409,7 +399,6 @@
             flex-wrap: wrap;
         }
 
-        /* Instruction Box */
         .instruction-box {
             background: linear-gradient(135deg, #f0f7ff 0%, #e8f0fe 100%);
             border-right: 5px solid var(--primary-color);
@@ -449,7 +438,6 @@
             z-index: 1;
         }
 
-        /* Export Options Modal */
         .export-modal {
             display: none;
             position: fixed;
@@ -602,7 +590,6 @@
             margin-top: 40px;
         }
 
-        /* Scroll Indicator */
         .scroll-indicator {
             position: fixed;
             bottom: 40px;
@@ -634,7 +621,6 @@
             transform: translateY(-5px) scale(1.05);
         }
 
-        /* Success Message */
         .success-message {
             position: fixed;
             top: 50%;
@@ -686,7 +672,6 @@
             line-height: 1.8;
         }
 
-        /* Loading Overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -728,7 +713,6 @@
             font-weight: 600;
         }
 
-        /* Responsive Design */
         @media (max-width: 992px) {
             .form-row {
                 grid-template-columns: 1fr;
@@ -818,7 +802,6 @@
             }
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -838,7 +821,6 @@
             background: var(--primary-dark);
         }
 
-        /* Form Validation Styles */
         .form-input.invalid, .form-select.invalid, .form-textarea.invalid {
             border-color: var(--danger-color);
             background-color: rgba(220, 53, 69, 0.05);
@@ -859,13 +841,11 @@
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
         <div class="loading-text" id="loadingText">جاري معالجة البيانات...</div>
     </div>
 
-    <!-- Success Message -->
     <div class="success-message" id="successMessage">
         <div class="success-icon">
             <i class="fas fa-check-circle"></i>
@@ -877,23 +857,18 @@
         </button>
     </div>
 
-    <!-- Header -->
     <div class="header">
         <h1>نظام إعداد التقارير - أداء الواجبات الوظيفية</h1>
         <div class="header-subtitle">الإدارة العامة للتعليم بمنطقة الرياض</div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-container">
-        <!-- Instruction Box -->
         <div class="instruction-box">
             <h3><i class="fas fa-info-circle"></i> تعليمات إعداد التقرير</h3>
             <p>يرجى تعبئة جميع الحقول المطلوبة (*) بدقة لتتمكن من إنشاء التقرير بشكل صحيح. يمكنك حفظ العمل كمسودة والعودة إليه لاحقاً.</p>
         </div>
 
-        <!-- Report Form -->
         <div class="report-form-container">
-            <!-- Section 1: Report Type -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-file-signature"></i> اختيار نوع التقرير</h2>
                 <p class="section-subtitle">اختر نوع التقرير المناسب لهذا البند من القائمة التالية</p>
@@ -914,7 +889,6 @@
                 </div>
             </div>
 
-            <!-- Section 2: Main Data -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-database"></i> البيانات الرئيسية</h2>
                 <p class="section-subtitle">البيانات الرئيسية التي ستظهر في رأس التقرير النهائي</p>
@@ -978,7 +952,6 @@
                 </div>
             </div>
 
-            <!-- Section 3: Program Details -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-calendar-alt"></i> تفاصيل البرنامج</h2>
                 <p class="section-subtitle">التفاصيل الزمنية والمكانية للبرنامج المنفذ</p>
@@ -1024,7 +997,6 @@
                 </div>
             </div>
 
-            <!-- Section 4: Activity Description -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-align-left"></i> وصف النشاط</h2>
                 <p class="section-subtitle">وصف شامل وواضح للنشاط الذي تم تنفيذه</p>
@@ -1039,7 +1011,6 @@
                 </div>
             </div>
 
-            <!-- Section 5: Implementation Procedures -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-tasks"></i> إجراءات التنفيذ</h2>
                 <p class="section-subtitle">الخطوات والإجراءات التي تم اتباعها لتنفيذ النشاط</p>
@@ -1054,7 +1025,6 @@
                 </div>
             </div>
 
-            <!-- Section 6: Results -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-chart-line"></i> النتائج</h2>
                 <p class="section-subtitle">النتائج المتحققة والأثر الإيجابي للنشاط</p>
@@ -1069,7 +1039,6 @@
                 </div>
             </div>
 
-            <!-- Section 7: Recommendations -->
             <div class="form-section">
                 <h2 class="section-header"><i class="fas fa-lightbulb"></i> التوصيات</h2>
                 <p class="section-subtitle">توصيات للتحسين والتطوير في المستقبل</p>
@@ -1084,7 +1053,6 @@
                 </div>
             </div>
 
-            <!-- Section 8: Attachments -->
             <div class="form-section upload-section">
                 <h2 class="section-header"><i class="fas fa-images"></i> الصور المرفقة بالتقرير</h2>
                 <p class="section-subtitle">صور توثيقية للنشاط المنفذ (صورتان كحد أقصى)</p>
@@ -1111,7 +1079,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="action-buttons">
                 <button class="btn btn-secondary" id="saveDraft">
                     <i class="fas fa-save"></i> حفظ كمسودة
@@ -1129,7 +1096,6 @@
         </div>
     </div>
 
-    <!-- Export Options Modal -->
     <div class="export-modal" id="exportModal">
         <div class="export-modal-content">
             <div class="export-modal-header">
@@ -1166,14 +1132,12 @@
         </div>
     </div>
 
-    <!-- Scroll to Top Button -->
     <div class="scroll-indicator" id="scrollToTop">
         <i class="fas fa-arrow-up"></i>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ========== العناصر الرئيسية ==========
             const uploadArea = document.getElementById('uploadArea');
             const imageUpload = document.getElementById('imageUpload');
             const imagePreview = document.getElementById('imagePreview');
@@ -1192,19 +1156,10 @@
             const successDetails = document.getElementById('successDetails');
             const closeSuccessMessage = document.getElementById('closeSuccessMessage');
             
-            // ========== متغيرات التطبيق ==========
             let uploadedImages = [];
             let currentReportData = null;
             
-            // ========== تهيئة الأحداث ==========
-            setupEventListeners();
-            
-            // ========== تحميل البيانات الأولية ==========
-            loadInitialData();
-            
-            // ========== إعداد أحداث العناصر ==========
             function setupEventListeners() {
-                // رفع الصور
                 uploadArea.addEventListener('click', function() {
                     imageUpload.click();
                 });
@@ -1221,7 +1176,6 @@
                 uploadArea.addEventListener('drop', function(e) {
                     e.preventDefault();
                     this.classList.remove('dragover');
-                    
                     const files = e.dataTransfer.files;
                     handleImageUpload(files);
                 });
@@ -1231,15 +1185,10 @@
                     handleImageUpload(files);
                 });
                 
-                // التمرير للأعلى
                 scrollToTopBtn.addEventListener('click', function() {
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
                 
-                // التحكم في ظهور زر التمرير للأعلى
                 window.addEventListener('scroll', function() {
                     if (window.scrollY > 300) {
                         scrollToTopBtn.classList.add('visible');
@@ -1248,22 +1197,10 @@
                     }
                 });
                 
-                // حفظ المسودة
-                saveDraftBtn.addEventListener('click', function() {
-                    saveAsDraft();
-                });
+                saveDraftBtn.addEventListener('click', saveAsDraft);
+                previewReportBtn.addEventListener('click', previewReport);
+                submitReportBtn.addEventListener('click', submitReport);
                 
-                // معاينة التقرير
-                previewReportBtn.addEventListener('click', function() {
-                    previewReport();
-                });
-                
-                // إنشاء التقرير
-                submitReportBtn.addEventListener('click', function() {
-                    submitReport();
-                });
-                
-                // التحقق من الحقول المطلوبة
                 document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(input => {
                     input.addEventListener('blur', function() {
                         validateField(this);
@@ -1278,7 +1215,6 @@
                     });
                 });
                 
-                // التحكم في نافذة التصدير
                 closeExportModal.addEventListener('click', function() {
                     exportModal.style.display = 'none';
                 });
@@ -1287,7 +1223,6 @@
                     exportModal.style.display = 'none';
                 });
                 
-                // اختيار صيغة التصدير
                 exportOptions.forEach(option => {
                     option.addEventListener('click', function() {
                         const format = this.dataset.format;
@@ -1295,22 +1230,18 @@
                     });
                 });
                 
-                // إغلاق نافذة التصدير عند النقر خارجها
                 window.addEventListener('click', function(event) {
                     if (event.target === exportModal) {
                         exportModal.style.display = 'none';
                     }
                 });
                 
-                // إغلاق رسالة النجاح
                 closeSuccessMessage.addEventListener('click', function() {
                     successMessage.classList.remove('active');
                 });
             }
             
-            // ========== معالجة رفع الصور ==========
             function handleImageUpload(files) {
-                // التحقق من عدد الصور
                 if (uploadedImages.length + files.length > 2) {
                     showError('يمكنك رفع صورتين كحد أقصى فقط');
                     return;
@@ -1319,13 +1250,11 @@
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
                     
-                    // التحقق من نوع الملف
                     if (!file.type.startsWith('image/')) {
                         showError('الرجاء رفع ملفات صور فقط (JPG, PNG, GIF)');
                         continue;
                     }
                     
-                    // التحقق من حجم الملف (5MB)
                     if (file.size > 5 * 1024 * 1024) {
                         showError('حجم الصورة يجب أن يكون أقل من 5MB');
                         continue;
@@ -1345,11 +1274,9 @@
                     reader.readAsDataURL(file);
                 }
                 
-                // إعادة تعيين حقل الرفع
                 imageUpload.value = '';
             }
             
-            // ========== تحديث معاينة الصور ==========
             function updateImagePreview() {
                 imagePreview.innerHTML = '';
                 
@@ -1367,7 +1294,6 @@
                     imagePreview.appendChild(item);
                 });
                 
-                // إضافة أحداث لحذف الصور
                 document.querySelectorAll('.preview-remove').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const index = parseInt(this.dataset.index);
@@ -1377,9 +1303,7 @@
                 });
             }
             
-            // ========== تحميل البيانات الأولية ==========
             function loadInitialData() {
-                // تحميل المسودة المحفوظة إن وجدت
                 const savedDraft = localStorage.getItem('reportDraft');
                 if (savedDraft) {
                     try {
@@ -1393,7 +1317,6 @@
                 }
             }
             
-            // ========== تحميل بيانات المسودة ==========
             function loadDraftData(draftData) {
                 document.getElementById('reportType').value = draftData.type || 'strategy';
                 document.getElementById('reportTitle').value = draftData.title || 'تقرير تنفيذ استراتيجية';
@@ -1407,7 +1330,6 @@
                 document.getElementById('results').value = draftData.results ? (Array.isArray(draftData.results) ? draftData.results.join(', ') : draftData.results) : '';
                 document.getElementById('recommendations').value = draftData.recommendations || '';
                 
-                // تحميل الصور
                 if (draftData.images && draftData.images.length > 0) {
                     uploadedImages = [...draftData.images];
                     updateImagePreview();
@@ -1416,7 +1338,6 @@
                 showSuccess('تم تحميل بيانات المسودة بنجاح');
             }
             
-            // ========== التحقق من الحقول ==========
             function validateField(field) {
                 const errorDiv = document.getElementById(`${field.id}Error`);
                 
@@ -1431,7 +1352,6 @@
                 return true;
             }
             
-            // ========== التحقق من النموذج كامل ==========
             function validateForm() {
                 let isValid = true;
                 const requiredFields = document.querySelectorAll('[required]');
@@ -1445,7 +1365,6 @@
                 return isValid;
             }
             
-            // ========== حفظ كمسودة ==========
             function saveAsDraft() {
                 if (!validateForm()) {
                     showError('يرجى ملء جميع الحقول المطلوبة قبل الحفظ');
@@ -1456,13 +1375,11 @@
                 reportData.status = 'draft';
                 reportData.savedAt = new Date().toLocaleString('ar-SA');
                 
-                // حفظ البيانات
                 localStorage.setItem('reportDraft', JSON.stringify(reportData));
                 
                 showSuccess('تم حفظ التقرير كمسودة بنجاح!\n' + reportData.savedAt);
             }
             
-            // ========== معاينة التقرير ==========
             function previewReport() {
                 if (!validateForm()) {
                     showError('يرجى ملء جميع الحقول المطلوبة قبل المعاينة');
@@ -1472,13 +1389,11 @@
                 currentReportData = collectReportData();
                 currentReportData.reportNumber = generateReportNumber();
                 
-                // فتح نافذة جديدة للمعاينة
                 const previewWindow = window.open('', '_blank');
                 previewWindow.document.write(generatePreviewHTML(currentReportData));
                 previewWindow.document.close();
             }
             
-            // ========== إنشاء التقرير النهائي ==========
             function submitReport() {
                 if (!validateForm()) {
                     showError('يرجى ملء جميع الحقول المطلوبة قبل الإنشاء');
@@ -1490,11 +1405,9 @@
                 currentReportData.submissionDate = new Date().toLocaleDateString('ar-SA');
                 currentReportData.reportNumber = generateReportNumber();
                 
-                // عرض نافذة اختيار صيغة التصدير
                 exportModal.style.display = 'flex';
             }
             
-            // ========== تصدير التقرير ==========
             async function exportReport(format) {
                 if (!currentReportData) {
                     showError('لا توجد بيانات للتقرير');
@@ -1514,12 +1427,10 @@
                             break;
                     }
                     
-                    // حفظ التقرير النهائي
                     currentReportData.exportedAt = new Date().toLocaleString('ar-SA');
                     currentReportData.exportFormat = format;
                     localStorage.setItem('lastReport', JSON.stringify(currentReportData));
                     
-                    // عرض رسالة النجاح
                     hideLoading();
                     showExportSuccess(format);
                     
@@ -1529,42 +1440,33 @@
                 }
             }
             
-            // ========== تصدير إلى Word (تنسيق احترافي) ==========
             async function exportToWord() {
                 const docx = window.docx;
                 
-                // إنشاء محتوى الوثيقة بتنسيق احترافي
                 const doc = new docx.Document({
                     sections: [{
                         properties: {
                             page: {
                                 margin: {
-                                    top: 1440,    // 1 inch = 1440 twips
+                                    top: 1440,
                                     right: 1440,
                                     bottom: 1440,
                                     left: 1440
-                                },
-                                pageNumbers: {
-                                    start: 1,
-                                    formatType: docx.PageNumberFormat.DECIMAL
                                 }
                             }
                         },
                         children: [
-                            // عنوان الصفحة مع ترويسة
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: "الإدارة العامة للتعليم",
                                         bold: true,
                                         size: 32,
-                                        font: "Traditional Arabic"
+                                        font: "Arial"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.CENTER,
-                                spacing: {
-                                    after: 400
-                                }
+                                spacing: { after: 400 }
                             }),
                             
                             new docx.Paragraph({
@@ -1573,23 +1475,20 @@
                                         text: `بمنطقة ${currentReportData.region}`,
                                         bold: true,
                                         size: 28,
-                                        font: "Traditional Arabic"
+                                        font: "Arial"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.CENTER,
-                                spacing: {
-                                    after: 600
-                                }
+                                spacing: { after: 600 }
                             }),
                             
-                            // العنوان الرئيسي
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: currentReportData.title,
                                         bold: true,
                                         size: 36,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "2c5aa0"
                                     })
                                 ],
@@ -1602,24 +1501,19 @@
                                         style: docx.BorderStyle.SINGLE
                                     }
                                 },
-                                spacing: {
-                                    after: 600
-                                }
+                                spacing: { after: 600 }
                             }),
                             
-                            // معلومات التقرير
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: `رقم التقرير: ${currentReportData.reportNumber}`,
                                         size: 22,
-                                        font: "Traditional Arabic"
+                                        font: "Arial"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    after: 200
-                                }
+                                spacing: { after: 200 }
                             }),
                             
                             new docx.Paragraph({
@@ -1627,34 +1521,27 @@
                                     new docx.TextRun({
                                         text: `تاريخ البرنامج: ${currentReportData.programDate}`,
                                         size: 22,
-                                        font: "Traditional Arabic"
+                                        font: "Arial"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    after: 400
-                                }
+                                spacing: { after: 400 }
                             }),
                             
-                            // القسم الأول: البيانات الأساسية
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: "البيانات الأساسية",
                                         bold: true,
                                         size: 28,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "2c5aa0"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    before: 400,
-                                    after: 300
-                                }
+                                spacing: { before: 400, after: 300 }
                             }),
                             
-                            // جدول البيانات الأساسية
                             new docx.Table({
                                 rows: [
                                     new docx.TableRow({
@@ -1665,29 +1552,21 @@
                                                         text: "المدرسة:",
                                                         bold: true,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                shading: {
-                                                    fill: "f0f4f8"
-                                                },
-                                                width: {
-                                                    size: 30,
-                                                    type: docx.WidthType.PERCENTAGE
-                                                }
+                                                shading: { fill: "f0f4f8" },
+                                                width: { size: 30, type: docx.WidthType.PERCENTAGE }
                                             }),
                                             new docx.TableCell({
                                                 children: [new docx.Paragraph({
                                                     children: [new docx.TextRun({
                                                         text: currentReportData.school,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                width: {
-                                                    size: 70,
-                                                    type: docx.WidthType.PERCENTAGE
-                                                }
+                                                width: { size: 70, type: docx.WidthType.PERCENTAGE }
                                             })
                                         ]
                                     }),
@@ -1699,19 +1578,17 @@
                                                         text: "مدير المدرسة:",
                                                         bold: true,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                shading: {
-                                                    fill: "f0f4f8"
-                                                }
+                                                shading: { fill: "f0f4f8" }
                                             }),
                                             new docx.TableCell({
                                                 children: [new docx.Paragraph({
                                                     children: [new docx.TextRun({
                                                         text: currentReportData.principal,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })]
                                             })
@@ -1725,19 +1602,17 @@
                                                         text: "معد التقرير:",
                                                         bold: true,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                shading: {
-                                                    fill: "f0f4f8"
-                                                }
+                                                shading: { fill: "f0f4f8" }
                                             }),
                                             new docx.TableCell({
                                                 children: [new docx.Paragraph({
                                                     children: [new docx.TextRun({
                                                         text: currentReportData.reporter,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })]
                                             })
@@ -1751,19 +1626,17 @@
                                                         text: "مكان التنفيذ:",
                                                         bold: true,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                shading: {
-                                                    fill: "f0f4f8"
-                                                }
+                                                shading: { fill: "f0f4f8" }
                                             }),
                                             new docx.TableCell({
                                                 children: [new docx.Paragraph({
                                                     children: [new docx.TextRun({
                                                         text: currentReportData.location,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })]
                                             })
@@ -1777,19 +1650,17 @@
                                                         text: "المستهدفون:",
                                                         bold: true,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                shading: {
-                                                    fill: "f0f4f8"
-                                                }
+                                                shading: { fill: "f0f4f8" }
                                             }),
                                             new docx.TableCell({
                                                 children: [new docx.Paragraph({
                                                     children: [new docx.TextRun({
                                                         text: currentReportData.target,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })]
                                             })
@@ -1803,19 +1674,17 @@
                                                         text: "عدد المستفيدين:",
                                                         bold: true,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                shading: {
-                                                    fill: "f0f4f8"
-                                                }
+                                                shading: { fill: "f0f4f8" }
                                             }),
                                             new docx.TableCell({
                                                 children: [new docx.Paragraph({
                                                     children: [new docx.TextRun({
                                                         text: currentReportData.beneficiaries,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })]
                                             })
@@ -1829,29 +1698,24 @@
                                                         text: "تابع للمناهج:",
                                                         bold: true,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })],
-                                                shading: {
-                                                    fill: "f0f4f8"
-                                                }
+                                                shading: { fill: "f0f4f8" }
                                             }),
                                             new docx.TableCell({
                                                 children: [new docx.Paragraph({
                                                     children: [new docx.TextRun({
                                                         text: currentReportData.curriculumRelated,
                                                         size: 24,
-                                                        font: "Traditional Arabic"
+                                                        font: "Arial"
                                                     })]
                                                 })]
                                             })
                                         ]
                                     })
                                 ],
-                                width: {
-                                    size: 100,
-                                    type: docx.WidthType.PERCENTAGE
-                                },
+                                width: { size: 100, type: docx.WidthType.PERCENTAGE },
                                 borders: {
                                     insideHorizontal: {
                                         style: docx.BorderStyle.SINGLE,
@@ -1866,22 +1730,18 @@
                                 }
                             }),
                             
-                            // القسم الثاني: وصف النشاط
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: "وصف مختصر لما تم تنفيذه",
                                         bold: true,
                                         size: 28,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "2c5aa0"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    before: 600,
-                                    after: 300
-                                }
+                                spacing: { before: 600, after: 300 }
                             }),
                             
                             new docx.Paragraph({
@@ -1889,31 +1749,25 @@
                                     new docx.TextRun({
                                         text: currentReportData.description,
                                         size: 24,
-                                        font: "Traditional Arabic"
+                                        font: "Arial"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    after: 400
-                                }
+                                spacing: { after: 400 }
                             }),
                             
-                            // القسم الثالث: إجراءات التنفيذ
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: "إجراءات التنفيذ",
                                         bold: true,
                                         size: 28,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "2c5aa0"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    before: 400,
-                                    after: 300
-                                }
+                                spacing: { before: 400, after: 300 }
                             }),
                             
                             ...(currentReportData.procedures || []).map((procedure, index) => 
@@ -1922,35 +1776,27 @@
                                         new docx.TextRun({
                                             text: `${index + 1}. ${procedure}`,
                                             size: 24,
-                                            font: "Traditional Arabic"
+                                            font: "Arial"
                                         })
                                     ],
                                     alignment: docx.AlignmentType.RIGHT,
-                                    spacing: {
-                                        after: 150
-                                    },
-                                    bullet: {
-                                        level: 0
-                                    }
+                                    spacing: { after: 150 },
+                                    bullet: { level: 0 }
                                 })
                             ),
                             
-                            // القسم الرابع: النتائج
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: "النتائج",
                                         bold: true,
                                         size: 28,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "2c5aa0"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    before: 600,
-                                    after: 300
-                                }
+                                spacing: { before: 600, after: 300 }
                             }),
                             
                             ...(currentReportData.results || []).map((result, index) => 
@@ -1959,35 +1805,27 @@
                                         new docx.TextRun({
                                             text: `${index + 1}. ${result}`,
                                             size: 24,
-                                            font: "Traditional Arabic"
+                                            font: "Arial"
                                         })
                                     ],
                                     alignment: docx.AlignmentType.RIGHT,
-                                    spacing: {
-                                        after: 150
-                                    },
-                                    bullet: {
-                                        level: 0
-                                    }
+                                    spacing: { after: 150 },
+                                    bullet: { level: 0 }
                                 })
                             ),
                             
-                            // القسم الخامس: التوصيات
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: "التوصيات",
                                         bold: true,
                                         size: 28,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "2c5aa0"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    before: 600,
-                                    after: 300
-                                }
+                                spacing: { before: 600, after: 300 }
                             }),
                             
                             new docx.Paragraph({
@@ -1995,31 +1833,25 @@
                                     new docx.TextRun({
                                         text: currentReportData.recommendations,
                                         size: 24,
-                                        font: "Traditional Arabic"
+                                        font: "Arial"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.RIGHT,
-                                spacing: {
-                                    after: 600
-                                }
+                                spacing: { after: 600 }
                             }),
                             
-                            // التوقيعات
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: "التوقيعات",
                                         bold: true,
                                         size: 28,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "2c5aa0"
                                     })
                                 ],
                                 alignment: docx.AlignmentType.CENTER,
-                                spacing: {
-                                    before: 800,
-                                    after: 400
-                                }
+                                spacing: { before: 800, after: 400 }
                             }),
                             
                             new docx.Table({
@@ -2034,7 +1866,7 @@
                                                                 text: "مدير المدرسة",
                                                                 bold: true,
                                                                 size: 24,
-                                                                font: "Traditional Arabic"
+                                                                font: "Arial"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
@@ -2044,7 +1876,7 @@
                                                             new docx.TextRun({
                                                                 text: currentReportData.principal,
                                                                 size: 22,
-                                                                font: "Traditional Arabic"
+                                                                font: "Arial"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
@@ -2054,7 +1886,7 @@
                                                             new docx.TextRun({
                                                                 text: "________________________",
                                                                 size: 24,
-                                                                font: "Traditional Arabic"
+                                                                font: "Arial"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
@@ -2064,17 +1896,14 @@
                                                             new docx.TextRun({
                                                                 text: "التوقيع",
                                                                 size: 20,
-                                                                font: "Traditional Arabic",
+                                                                font: "Arial",
                                                                 color: "666666"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
                                                     })
                                                 ],
-                                                margins: {
-                                                    top: 200,
-                                                    bottom: 200
-                                                }
+                                                margins: { top: 200, bottom: 200 }
                                             }),
                                             new docx.TableCell({
                                                 children: [
@@ -2084,7 +1913,7 @@
                                                                 text: "معد التقرير",
                                                                 bold: true,
                                                                 size: 24,
-                                                                font: "Traditional Arabic"
+                                                                font: "Arial"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
@@ -2094,7 +1923,7 @@
                                                             new docx.TextRun({
                                                                 text: currentReportData.reporter,
                                                                 size: 22,
-                                                                font: "Traditional Arabic"
+                                                                font: "Arial"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
@@ -2104,7 +1933,7 @@
                                                             new docx.TextRun({
                                                                 text: "________________________",
                                                                 size: 24,
-                                                                font: "Traditional Arabic"
+                                                                font: "Arial"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
@@ -2114,60 +1943,48 @@
                                                             new docx.TextRun({
                                                                 text: "التوقيع",
                                                                 size: 20,
-                                                                font: "Traditional Arabic",
+                                                                font: "Arial",
                                                                 color: "666666"
                                                             })
                                                         ],
                                                         alignment: docx.AlignmentType.CENTER
                                                     })
                                                 ],
-                                                margins: {
-                                                    top: 200,
-                                                    bottom: 200
-                                                }
+                                                margins: { top: 200, bottom: 200 }
                                             })
                                         ]
                                     })
                                 ],
-                                width: {
-                                    size: 100,
-                                    type: docx.WidthType.PERCENTAGE
-                                }
+                                width: { size: 100, type: docx.WidthType.PERCENTAGE }
                             }),
                             
-                            // تذييل الصفحة
                             new docx.Paragraph({
                                 children: [
                                     new docx.TextRun({
                                         text: `تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير - ${new Date().toLocaleDateString('ar-SA')}`,
                                         size: 18,
-                                        font: "Traditional Arabic",
+                                        font: "Arial",
                                         color: "666666",
                                         italics: true
                                     })
                                 ],
                                 alignment: docx.AlignmentType.CENTER,
-                                spacing: {
-                                    before: 800
-                                }
+                                spacing: { before: 800 }
                             })
                         ]
                     }]
                 });
                 
-                // تحميل الوثيقة
                 const buffer = await docx.Packer.toBlob(doc);
                 saveAs(buffer, `تقرير_${currentReportData.reportNumber}.docx`);
             }
             
-            // ========== تصدير إلى HTML (تنسيق احترافي) ==========
             function exportToHTML() {
                 const htmlContent = generateProfessionalPreviewHTML(currentReportData);
                 const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
                 saveAs(blob, `تقرير_${currentReportData.reportNumber}.html`);
             }
             
-            // ========== جمع بيانات التقرير ==========
             function collectReportData() {
                 return {
                     type: document.getElementById('reportType').value,
@@ -2189,603 +2006,234 @@
                 };
             }
             
-            // ========== توليد HTML احترافي للمعاينة ==========
             function generateProfessionalPreviewHTML(reportData) {
-                return `
-                    <!DOCTYPE html>
-                    <html dir="rtl" lang="ar">
-                    <head>
-                        <meta charset="UTF-8">
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>${reportData.title}</title>
-                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                        <style>
-                            @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
-                            
-                            * {
-                                margin: 0;
-                                padding: 0;
-                                box-sizing: border-box;
-                            }
-                            
-                            body {
-                                font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                                line-height: 1.8;
-                                color: #333;
-                                background: linear-gradient(135deg, #f8fafc 0%, #e8f0fe 100%);
-                                min-height: 100vh;
-                                padding: 40px 20px;
-                                direction: rtl;
-                            }
-                            
-                            .report-container {
-                                max-width: 1000px;
-                                margin: 0 auto;
-                                background: white;
-                                padding: 50px;
-                                box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-                                border-radius: 20px;
-                                position: relative;
-                                overflow: hidden;
-                                border: 1px solid rgba(255,255,255,0.3);
-                            }
-                            
-                            .report-container::before {
-                                content: '';
-                                position: absolute;
-                                top: 0;
-                                right: 0;
-                                width: 100%;
-                                height: 8px;
-                                background: linear-gradient(90deg, #2c5aa0 0%, #4a7bc8 100%);
-                            }
-                            
-                            .header {
-                                text-align: center;
-                                margin-bottom: 60px;
-                                position: relative;
-                                padding-bottom: 30px;
-                            }
-                            
-                            .header::after {
-                                content: '';
-                                position: absolute;
-                                bottom: 0;
-                                right: 50%;
-                                transform: translateX(50%);
-                                width: 200px;
-                                height: 4px;
-                                background: linear-gradient(90deg, #2c5aa0 0%, #4a7bc8 100%);
-                                border-radius: 2px;
-                            }
-                            
-                            h1 {
-                                color: #2c5aa0;
-                                font-size: 36px;
-                                margin-bottom: 20px;
-                                font-weight: 800;
-                                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                            }
-                            
-                            .subtitle {
-                                color: #666;
-                                font-size: 22px;
-                                font-weight: 600;
-                                margin-bottom: 10px;
-                            }
-                            
-                            .report-info {
-                                display: flex;
-                                justify-content: center;
-                                gap: 40px;
-                                margin-top: 30px;
-                                flex-wrap: wrap;
-                            }
-                            
-                            .info-item {
-                                background: #f0f7ff;
-                                padding: 15px 25px;
-                                border-radius: 12px;
-                                font-size: 18px;
-                                display: flex;
-                                align-items: center;
-                                gap: 10px;
-                                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-                                transition: transform 0.3s ease;
-                            }
-                            
-                            .info-item:hover {
-                                transform: translateY(-5px);
-                            }
-                            
-                            .info-item i {
-                                color: #2c5aa0;
-                                font-size: 20px;
-                            }
-                            
-                            .section {
-                                margin-bottom: 50px;
-                                padding: 30px;
-                                background: #f8fafc;
-                                border-radius: 15px;
-                                border-right: 5px solid #2c5aa0;
-                                box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-                                position: relative;
-                                overflow: hidden;
-                            }
-                            
-                            .section::before {
-                                content: '';
-                                position: absolute;
-                                top: 0;
-                                right: 0;
-                                width: 100px;
-                                height: 100px;
-                                background: linear-gradient(135deg, rgba(44, 90, 160, 0.05) 0%, transparent 100%);
-                                border-radius: 0 0 0 100%;
-                            }
-                            
-                            .section-title {
-                                color: #2c5aa0;
-                                font-size: 28px;
-                                margin-bottom: 25px;
-                                font-weight: 700;
-                                display: flex;
-                                align-items: center;
-                                gap: 15px;
-                            }
-                            
-                            .section-title i {
-                                background: rgba(44, 90, 160, 0.1);
-                                padding: 12px;
-                                border-radius: 10px;
-                                width: 55px;
-                                height: 55px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                            }
-                            
-                            .basic-info-grid {
-                                display: grid;
-                                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                                gap: 25px;
-                                margin-bottom: 30px;
-                            }
-                            
-                            .info-card {
-                                background: white;
-                                padding: 25px;
-                                border-radius: 12px;
-                                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-                                border: 1px solid #e8f0fe;
-                                transition: transform 0.3s ease;
-                            }
-                            
-                            .info-card:hover {
-                                transform: translateY(-5px);
-                                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-                            }
-                            
-                            .info-label {
-                                color: #2c5aa0;
-                                font-weight: 600;
-                                font-size: 18px;
-                                margin-bottom: 10px;
-                                display: flex;
-                                align-items: center;
-                                gap: 10px;
-                            }
-                            
-                            .info-value {
-                                color: #333;
-                                font-size: 20px;
-                                font-weight: 500;
-                                padding-right: 10px;
-                            }
-                            
-                            .content-box {
-                                background: white;
-                                padding: 30px;
-                                border-radius: 12px;
-                                margin-bottom: 25px;
-                                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-                                border: 1px solid #e8f0fe;
-                            }
-                            
-                            .content-box p {
-                                font-size: 20px;
-                                line-height: 1.8;
-                                color: #444;
-                                text-align: justify;
-                            }
-                            
-                            .list-container {
-                                padding-right: 20px;
-                            }
-                            
-                            .list-item {
-                                display: flex;
-                                align-items: flex-start;
-                                gap: 15px;
-                                margin-bottom: 20px;
-                                padding: 15px;
-                                background: white;
-                                border-radius: 10px;
-                                border-right: 4px solid #2c5aa0;
-                                box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-                                transition: transform 0.3s ease;
-                            }
-                            
-                            .list-item:hover {
-                                transform: translateX(-10px);
-                            }
-                            
-                            .list-number {
-                                background: #2c5aa0;
-                                color: white;
-                                width: 35px;
-                                height: 35px;
-                                border-radius: 50%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-weight: bold;
-                                font-size: 18px;
-                                flex-shrink: 0;
-                            }
-                            
-                            .list-text {
-                                font-size: 18px;
-                                color: #444;
-                                flex: 1;
-                            }
-                            
-                            .image-gallery {
-                                display: grid;
-                                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                                gap: 25px;
-                                margin-top: 30px;
-                            }
-                            
-                            .image-card {
-                                border-radius: 15px;
-                                overflow: hidden;
-                                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-                                transition: transform 0.3s ease;
-                                position: relative;
-                            }
-                            
-                            .image-card:hover {
-                                transform: translateY(-10px) scale(1.02);
-                            }
-                            
-                            .image-card img {
-                                width: 100%;
-                                height: 250px;
-                                object-fit: cover;
-                                display: block;
-                            }
-                            
-                            .image-caption {
-                                background: rgba(44, 90, 160, 0.9);
-                                color: white;
-                                padding: 15px;
-                                text-align: center;
-                                font-size: 16px;
-                            }
-                            
-                            .signatures {
-                                display: flex;
-                                justify-content: space-around;
-                                margin-top: 80px;
-                                padding-top: 40px;
-                                border-top: 3px solid #2c5aa0;
-                                flex-wrap: wrap;
-                                gap: 40px;
-                            }
-                            
-                            .signature-box {
-                                text-align: center;
-                                width: 300px;
-                                padding: 30px;
-                                background: #f8fafc;
-                                border-radius: 15px;
-                                box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-                                position: relative;
-                                transition: transform 0.3s ease;
-                            }
-                            
-                            .signature-box:hover {
-                                transform: translateY(-10px);
-                            }
-                            
-                            .signature-title {
-                                color: #2c5aa0;
-                                font-size: 24px;
-                                font-weight: 700;
-                                margin-bottom: 15px;
-                            }
-                            
-                            .signature-name {
-                                font-size: 22px;
-                                color: #333;
-                                margin-bottom: 30px;
-                                font-weight: 600;
-                            }
-                            
-                            .signature-line {
-                                width: 200px;
-                                height: 3px;
-                                background: #333;
-                                margin: 30px auto 15px;
-                                border-radius: 2px;
-                            }
-                            
-                            .signature-label {
-                                color: #666;
-                                font-size: 18px;
-                                font-style: italic;
-                            }
-                            
-                            .footer {
-                                text-align: center;
-                                margin-top: 60px;
-                                padding-top: 30px;
-                                border-top: 2px dashed #ddd;
-                                color: #888;
-                                font-size: 16px;
-                            }
-                            
-                            @media (max-width: 768px) {
-                                .report-container {
-                                    padding: 30px 20px;
-                                }
-                                
-                                h1 {
-                                    font-size: 28px;
-                                }
-                                
-                                .subtitle {
-                                    font-size: 18px;
-                                }
-                                
-                                .section-title {
-                                    font-size: 24px;
-                                }
-                                
-                                .basic-info-grid {
-                                    grid-template-columns: 1fr;
-                                }
-                                
-                                .signatures {
-                                    flex-direction: column;
-                                    align-items: center;
-                                }
-                                
-                                .signature-box {
-                                    width: 100%;
-                                    max-width: 300px;
-                                }
-                                
-                                .info-item {
-                                    padding: 12px 20px;
-                                    font-size: 16px;
-                                }
-                            }
-                            
-                            @media print {
-                                body {
-                                    background: white;
-                                    padding: 0;
-                                }
-                                
-                                .report-container {
-                                    box-shadow: none;
-                                    border-radius: 0;
-                                    padding: 30px;
-                                }
-                                
-                                .section, .info-card, .content-box, .list-item, .signature-box {
-                                    break-inside: avoid;
-                                }
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="report-container">
-                            <div class="header">
-                                <h1>${reportData.title}</h1>
-                                <div class="subtitle">الإدارة العامة للتعليم بمنطقة ${reportData.region}</div>
-                                
-                                <div class="report-info">
-                                    <div class="info-item">
-                                        <i class="fas fa-hashtag"></i>
-                                        <span>رقم التقرير: ${reportData.reportNumber}</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>تاريخ البرنامج: ${reportData.programDate}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- البيانات الأساسية -->
-                            <div class="section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-database"></i>
-                                    البيانات الأساسية
-                                </h3>
-                                
-                                <div class="basic-info-grid">
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="fas fa-school"></i>
-                                            المدرسة
-                                        </div>
-                                        <div class="info-value">${reportData.school}</div>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="fas fa-user-tie"></i>
-                                            مدير المدرسة
-                                        </div>
-                                        <div class="info-value">${reportData.principal}</div>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="fas fa-user-edit"></i>
-                                            معد التقرير
-                                        </div>
-                                        <div class="info-value">${reportData.reporter}</div>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="fas fa-map-marker"></i>
-                                            مكان التنفيذ
-                                        </div>
-                                        <div class="info-value">${reportData.location}</div>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="fas fa-users"></i>
-                                            المستهدفون
-                                        </div>
-                                        <div class="info-value">${reportData.target}</div>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="fas fa-user-check"></i>
-                                            عدد المستفيدين
-                                        </div>
-                                        <div class="info-value">${reportData.beneficiaries}</div>
-                                    </div>
-                                    
-                                    <div class="info-card">
-                                        <div class="info-label">
-                                            <i class="fas fa-book"></i>
-                                            تابع للمناهج
-                                        </div>
-                                        <div class="info-value">${reportData.curriculumRelated}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- وصف النشاط -->
-                            <div class="section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-clipboard-list"></i>
-                                    وصف مختصر لما تم تنفيذه
-                                </h3>
-                                
-                                <div class="content-box">
-                                    <p>${reportData.description}</p>
-                                </div>
-                            </div>
-                            
-                            <!-- إجراءات التنفيذ -->
-                            ${reportData.procedures && reportData.procedures.length > 0 ? `
-                            <div class="section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-tasks"></i>
-                                    إجراءات التنفيذ
-                                </h3>
-                                
-                                <div class="list-container">
-                                    ${reportData.procedures.map((procedure, index) => `
-                                    <div class="list-item">
-                                        <div class="list-number">${index + 1}</div>
-                                        <div class="list-text">${procedure}</div>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            ` : ''}
-                            
-                            <!-- النتائج -->
-                            ${reportData.results && reportData.results.length > 0 ? `
-                            <div class="section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-chart-line"></i>
-                                    النتائج
-                                </h3>
-                                
-                                <div class="list-container">
-                                    ${reportData.results.map((result, index) => `
-                                    <div class="list-item">
-                                        <div class="list-number">${index + 1}</div>
-                                        <div class="list-text">${result}</div>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            ` : ''}
-                            
-                            <!-- التوصيات -->
-                            <div class="section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-lightbulb"></i>
-                                    التوصيات
-                                </h3>
-                                
-                                <div class="content-box">
-                                    <p>${reportData.recommendations}</p>
-                                </div>
-                            </div>
-                            
-                            <!-- الصور المرفقة -->
-                            ${reportData.images && reportData.images.length > 0 ? `
-                            <div class="section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-images"></i>
-                                    الصور المرفقة
-                                </h3>
-                                
-                                <div class="image-gallery">
-                                    ${reportData.images.map((img, idx) => `
-                                    <div class="image-card">
-                                        <img src="${img.data}" alt="صورة ${idx + 1}">
-                                        <div class="image-caption">صورة ${idx + 1}: ${img.name}</div>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                            ` : ''}
-                            
-                            <!-- التوقيعات -->
-                            <div class="signatures">
-                                <div class="signature-box">
-                                    <div class="signature-title">مدير المدرسة</div>
-                                    <div class="signature-name">${reportData.principal}</div>
-                                    <div class="signature-line"></div>
-                                    <div class="signature-label">التوقيع</div>
-                                </div>
-                                
-                                <div class="signature-box">
-                                    <div class="signature-title">معد التقرير</div>
-                                    <div class="signature-name">${reportData.reporter}</div>
-                                    <div class="signature-line"></div>
-                                    <div class="signature-label">التوقيع</div>
-                                </div>
-                            </div>
-                            
-                            <!-- التذييل -->
-                            <div class="footer">
-                                <p>تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير الإلكتروني</p>
-                                <p>${new Date().toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                            </div>
-                        </div>
-                    </body>
-                    </html>
-                `;
+                return `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${reportData.title}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8; color: #333;
+            background: linear-gradient(135deg, #f8fafc 0%, #e8f0fe 100%);
+            min-height: 100vh; padding: 40px 20px; direction: rtl;
+        }
+        
+        .report-container {
+            max-width: 1000px; margin: 0 auto; background: white; padding: 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15); border-radius: 20px;
+            position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .report-container::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 100%; height: 8px;
+            background: linear-gradient(90deg, #2c5aa0 0%, #4a7bc8 100%);
+        }
+        
+        .header { text-align: center; margin-bottom: 60px; position: relative; padding-bottom: 30px; }
+        .header::after {
+            content: ''; position: absolute; bottom: 0; right: 50%; transform: translateX(50%);
+            width: 200px; height: 4px; background: linear-gradient(90deg, #2c5aa0 0%, #4a7bc8 100%); border-radius: 2px;
+        }
+        
+        h1 { color: #2c5aa0; font-size: 36px; margin-bottom: 20px; font-weight: 800; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .subtitle { color: #666; font-size: 22px; font-weight: 600; margin-bottom: 10px; }
+        
+        .report-info { display: flex; justify-content: center; gap: 40px; margin-top: 30px; flex-wrap: wrap; }
+        .info-item {
+            background: #f0f7ff; padding: 15px 25px; border-radius: 12px; font-size: 18px;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        .info-item:hover { transform: translateY(-5px); }
+        .info-item i { color: #2c5aa0; font-size: 20px; }
+        
+        .section {
+            margin-bottom: 50px; padding: 30px; background: #f8fafc; border-radius: 15px;
+            border-right: 5px solid #2c5aa0; box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+            position: relative; overflow: hidden;
+        }
+        .section::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 100px; height: 100px;
+            background: linear-gradient(135deg, rgba(44, 90, 160, 0.05) 0%, transparent 100%); border-radius: 0 0 0 100%;
+        }
+        
+        .section-title {
+            color: #2c5aa0; font-size: 28px; margin-bottom: 25px; font-weight: 700;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .section-title i {
+            background: rgba(44, 90, 160, 0.1); padding: 12px; border-radius: 10px;
+            width: 55px; height: 55px; display: flex; align-items: center; justify-content: center;
+        }
+        
+        .basic-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 30px; }
+        .info-card {
+            background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e8f0fe; transition: transform 0.3s ease;
+        }
+        .info-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        
+        .info-label {
+            color: #2c5aa0; font-weight: 600; font-size: 18px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .info-value { color: #333; font-size: 20px; font-weight: 500; padding-right: 10px; }
+        
+        .content-box {
+            background: white; padding: 30px; border-radius: 12px; margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e8f0fe;
+        }
+        .content-box p { font-size: 20px; line-height: 1.8; color: #444; text-align: justify; }
+        
+        .list-container { padding-right: 20px; }
+        .list-item {
+            display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; padding: 15px;
+            background: white; border-radius: 10px; border-right: 4px solid #2c5aa0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05); transition: transform 0.3s ease;
+        }
+        .list-item:hover { transform: translateX(-10px); }
+        
+        .list-number {
+            background: #2c5aa0; color: white; width: 35px; height: 35px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; flex-shrink: 0;
+        }
+        .list-text { font-size: 18px; color: #444; flex: 1; }
+        
+        .image-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
+        .image-card { border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s ease; position: relative; }
+        .image-card:hover { transform: translateY(-10px) scale(1.02); }
+        .image-card img { width: 100%; height: 250px; object-fit: cover; display: block; }
+        .image-caption { background: rgba(44, 90, 160, 0.9); color: white; padding: 15px; text-align: center; font-size: 16px; }
+        
+        .signatures {
+            display: flex; justify-content: space-around; margin-top: 80px; padding-top: 40px;
+            border-top: 3px solid #2c5aa0; flex-wrap: wrap; gap: 40px;
+        }
+        .signature-box {
+            text-align: center; width: 300px; padding: 30px; background: #f8fafc;
+            border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); position: relative; transition: transform 0.3s ease;
+        }
+        .signature-box:hover { transform: translateY(-10px); }
+        .signature-title { color: #2c5aa0; font-size: 24px; font-weight: 700; margin-bottom: 15px; }
+        .signature-name { font-size: 22px; color: #333; margin-bottom: 30px; font-weight: 600; }
+        .signature-line { width: 200px; height: 3px; background: #333; margin: 30px auto 15px; border-radius: 2px; }
+        .signature-label { color: #666; font-size: 18px; font-style: italic; }
+        
+        .footer {
+            text-align: center; margin-top: 60px; padding-top: 30px; border-top: 2px dashed #ddd;
+            color: #888; font-size: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .report-container { padding: 30px 20px; }
+            h1 { font-size: 28px; } .subtitle { font-size: 18px; }
+            .section-title { font-size: 24px; }
+            .basic-info-grid { grid-template-columns: 1fr; }
+            .signatures { flex-direction: column; align-items: center; }
+            .signature-box { width: 100%; max-width: 300px; }
+            .info-item { padding: 12px 20px; font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <div class="header">
+            <h1>${reportData.title}</h1>
+            <div class="subtitle">الإدارة العامة للتعليم بمنطقة ${reportData.region}</div>
+            
+            <div class="report-info">
+                <div class="info-item"><i class="fas fa-hashtag"></i><span>رقم التقرير: ${reportData.reportNumber}</span></div>
+                <div class="info-item"><i class="fas fa-calendar"></i><span>تاريخ البرنامج: ${reportData.programDate}</span></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title"><i class="fas fa-database"></i>البيانات الأساسية</h3>
+            <div class="basic-info-grid">
+                <div class="info-card"><div class="info-label"><i class="fas fa-school"></i>المدرسة</div><div class="info-value">${reportData.school}</div></div>
+                <div class="info-card"><div class="info-label"><i class="fas fa-user-tie"></i>مدير المدرسة</div><div class="info-value">${reportData.principal}</div></div>
+                <div class="info-card"><div class="info-label"><i class="fas fa-user-edit"></i>معد التقرير</div><div class="info-value">${reportData.reporter}</div></div>
+                <div class="info-card"><div class="info-label"><i class="fas fa-map-marker"></i>مكان التنفيذ</div><div class="info-value">${reportData.location}</div></div>
+                <div class="info-card"><div class="info-label"><i class="fas fa-users"></i>المستهدفون</div><div class="info-value">${reportData.target}</div></div>
+                <div class="info-card"><div class="info-label"><i class="fas fa-user-check"></i>عدد المستفيدين</div><div class="info-value">${reportData.beneficiaries}</div></div>
+                <div class="info-card"><div class="info-label"><i class="fas fa-book"></i>تابع للمناهج</div><div class="info-value">${reportData.curriculumRelated}</div></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title"><i class="fas fa-clipboard-list"></i>وصف مختصر لما تم تنفيذه</h3>
+            <div class="content-box"><p>${reportData.description}</p></div>
+        </div>
+        
+        ${reportData.procedures && reportData.procedures.length > 0 ? `
+        <div class="section">
+            <h3 class="section-title"><i class="fas fa-tasks"></i>إجراءات التنفيذ</h3>
+            <div class="list-container">
+                ${reportData.procedures.map((procedure, index) => `
+                <div class="list-item"><div class="list-number">${index + 1}</div><div class="list-text">${procedure}</div></div>
+                `).join('')}
+            </div>
+        </div>` : ''}
+        
+        ${reportData.results && reportData.results.length > 0 ? `
+        <div class="section">
+            <h3 class="section-title"><i class="fas fa-chart-line"></i>النتائج</h3>
+            <div class="list-container">
+                ${reportData.results.map((result, index) => `
+                <div class="list-item"><div class="list-number">${index + 1}</div><div class="list-text">${result}</div></div>
+                `).join('')}
+            </div>
+        </div>` : ''}
+        
+        <div class="section">
+            <h3 class="section-title"><i class="fas fa-lightbulb"></i>التوصيات</h3>
+            <div class="content-box"><p>${reportData.recommendations}</p></div>
+        </div>
+        
+        ${reportData.images && reportData.images.length > 0 ? `
+        <div class="section">
+            <h3 class="section-title"><i class="fas fa-images"></i>الصور المرفقة</h3>
+            <div class="image-gallery">
+                ${reportData.images.map((img, idx) => `
+                <div class="image-card">
+                    <img src="${img.data}" alt="صورة ${idx + 1}">
+                    <div class="image-caption">صورة ${idx + 1}: ${img.name}</div>
+                </div>`).join('')}
+            </div>
+        </div>` : ''}
+        
+        <div class="signatures">
+            <div class="signature-box">
+                <div class="signature-title">مدير المدرسة</div>
+                <div class="signature-name">${reportData.principal}</div>
+                <div class="signature-line"></div>
+                <div class="signature-label">التوقيع</div>
+            </div>
+            <div class="signature-box">
+                <div class="signature-title">معد التقرير</div>
+                <div class="signature-name">${reportData.reporter}</div>
+                <div class="signature-line"></div>
+                <div class="signature-label">التوقيع</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>تم إنشاء هذا التقرير بواسطة نظام إعداد التقارير الإلكتروني</p>
+            <p>${new Date().toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+        </div>
+    </div>
+</body>
+</html>`;
             }
             
-            // ========== توليد رقم التقرير ==========
             function generateReportNumber() {
                 const prefix = 'REP';
                 const year = new Date().getFullYear();
@@ -2795,9 +2243,7 @@
                 return `${prefix}-${year}${month}${day}-${random}`;
             }
             
-            // ========== إعادة تعيين النموذج ==========
             function resetForm() {
-                // إعادة تعيين الحقول
                 document.getElementById('programDate').value = '1447-06-12';
                 document.getElementById('location').value = '';
                 document.getElementById('target').value = '';
@@ -2807,21 +2253,14 @@
                 document.getElementById('results').value = '';
                 document.getElementById('recommendations').value = '';
                 
-                // إعادة تعيين الصور
                 uploadedImages = [];
                 imagePreview.innerHTML = '';
                 
-                // حذف المسودة
                 localStorage.removeItem('reportDraft');
                 
-                // التمرير للأعلى
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
             
-            // ========== وظائف المساعدة ==========
             function showLoading(text) {
                 loadingText.textContent = text;
                 loadingOverlay.classList.add('active');
@@ -2844,7 +2283,6 @@
                 successDetails.textContent = `تم تصدير التقرير بصيغة ${format === 'word' ? 'Microsoft Word' : 'HTML'}.\nرقم التقرير: ${currentReportData.reportNumber}`;
                 successMessage.classList.add('active');
                 
-                // إعادة تعيين النموذج تلقائياً بعد 5 ثوانٍ
                 setTimeout(() => {
                     if (confirm('هل تريد إعادة تعيين النموذج لبدء تقرير جديد؟')) {
                         successMessage.classList.remove('active');
@@ -2853,7 +2291,9 @@
                 }, 5000);
             }
             
-            // ========== الحفظ التلقائي ==========
+            setupEventListeners();
+            loadInitialData();
+            
             setInterval(() => {
                 if (validateForm()) {
                     const reportData = collectReportData();

@@ -3,202 +3,304 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام إعداد التقارير التربوية</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<title>أداة إعداد التقارير</title>
 
 <style>
-/* ===== عام ===== */
+@font-face {
+  font-family: 'KufamLocal';
+  src: url('static/Kufam-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'KufamLocal';
+  src: url('static/Kufam-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
 body {
-    font-family: 'Cairo', sans-serif;
-    margin: 0;
-    background: #f2f2f2;
-    direction: rtl;
+  font-family: 'KufamLocal', sans-serif;
+  background: #f2f2f2;
+  margin: 0;
 }
 
-/* ===== واجهة ===== */
-.wrapper {
-    max-width: 900px;
-    margin: auto;
-    padding: 15px;
+/* ===== الأداة ===== */
+.tool {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  background: white;
 }
 
-.form {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
+.tool label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 700;
 }
 
-.form label {
-    display: block;
-    margin-top: 15px;
-    font-weight: bold;
+.tool input,
+.tool textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
 }
 
-.form input,
-.form textarea {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-}
-
-textarea { min-height: 120px; }
+.tool textarea { min-height: 90px; }
 
 button {
-    margin-top: 20px;
-    width: 100%;
-    padding: 14px;
-    font-size: 18px;
-    background: #1a237e;
-    color: white;
-    border: none;
-    border-radius: 8px;
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  font-size: 18px;
+  background: #0a3b40;
+  color: white;
+  border: none;
+  border-radius: 8px;
 }
 
-/* ===== التقرير ===== */
-.report {
-    background: white;
-    margin-top: 20px;
-    padding: 20px;
-    border-radius: 10px;
+/* معاينة الصور */
+.preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.preview img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
-.report h1,
-.report h2 { text-align: center; }
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    page-break-inside: avoid;
-}
-
-td {
-    border: 1px solid #000;
-    padding: 8px;
-}
-
-.label {
-    font-weight: bold;
-    background: #f5f5f5;
-}
-
-/* ===== الصور ===== */
-.images {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.images img {
-    width: 100%;
-    border: 1px solid #000;
-    border-radius: 6px;
-    page-break-inside: avoid;
-}
-
-@media (min-width: 768px) {
-    .images img { width: 48%; }
-}
+.report { display: none; }
 
 /* ===== الطباعة ===== */
 @page {
-    size: A4;
-    margin: 20mm;
+  size: A4;
+  margin: 14mm;
 }
 
 @media print {
-    body { background: white; }
 
-    .wrapper { padding: 0; }
+  body { background: white; }
+  .tool { display: none; }
+  .report { display: block; }
 
-    .form { display: none; }
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
 
-    .report {
-        width: 210mm;
-        min-height: 297mm;
-        margin: 0;
-        padding: 25mm;
-        border-radius: 0;
-    }
+  .header-full {
+    background: #0a3b40;
+    color: white;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+  }
 
-    img { max-width: 100%; }
+  .header-full img {
+    width: 110px;
+    margin-bottom: 10px;
+  }
+
+  .school-name {
+    background: #0a3b40;
+    color: white;
+    width: fit-content;
+    margin: 10px auto 18px;
+    padding: 8px 28px;
+    border-radius: 14px;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .info-box {
+    border: 2px solid #cfd8dc;
+    border-radius: 14px;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .info-box span {
+    display: block;
+    background: #e0e0e0;
+    border-radius: 10px;
+    padding: 4px;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .grid-desc {
+    display: grid;
+    grid-template-columns: 1fr 90px 1fr;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .desc-box {
+    border: 2px solid #cfd8dc;
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .desc-box strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .vertical {
+    background: #e0e0e0;
+    border-radius: 16px;
+    writing-mode: vertical-rl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    text-align: center;
+    padding: 6px;
+  }
+
+  .images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .images img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<!-- ===== الأداة ===== -->
+<div class="tool">
 
-<div class="form">
 <label>اسم المدرسة</label>
-<input oninput="school.textContent=this.value" value="مدرسة النموذجية الثانوية">
-
-<label>اسم المدير</label>
-<input oninput="principal.textContent=this.value" value="محمد أحمد السعيد">
-
-<label>معد التقرير</label>
-<input oninput="reporter.textContent=this.value" value="خالد سعيد العتيبي">
+<input oninput="school.textContent=this.value">
 
 <label>عنوان التقرير</label>
-<input oninput="titleH.textContent=this.value" value="تقرير فعالية اليوم الوطني">
+<input oninput="title.textContent=this.value">
 
-<label>وصف التقرير</label>
-<textarea oninput="description.textContent=this.value">
-تم تنفيذ فعالية بمناسبة اليوم الوطني تضمنت أنشطة ثقافية وتربوية متنوعة.
-</textarea>
+<label>تاريخ التنفيذ</label>
+<input oninput="date.textContent=this.value">
 
-<label>التاريخ</label>
-<input oninput="date.textContent=this.value" value="1445/06/12 هـ">
+<label>المستهدفون</label>
+<input oninput="target.textContent=this.value">
 
-<label>المكان</label>
-<input oninput="location.textContent=this.value" value="ساحة المدرسة">
+<label>عدد المستفيدين</label>
+<input oninput="count.textContent=this.value">
 
-<label>إدراج الصور</label>
+<label>الوصف المختصر</label>
+<textarea oninput="desc1.textContent=this.value"></textarea>
+
+<label>تفاصيل التنفيذ</label>
+<textarea oninput="desc2.textContent=this.value"></textarea>
+
+<label>النتائج</label>
+<textarea oninput="desc3.textContent=this.value"></textarea>
+
+<label>التوصيات</label>
+<textarea oninput="desc4.textContent=this.value"></textarea>
+
+<label>إدراج الصور (شواهد)</label>
 <input type="file" multiple accept="image/*" onchange="loadImages(this.files)">
+<div class="preview" id="preview"></div>
 
 <button onclick="window.print()">تصدير PDF</button>
 </div>
 
+<!-- ===== التقرير ===== -->
 <div class="report">
-<h1>وزارة التعليم</h1>
-<h2>إدارة تعليم منطقة مكة المكرمة</h2>
-<h2 id="titleH">تقرير فعالية اليوم الوطني</h2>
 
-<table>
-<tr><td class="label">اسم المدرسة</td><td id="school">مدرسة النموذجية الثانوية</td></tr>
-<tr><td class="label">اسم المدير</td><td id="principal">محمد أحمد السعيد</td></tr>
-<tr><td class="label">معد التقرير</td><td id="reporter">خالد سعيد العتيبي</td></tr>
-<tr><td class="label">التاريخ</td><td id="date">1445/06/12 هـ</td></tr>
-<tr><td class="label">المكان</td><td id="location">ساحة المدرسة</td></tr>
-</table>
+<!-- الصفحة الأولى -->
+<div class="page">
+  <div class="header-full">
+    <img src="https://i.ibb.co/2037zjqy/IMG-2102.jpg">
+    <div>وزارة التعليم</div>
+  </div>
 
-<h3>وصف التقرير</h3>
-<p id="description">
-تم تنفيذ فعالية بمناسبة اليوم الوطني تضمنت أنشطة ثقافية وتربوية متنوعة.
-</p>
+  <div class="school-name" id="school"></div>
 
-<h3>الصور التوثيقية</h3>
-<div class="images" id="imagesContainer"></div>
+  <div class="info-grid">
+    <div class="info-box"><span>عنوان التقرير</span><div id="title"></div></div>
+    <div class="info-box"><span>تاريخ التنفيذ</span><div id="date"></div></div>
+    <div class="info-box"><span>المستهدفون</span><div id="target"></div></div>
+    <div class="info-box"><span>عدد المستفيدين</span><div id="count"></div></div>
+  </div>
+
+  <div class="grid-desc">
+    <div class="desc-box">
+      <strong>وصف مختصر لما تم تنفيذه</strong>
+      <p id="desc1"></p>
+    </div>
+
+    <div class="vertical">
+      وصف مختصر<br>وإجراءات التنفيذ
+    </div>
+
+    <div class="desc-box">
+      <strong>تفاصيل التنفيذ</strong>
+      <p id="desc2"></p>
+    </div>
+  </div>
+</div>
+
+<!-- الصفحة الثانية -->
+<div class="page">
+  <div class="grid-desc">
+    <div class="desc-box">
+      <strong>النتائج</strong>
+      <p id="desc3"></p>
+    </div>
+
+    <div class="vertical">
+      النتائج<br>والتوصيات
+    </div>
+
+    <div class="desc-box">
+      <strong>التوصيات</strong>
+      <p id="desc4"></p>
+    </div>
+  </div>
+</div>
+
+<!-- الصفحة الثالثة -->
+<div class="page">
+  <h3 style="text-align:center">شواهد الصور</h3>
+  <div class="images" id="imagesContainer"></div>
 </div>
 
 </div>
 
 <script>
 function loadImages(files) {
-    const container = document.getElementById("imagesContainer");
-    container.innerHTML = "";
+  const preview = document.getElementById("preview");
+  const container = document.getElementById("imagesContainer");
 
-    Array.from(files).forEach(file => {
-        if (!file.type.startsWith("image/")) return;
-        const reader = new FileReader();
-        reader.onload = e => {
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            container.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
+  preview.innerHTML = "";
+  container.innerHTML = "";
+
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img1 = document.createElement("img");
+      const img2 = document.createElement("img");
+      img1.src = img2.src = e.target.result;
+      preview.appendChild(img1);
+      container.appendChild(img2);
+    };
+    reader.readAsDataURL(file);
+  });
 }
 </script>
 

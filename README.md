@@ -22,7 +22,7 @@ body {
   margin: 0;
 }
 
-/* ===== الأداة ===== */
+/* ================= الأداة ================= */
 .tool {
   max-width: 900px;
   margin: auto;
@@ -71,7 +71,7 @@ button {
 
 .report { display: none; }
 
-/* ===== الطباعة ===== */
+/* ================= الطباعة ================= */
 @page {
   size: A4;
   margin: 14mm;
@@ -86,6 +86,7 @@ button {
   .page { page-break-after: always; }
   .page:last-child { page-break-after: auto; }
 
+  /* ===== الهيدر ===== */
   .header-full {
     background: #0a3b40;
     color: white;
@@ -108,6 +109,7 @@ button {
     border-radius: 14px;
   }
 
+  /* ===== معلومات ===== */
   .info-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -132,17 +134,22 @@ button {
     margin-bottom: 6px;
   }
 
+  /* ===== شبكة المحتوى ===== */
   .grid-desc {
     display: grid;
     grid-template-columns: 1fr 90px 1fr;
     gap: 12px;
     margin-top: 18px;
+    align-items: stretch;
   }
 
+  /* ===== مربعات النص (موحّدة الارتفاع) ===== */
   .desc-box {
     border: 2px solid #cfd8dc;
     border-radius: 16px;
     padding: 14px;
+    height: 160px;
+    overflow: hidden;
   }
 
   .desc-box strong {
@@ -150,18 +157,37 @@ button {
     margin-bottom: 6px;
   }
 
-  .vertical {
-    background: #e0e0e0;
-    border-radius: 16px;
-    writing-mode: vertical-rl;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    text-align: center;
-    padding: 6px;
+  .desc-box p {
+    line-height: 1.6;
+    max-height: calc(1.6em * 5);
+    overflow: hidden;
+    margin: 0;
   }
 
+  /* ===== المربع العمودي المقسوم ===== */
+  .vertical-split {
+    background: #e0e0e0;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 6px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .vertical-split span {
+    writing-mode: vertical-rl;
+  }
+
+  .vertical-divider {
+    width: 60%;
+    height: 1px;
+    background: #9e9e9e;
+  }
+
+  /* ===== الصور ===== */
   .images {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -175,13 +201,27 @@ button {
     border: 1px solid #999;
     page-break-inside: avoid;
   }
+
+  /* ===== التوقيعات ===== */
+  .signatures {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .signature-box {
+    border-top: 2px solid #000;
+    padding-top: 8px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- ===== الأداة ===== -->
+<!-- ================= الأداة ================= -->
 <div class="tool">
 
 <label>اسم المدرسة</label>
@@ -211,6 +251,12 @@ button {
 <label>التوصيات</label>
 <textarea oninput="desc4.textContent=this.value"></textarea>
 
+<label>اسم المعلم</label>
+<input oninput="teacher.textContent=this.value">
+
+<label>اسم مدير المدرسة</label>
+<input oninput="principal.textContent=this.value">
+
 <label>إدراج الصور (شواهد)</label>
 <input type="file" multiple accept="image/*" onchange="loadImages(this.files)">
 <div class="preview" id="preview"></div>
@@ -218,7 +264,7 @@ button {
 <button onclick="window.print()">تصدير PDF</button>
 </div>
 
-<!-- ===== التقرير ===== -->
+<!-- ================= التقرير ================= -->
 <div class="report">
 
 <!-- الصفحة الأولى -->
@@ -243,8 +289,10 @@ button {
       <p id="desc1"></p>
     </div>
 
-    <div class="vertical">
-      وصف مختصر<br>وإجراءات التنفيذ
+    <div class="vertical-split">
+      <span>وصف مختصر</span>
+      <div class="vertical-divider"></div>
+      <span>إجراءات التنفيذ</span>
     </div>
 
     <div class="desc-box">
@@ -262,8 +310,10 @@ button {
       <p id="desc3"></p>
     </div>
 
-    <div class="vertical">
-      النتائج<br>والتوصيات
+    <div class="vertical-split">
+      <span>النتائج</span>
+      <div class="vertical-divider"></div>
+      <span>التوصيات</span>
     </div>
 
     <div class="desc-box">
@@ -277,6 +327,17 @@ button {
 <div class="page">
   <h3 style="text-align:center">شواهد الصور</h3>
   <div class="images" id="imagesContainer"></div>
+
+  <div class="signatures">
+    <div class="signature-box">
+      اسم المعلم<br>
+      <strong id="teacher"></strong>
+    </div>
+    <div class="signature-box">
+      اسم مدير المدرسة<br>
+      <strong id="principal"></strong>
+    </div>
+  </div>
 </div>
 
 </div>

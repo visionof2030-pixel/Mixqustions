@@ -6,6 +6,7 @@
 <title>أداة إعداد التقارير</title>
 
 <style>
+/* ===== الخط ===== */
 @font-face {
   font-family: 'KufamLocal';
   src: url('static/Kufam-Regular.ttf') format('truetype');
@@ -16,6 +17,7 @@
   font-weight: 700;
 }
 
+/* ===== عام ===== */
 body {
   font-family: 'KufamLocal', sans-serif;
   background: #f2f2f2;
@@ -54,7 +56,6 @@ button {
   border-radius: 8px;
 }
 
-/* معاينة الصور */
 .preview {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -81,9 +82,11 @@ button {
   .tool { display: none; }
   .report { display: block; }
 
+  /* ===== الصفحة ===== */
   .page {
+    height: calc(297mm - 28mm); /* A4 - الهوامش */
     page-break-after: always;
-    min-height: calc(297mm - 28mm);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
   }
@@ -94,21 +97,21 @@ button {
     background: #0a3b40;
     color: white;
     border-radius: 18px;
-    padding: 20px;
+    padding: 18px;
     text-align: center;
     flex-shrink: 0;
   }
 
   .header-full img {
     width: 110px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .school-name {
     background: #0a3b40;
     color: white;
     width: fit-content;
-    margin: 10px auto 18px;
+    margin: 10px auto 14px;
     padding: 8px 28px;
     border-radius: 14px;
     flex-shrink: 0;
@@ -116,13 +119,14 @@ button {
 
   /* ===== شبكة المحتوى ===== */
   .grid-desc {
+    flex: 1;
     display: grid;
     grid-template-columns: 1fr 90px 1fr;
     gap: 12px;
-    flex: 1;
+    overflow: hidden;
   }
 
-  /* ===== مربعات النص (تملأ ارتفاع الصفحة) ===== */
+  /* ===== مربعات النص (قص ذكي) ===== */
   .desc-box {
     border: 2px solid #cfd8dc;
     border-radius: 16px;
@@ -152,7 +156,7 @@ button {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 6px;
+    padding: 12px 6px;
     font-weight: 700;
     text-align: center;
   }
@@ -173,14 +177,14 @@ button {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 10px;
+    overflow: hidden;
   }
 
   .images img {
     width: 100%;
     border-radius: 12px;
     border: 1px solid #999;
-    page-break-inside: avoid;
   }
 
   /* ===== التوقيعات ===== */

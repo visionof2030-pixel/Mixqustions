@@ -43,8 +43,6 @@ body {
   margin-top: 5px;
 }
 
-.tool textarea { min-height: 90px; }
-
 button {
   margin-top: 20px;
   width: 100%;
@@ -54,6 +52,19 @@ button {
   color: white;
   border: none;
   border-radius: 8px;
+}
+
+/* معاينة الصور */
+.preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.preview img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
 
 .report { display: none; }
@@ -70,7 +81,12 @@ button {
   .tool { display: none; }
   .report { display: block; }
 
-  .page { page-break-after: always; }
+  .page {
+    page-break-after: always;
+    min-height: calc(297mm - 28mm);
+    display: flex;
+    flex-direction: column;
+  }
   .page:last-child { page-break-after: auto; }
 
   /* ===== الهيدر ===== */
@@ -80,6 +96,7 @@ button {
     border-radius: 18px;
     padding: 20px;
     text-align: center;
+    flex-shrink: 0;
   }
 
   .header-full img {
@@ -94,6 +111,7 @@ button {
     margin: 10px auto 18px;
     padding: 8px 28px;
     border-radius: 14px;
+    flex-shrink: 0;
   }
 
   /* ===== شبكة المحتوى ===== */
@@ -101,32 +119,32 @@ button {
     display: grid;
     grid-template-columns: 1fr 90px 1fr;
     gap: 12px;
-    margin-top: 18px;
-    align-items: stretch;
+    flex: 1;
   }
 
-  /* ===== مربعات النص (موحدة – 12 سطر) ===== */
+  /* ===== مربعات النص (تملأ ارتفاع الصفحة) ===== */
   .desc-box {
     border: 2px solid #cfd8dc;
     border-radius: 16px;
     padding: 14px;
-    height: 260px;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
   }
 
   .desc-box strong {
-    display: block;
     margin-bottom: 8px;
+    flex-shrink: 0;
   }
 
   .desc-box p {
-    line-height: 1.6;
-    max-height: calc(1.6em * 12);
+    flex: 1;
+    line-height: 1.7;
     overflow: hidden;
     margin: 0;
   }
 
-  /* ===== المربع الأوسط المصحح ===== */
+  /* ===== المربع الأوسط ===== */
   .vertical-split {
     background: #e0e0e0;
     border-radius: 16px;
@@ -148,12 +166,26 @@ button {
     width: 60%;
     height: 2px;
     background: #9e9e9e;
-    margin: 10px 0;
+  }
+
+  /* ===== الصور ===== */
+  .images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .images img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #999;
+    page-break-inside: avoid;
   }
 
   /* ===== التوقيعات ===== */
   .signatures {
-    margin-top: 40px;
+    margin-top: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
@@ -173,9 +205,6 @@ button {
 <!-- ================= الأداة ================= -->
 <div class="tool">
 
-<label>اسم المدرسة</label>
-<input oninput="school.textContent=this.value">
-
 <label>الوصف المختصر</label>
 <textarea oninput="desc1.textContent=this.value"></textarea>
 
@@ -194,6 +223,10 @@ button {
 <label>اسم مدير المدرسة</label>
 <input oninput="principal.textContent=this.value">
 
+<label>إرفاق الصور</label>
+<input type="file" multiple accept="image/*" onchange="loadImages(this.files)">
+<div class="preview" id="preview"></div>
+
 <button onclick="window.print()">تصدير PDF</button>
 </div>
 
@@ -207,11 +240,11 @@ button {
     <div>وزارة التعليم</div>
   </div>
 
-  <div class="school-name" id="school"></div>
+  <div class="school-name">تقرير نشاط</div>
 
   <div class="grid-desc">
     <div class="desc-box">
-      <strong>وصف مختصر لما تم تنفيذه</strong>
+      <strong>وصف مختصر</strong>
       <p id="desc1"></p>
     </div>
 
@@ -251,6 +284,10 @@ button {
 
 <!-- الصفحة الثالثة -->
 <div class="page">
+  <h3 style="text-align:center">شواهد الصور</h3>
+
+  <div class="images" id="imagesContainer"></div>
+
   <div class="signatures">
     <div class="signature-box">
       اسم المعلم<br>
@@ -264,6 +301,29 @@ button {
 </div>
 
 </div>
+
+<script>
+function loadImages(files) {
+  const preview = document.getElementById("preview");
+  const container = document.getElementById("imagesContainer");
+
+  preview.innerHTML = "";
+  container.innerHTML = "";
+
+  Array.from(files).forEach(file => {
+    if (!file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img1 = document.createElement("img");
+      const img2 = document.createElement("img");
+      img1.src = img2.src = e.target.result;
+      preview.appendChild(img1);
+      container.appendChild(img2);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+</script>
 
 </body>
 </html>

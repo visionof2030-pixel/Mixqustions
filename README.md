@@ -17,7 +17,6 @@
   font-weight: 700;
 }
 
-/* ===== عام ===== */
 body {
   font-family: 'KufamLocal', sans-serif;
   background: #f2f2f2;
@@ -84,7 +83,7 @@ button {
 
   /* ===== الصفحة ===== */
   .page {
-    height: calc(297mm - 28mm); /* A4 - الهوامش */
+    height: calc(297mm - 28mm);
     page-break-after: always;
     overflow: hidden;
     display: flex;
@@ -142,10 +141,21 @@ button {
   }
 
   .desc-box p {
-    flex: 1;
     line-height: 1.7;
     overflow: hidden;
     margin: 0;
+  }
+
+  /* ===== حدود مختلفة لكل صفحة ===== */
+
+  /* الصفحة الأولى: 15 سطر */
+  .page.first .desc-box p {
+    max-height: calc(1.7em * 15);
+  }
+
+  /* الصفحة الثانية: 18 سطر */
+  .page.second .desc-box p {
+    max-height: calc(1.7em * 18);
   }
 
   /* ===== المربع الأوسط ===== */
@@ -238,7 +248,7 @@ button {
 <div class="report">
 
 <!-- الصفحة الأولى -->
-<div class="page">
+<div class="page first">
   <div class="header-full">
     <img src="https://i.ibb.co/2037zjqy/IMG-2102.jpg">
     <div>وزارة التعليم</div>
@@ -266,7 +276,7 @@ button {
 </div>
 
 <!-- الصفحة الثانية -->
-<div class="page">
+<div class="page second">
   <div class="grid-desc">
     <div class="desc-box">
       <strong>النتائج</strong>

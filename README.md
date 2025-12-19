@@ -5,199 +5,201 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>نظام إعداد التقارير التربوية</title>
 
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
+/* ===== عام ===== */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Cairo', sans-serif;
+    margin: 0;
     background: #f2f2f2;
-    padding: 20px;
     direction: rtl;
 }
-.container {
-    max-width: 800px;
-    background: #fff;
+
+/* ===== واجهة ===== */
+.wrapper {
+    max-width: 900px;
     margin: auto;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,.1);
-}
-h1 {
-    text-align: center;
-    color: #1a237e;
-    margin-bottom: 30px;
-}
-label {
-    font-weight: bold;
-    margin-top: 15px;
-    display: block;
-}
-input, textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
-textarea {
-    height: 120px;
-}
-button {
-    margin-top: 25px;
     padding: 15px;
+}
+
+.form {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.form input,
+.form textarea {
     width: 100%;
+    padding: 12px;
+    font-size: 16px;
+}
+
+textarea { min-height: 120px; }
+
+button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    background: #1a237e;
+    color: white;
     border: none;
     border-radius: 8px;
-    background: #1a237e;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
 }
-button:hover {
-    background: #283593;
+
+/* ===== التقرير ===== */
+.report {
+    background: white;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
 }
-.preview {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 10px;
+
+.report h1,
+.report h2 { text-align: center; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    page-break-inside: avoid;
 }
-.preview img {
-    width: 120px;
-    height: 80px;
-    object-fit: cover;
-    border: 1px solid #ccc;
+
+td {
+    border: 1px solid #000;
+    padding: 8px;
 }
-.status {
-    margin-top: 15px;
-    text-align: center;
+
+.label {
     font-weight: bold;
-    color: green;
+    background: #f5f5f5;
+}
+
+/* ===== الصور ===== */
+.images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.images img {
+    width: 100%;
+    border: 1px solid #000;
+    border-radius: 6px;
+    page-break-inside: avoid;
+}
+
+@media (min-width: 768px) {
+    .images img { width: 48%; }
+}
+
+/* ===== الطباعة ===== */
+@page {
+    size: A4;
+    margin: 20mm;
+}
+
+@media print {
+    body { background: white; }
+
+    .wrapper { padding: 0; }
+
+    .form { display: none; }
+
+    .report {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        padding: 25mm;
+        border-radius: 0;
+    }
+
+    img { max-width: 100%; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>نظام إعداد التقارير التربوية</h1>
+<div class="wrapper">
 
-    <label>اسم المدرسة</label>
-    <input id="school" value="مدرسة النموذجية الثانوية">
+<div class="form">
+<label>اسم المدرسة</label>
+<input oninput="school.textContent=this.value" value="مدرسة النموذجية الثانوية">
 
-    <label>اسم المدير</label>
-    <input id="principal" value="محمد أحمد السعيد">
+<label>اسم المدير</label>
+<input oninput="principal.textContent=this.value" value="محمد أحمد السعيد">
 
-    <label>اسم معد التقرير</label>
-    <input id="reporter" value="خالد سعيد العتيبي">
+<label>معد التقرير</label>
+<input oninput="reporter.textContent=this.value" value="خالد سعيد العتيبي">
 
-    <label>عنوان التقرير</label>
-    <input id="title" value="تقرير فعالية اليوم الوطني">
+<label>عنوان التقرير</label>
+<input oninput="titleH.textContent=this.value" value="تقرير فعالية اليوم الوطني">
 
-    <label>وصف التقرير</label>
-    <textarea id="description">تم تنفيذ فعالية بمناسبة اليوم الوطني تضمنت أنشطة ثقافية وتربوية متنوعة.</textarea>
+<label>وصف التقرير</label>
+<textarea oninput="description.textContent=this.value">
+تم تنفيذ فعالية بمناسبة اليوم الوطني تضمنت أنشطة ثقافية وتربوية متنوعة.
+</textarea>
 
-    <label>التاريخ</label>
-    <input id="date" value="1445/06/12 هـ">
+<label>التاريخ</label>
+<input oninput="date.textContent=this.value" value="1445/06/12 هـ">
 
-    <label>المكان</label>
-    <input id="location" value="ساحة المدرسة">
+<label>المكان</label>
+<input oninput="location.textContent=this.value" value="ساحة المدرسة">
 
-    <label>الصور (حد أقصى 4)</label>
-    <input type="file" id="images" multiple accept="image/*">
-    <div class="preview" id="preview"></div>
+<label>إدراج الصور</label>
+<input type="file" multiple accept="image/*" onchange="loadImages(this.files)">
 
-    <button id="exportBtn">تصدير التقرير PDF</button>
-    <div class="status" id="status"></div>
+<button onclick="window.print()">تصدير PDF</button>
+</div>
+
+<div class="report">
+<h1>وزارة التعليم</h1>
+<h2>إدارة تعليم منطقة مكة المكرمة</h2>
+<h2 id="titleH">تقرير فعالية اليوم الوطني</h2>
+
+<table>
+<tr><td class="label">اسم المدرسة</td><td id="school">مدرسة النموذجية الثانوية</td></tr>
+<tr><td class="label">اسم المدير</td><td id="principal">محمد أحمد السعيد</td></tr>
+<tr><td class="label">معد التقرير</td><td id="reporter">خالد سعيد العتيبي</td></tr>
+<tr><td class="label">التاريخ</td><td id="date">1445/06/12 هـ</td></tr>
+<tr><td class="label">المكان</td><td id="location">ساحة المدرسة</td></tr>
+</table>
+
+<h3>وصف التقرير</h3>
+<p id="description">
+تم تنفيذ فعالية بمناسبة اليوم الوطني تضمنت أنشطة ثقافية وتربوية متنوعة.
+</p>
+
+<h3>الصور التوثيقية</h3>
+<div class="images" id="imagesContainer"></div>
+</div>
+
 </div>
 
 <script>
-let uploadedImages = [];
+function loadImages(files) {
+    const container = document.getElementById("imagesContainer");
+    container.innerHTML = "";
 
-document.getElementById('images').addEventListener('change', function (e) {
-    uploadedImages = [];
-    const preview = document.getElementById('preview');
-    preview.innerHTML = '';
-
-    Array.from(e.target.files).slice(0,4).forEach(file => {
+    Array.from(files).forEach(file => {
+        if (!file.type.startsWith("image/")) return;
         const reader = new FileReader();
-        reader.onload = function(ev) {
-            uploadedImages.push(ev.target.result);
-            const img = document.createElement('img');
-            img.src = ev.target.result;
-            preview.appendChild(img);
+        reader.onload = e => {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            container.appendChild(img);
         };
         reader.readAsDataURL(file);
     });
-});
-
-document.getElementById('exportBtn').addEventListener('click', function () {
-
-    const schoolVal = document.getElementById('school').value.trim();
-    const principalVal = document.getElementById('principal').value.trim();
-    const reporterVal = document.getElementById('reporter').value.trim();
-    const titleVal = document.getElementById('title').value.trim();
-    const descriptionVal = document.getElementById('description').value.trim();
-    const dateVal = document.getElementById('date').value.trim();
-    const locationVal = document.getElementById('location').value.trim();
-
-    if (!schoolVal || !principalVal || !reporterVal || !titleVal || !descriptionVal) {
-        alert("يرجى تعبئة جميع الحقول الأساسية");
-        return;
-    }
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF("p", "mm", "a4");
-
-    doc.setFontSize(14);
-    doc.text("وزارة التعليم", 105, 15, { align: "center" });
-    doc.text("إدارة تعليم منطقة مكة المكرمة", 105, 25, { align: "center" });
-
-    doc.setFontSize(18);
-    doc.text(titleVal, 105, 40, { align: "center" });
-
-    doc.autoTable({
-        startY: 50,
-        styles: { halign: 'right', fontSize: 12 },
-        head: [['القيمة', 'البيان']],
-        body: [
-            [schoolVal, 'اسم المدرسة'],
-            [principalVal, 'اسم المدير'],
-            [reporterVal, 'معد التقرير'],
-            [dateVal, 'التاريخ'],
-            [locationVal, 'المكان']
-        ],
-        theme: 'grid'
-    });
-
-    let y = doc.lastAutoTable.finalY + 10;
-    doc.setFontSize(14);
-    doc.text("وصف التقرير:", 190, y, { align: "right" });
-    y += 8;
-
-    doc.setFontSize(12);
-    doc.text(
-        doc.splitTextToSize(descriptionVal, 170),
-        190,
-        y,
-        { align: "right" }
-    );
-
-    if (uploadedImages.length > 0) {
-        doc.addPage();
-        let imgY = 20;
-
-        uploadedImages.forEach((img, i) => {
-            doc.addImage(img, 'JPEG', 20 + (i % 2) * 90, imgY, 80, 60);
-            if (i % 2 === 1) imgY += 70;
-        });
-    }
-
-    doc.save(titleVal + ".pdf");
-    document.getElementById('status').textContent = "تم إنشاء التقرير بنجاح";
-});
+}
 </script>
 
 </body>

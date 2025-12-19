@@ -45,7 +45,7 @@ textarea {
     height: 120px;
 }
 button {
-    margin-top: 20px;
+    margin-top: 25px;
     padding: 15px;
     width: 100%;
     border: none;
@@ -74,6 +74,7 @@ button:hover {
     margin-top: 15px;
     text-align: center;
     font-weight: bold;
+    color: green;
 }
 </style>
 </head>
@@ -89,14 +90,14 @@ button:hover {
     <label>اسم المدير</label>
     <input id="principal" value="محمد أحمد السعيد">
 
-    <label>معد التقرير</label>
+    <label>اسم معد التقرير</label>
     <input id="reporter" value="خالد سعيد العتيبي">
 
     <label>عنوان التقرير</label>
     <input id="title" value="تقرير فعالية اليوم الوطني">
 
     <label>وصف التقرير</label>
-    <textarea id="description">تم تنفيذ فعالية بمناسبة اليوم الوطني تضمنت أنشطة ثقافية وتربوية متنوعة هدفت إلى تعزيز الانتماء الوطني.</textarea>
+    <textarea id="description">تم تنفيذ فعالية بمناسبة اليوم الوطني تضمنت أنشطة ثقافية وتربوية متنوعة.</textarea>
 
     <label>التاريخ</label>
     <input id="date" value="1445/06/12 هـ">
@@ -104,25 +105,25 @@ button:hover {
     <label>المكان</label>
     <input id="location" value="ساحة المدرسة">
 
-    <label>الصور (حتى 4)</label>
+    <label>الصور (حد أقصى 4)</label>
     <input type="file" id="images" multiple accept="image/*">
     <div class="preview" id="preview"></div>
 
-    <button id="export">تصدير التقرير PDF</button>
+    <button id="exportBtn">تصدير التقرير PDF</button>
     <div class="status" id="status"></div>
 </div>
 
 <script>
 let uploadedImages = [];
 
-document.getElementById('images').addEventListener('change', e => {
+document.getElementById('images').addEventListener('change', function (e) {
     uploadedImages = [];
     const preview = document.getElementById('preview');
     preview.innerHTML = '';
 
-    [...e.target.files].slice(0,4).forEach(file => {
+    Array.from(e.target.files).slice(0,4).forEach(file => {
         const reader = new FileReader();
-        reader.onload = ev => {
+        reader.onload = function(ev) {
             uploadedImages.push(ev.target.result);
             const img = document.createElement('img');
             img.src = ev.target.result;
@@ -132,54 +133,70 @@ document.getElementById('images').addEventListener('change', e => {
     });
 });
 
-document.getElementById('export').addEventListener('click', () => {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+document.getElementById('exportBtn').addEventListener('click', function () {
 
-    const school = school.value;
-    const principal = principal.value;
-    const reporter = reporter.value;
-    const title = document.getElementById('title').value;
-    const description = description.value;
-    const date = date.value;
-    const location = location.value;
+    const schoolVal = document.getElementById('school').value.trim();
+    const principalVal = document.getElementById('principal').value.trim();
+    const reporterVal = document.getElementById('reporter').value.trim();
+    const titleVal = document.getElementById('title').value.trim();
+    const descriptionVal = document.getElementById('description').value.trim();
+    const dateVal = document.getElementById('date').value.trim();
+    const locationVal = document.getElementById('location').value.trim();
+
+    if (!schoolVal || !principalVal || !reporterVal || !titleVal || !descriptionVal) {
+        alert("يرجى تعبئة جميع الحقول الأساسية");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF("p", "mm", "a4");
 
     doc.setFontSize(14);
     doc.text("وزارة التعليم", 105, 15, { align: "center" });
     doc.text("إدارة تعليم منطقة مكة المكرمة", 105, 25, { align: "center" });
+
     doc.setFontSize(18);
-    doc.text(title, 105, 40, { align: "center" });
+    doc.text(titleVal, 105, 40, { align: "center" });
 
     doc.autoTable({
         startY: 50,
-        styles: { halign: 'right' },
+        styles: { halign: 'right', fontSize: 12 },
         head: [['القيمة', 'البيان']],
         body: [
-            [school, 'اسم المدرسة'],
-            [principal, 'اسم المدير'],
-            [reporter, 'معد التقرير'],
-            [date, 'التاريخ'],
-            [location, 'المكان']
-        ]
+            [schoolVal, 'اسم المدرسة'],
+            [principalVal, 'اسم المدير'],
+            [reporterVal, 'معد التقرير'],
+            [dateVal, 'التاريخ'],
+            [locationVal, 'المكان']
+        ],
+        theme: 'grid'
     });
 
     let y = doc.lastAutoTable.finalY + 10;
+    doc.setFontSize(14);
     doc.text("وصف التقرير:", 190, y, { align: "right" });
-    y += 7;
-    doc.setFontSize(12);
-    doc.text(doc.splitTextToSize(description, 170), 190, y, { align: "right" });
+    y += 8;
 
-    if (uploadedImages.length) {
+    doc.setFontSize(12);
+    doc.text(
+        doc.splitTextToSize(descriptionVal, 170),
+        190,
+        y,
+        { align: "right" }
+    );
+
+    if (uploadedImages.length > 0) {
         doc.addPage();
-        y = 20;
+        let imgY = 20;
+
         uploadedImages.forEach((img, i) => {
-            doc.addImage(img, 'JPEG', 20 + (i % 2) * 90, y, 80, 60);
-            if (i % 2 === 1) y += 70;
+            doc.addImage(img, 'JPEG', 20 + (i % 2) * 90, imgY, 80, 60);
+            if (i % 2 === 1) imgY += 70;
         });
     }
 
-    doc.save(title + ".pdf");
-    document.getElementById('status').textContent = "تم إنشاء الملف بنجاح";
+    doc.save(titleVal + ".pdf");
+    document.getElementById('status').textContent = "تم إنشاء التقرير بنجاح";
 });
 </script>
 

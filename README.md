@@ -275,6 +275,69 @@
             padding-left: 2.5rem;
         }
 
+        /* ========== زر التبديل (Toggle Switch) ========== */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-md);
+            padding: var(--space-sm);
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+
+        .toggle-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--success);
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
         /* ========== الأزرار ========== */
         .btn {
             display: inline-flex;
@@ -366,38 +429,104 @@
             border-color: var(--info);
         }
 
-        /* ========== الجداول ========== */
+        /* ========== إصلاح: وضوح جدول الأكواد في لوحة الأدمن ========== */
         .table-container {
             max-width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            border-radius: var(--radius-md);
-            background: var(--bg-surface);
+            background: #0f2a3f;
+            border-radius: 14px;
+            overflow: hidden;
             border: 1px solid var(--border);
             margin-top: var(--space-md);
         }
 
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            background: #0f2a3f;
+            border-radius: 14px;
+        }
+
         .data-table {
             width: 100%;
+            min-width: 0 !important;
             border-collapse: collapse;
-            min-width: 600px;
         }
 
         .data-table th {
-            padding: var(--space-sm);
-            text-align: right;
-            font-weight: 600;
-            color: var(--secondary);
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid var(--border);
-            font-size: 0.75rem;
+            background: #0b3a2c;
+            color: #ffd166;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 12px;
+            text-align: center;
             white-space: nowrap;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .data-table td {
-            padding: var(--space-sm);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.875rem;
+            background: #ffffff;
+            color: #0a1929;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .data-table td:first-child {
+            font-family: "Courier New", monospace;
+            letter-spacing: 1px;
+            color: #0b5ed7 !important;
+            font-weight: 800;
+            direction: ltr;
+        }
+
+        .data-table .status {
+            background: #e0f2fe !important;
+            color: #0369a1 !important;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .badge {
+            background: #e0f2fe !important;
+            color: #0369a1 !important;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        /* ========== حاوية معلومات المستخدم الاختيارية ========== */
+        .user-info-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .user-info-container.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ========== الإشعارات ========== */
@@ -498,6 +627,26 @@
             }
         }
 
+        /* ========== تحسينات الجوال ========== */
+        @media (max-width: 480px) {
+            .data-table th,
+            .data-table td {
+                font-size: 12px;
+                padding: 10px 8px;
+            }
+            
+            .data-table td:first-child {
+                font-size: 11px;
+                letter-spacing: 0.5px;
+            }
+            
+            .data-table .status,
+            .badge {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+        }
+
         /* ========== تحسينات اللمس ========== */
         @media (hover: none) and (pointer: coarse) {
             .btn,
@@ -560,10 +709,6 @@
                 <i class="fas fa-list tab-icon"></i>
                 <span>الأكواد النشطة</span>
             </button>
-            <button class="nav-tab" data-tab="users">
-                <i class="fas fa-users tab-icon"></i>
-                <span>المستخدمين</span>
-            </button>
             <button class="nav-tab" data-tab="reports">
                 <i class="fas fa-chart-bar tab-icon"></i>
                 <span>التقارير</span>
@@ -611,6 +756,28 @@
                             <option value="20">20 كود</option>
                             <option value="50">50 كود</option>
                         </select>
+                    </div>
+
+                    <!-- زر التبديل لإضافة معلومات المستخدم -->
+                    <div class="toggle-group">
+                        <span class="toggle-label">إضافة معلومات المستخدم (اختياري)</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="userInfoToggle" onchange="toggleUserInfo()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- معلومات المستخدم الاختيارية -->
+                    <div class="user-info-container" id="userInfoContainer">
+                        <div class="form-group">
+                            <label for="userName" class="form-label">اسم المستخدم</label>
+                            <input type="text" id="userName" class="form-control" placeholder="أدخل اسم المستخدم">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userPhone" class="form-label">رقم الجوال</label>
+                            <input type="tel" id="userPhone" class="form-control" placeholder="مثال: 05XXXXXXXX">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -671,59 +838,29 @@
                     </div>
 
                     <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>الكود</th>
-                                    <th>المدة</th>
-                                    <th>الحالة</th>
-                                    <th>تاريخ الانتهاء</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="codesTable">
-                                <tr>
-                                    <td colspan="5" style="text-align: center; padding: 40px;">
-                                        <div class="loading"></div>
-                                        <p style="margin-top: 10px;">جاري تحميل البيانات...</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- تبويب المستخدمين -->
-            <section id="users" class="tab-content">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>المستخدمين النشطين</h3>
-                            <small>عرض وإدارة حسابات المستخدمين</small>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>الكود</th>
+                                        <th>المدة</th>
+                                        <th>اسم المستخدم</th>
+                                        <th>الجوال</th>
+                                        <th>الحالة</th>
+                                        <th>تاريخ الانتهاء</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="codesTable">
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f;">
+                                            <div class="loading"></div>
+                                            <p style="margin-top: 10px; color: var(--text-secondary);">جاري تحميل البيانات...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <select id="userFilter" class="form-control" style="width: auto; min-width: 150px;">
-                            <option value="">جميع المستخدمين</option>
-                            <option value="active">النشطين فقط</option>
-                            <option value="expired">المنتهية صلاحيتهم</option>
-                        </select>
-                    </div>
-
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>المستخدم</th>
-                                    <th>البريد</th>
-                                    <th>الحالة</th>
-                                    <th>تاريخ التسجيل</th>
-                                    <th>الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody id="usersTable">
-                                <!-- سيتم ملؤه ديناميكياً -->
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </section>
@@ -756,6 +893,17 @@
                             <div class="stat-value" id="successRate">0%</div>
                             <div class="stat-label">معدل النجاح</div>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportPeriod" class="form-label">فترة التقرير</label>
+                        <select id="reportPeriod" class="form-control" onchange="loadReports()">
+                            <option value="today">اليوم</option>
+                            <option value="week">الأسبوع الحالي</option>
+                            <option value="month">الشهر الحالي</option>
+                            <option value="year">السنة الحالية</option>
+                            <option value="all">كل الفترات</option>
+                        </select>
                     </div>
                 </div>
             </section>
@@ -877,12 +1025,24 @@
                 case 'codes':
                     loadActiveCodes();
                     break;
-                case 'users':
-                    loadUsers();
-                    break;
                 case 'reports':
                     loadReports();
                     break;
+            }
+        }
+
+        // ==================== تبديل معلومات المستخدم ====================
+        function toggleUserInfo() {
+            const container = document.getElementById('userInfoContainer');
+            const toggle = document.getElementById('userInfoToggle');
+            
+            if (toggle.checked) {
+                container.classList.add('show');
+            } else {
+                container.classList.remove('show');
+                // مسح القيم عند الإخفاء
+                document.getElementById('userName').value = '';
+                document.getElementById('userPhone').value = '';
             }
         }
 
@@ -903,10 +1063,22 @@
             const adminToken = document.getElementById('adminToken').value;
             const codeCount = parseInt(document.getElementById('codeCount').value);
             const price = document.getElementById('price').value;
+            const userInfoToggle = document.getElementById('userInfoToggle').checked;
+            const userName = userInfoToggle ? document.getElementById('userName').value.trim() : '';
+            const userPhone = userInfoToggle ? document.getElementById('userPhone').value.trim() : '';
             
             if (!adminToken) {
                 showNotification('يرجى إدخال كود الأمان', 'error');
                 return;
+            }
+            
+            // التحقق من صحة رقم الجوال إذا تم إدخاله
+            if (userInfoToggle && userPhone) {
+                const phoneRegex = /^(05|5)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/;
+                if (!phoneRegex.test(userPhone)) {
+                    showNotification('رقم الجوال غير صحيح. يجب أن يبدأ بـ 05 ويحتوي على 10 أرقام', 'error');
+                    return;
+                }
             }
             
             const btn = document.querySelector('#generate .btn-success');
@@ -929,7 +1101,11 @@
                         code: data.activation_code,
                         duration: currentDuration,
                         expires_at: data.expires_at,
-                        price: price || 'غير محدد'
+                        price: price || 'غير محدد',
+                        user_name: userName || 'غير محدد',
+                        user_phone: userPhone || 'غير محدد',
+                        created_at: new Date().toISOString(),
+                        used: false
                     });
                     
                     await new Promise(resolve => setTimeout(resolve, 100));
@@ -939,8 +1115,16 @@
                 saveGeneratedCodes(codes);
                 
                 // عرض الأكواد
-                displayGeneratedCodes(codes);
+                displayGeneratedCodes(codes, userName, userPhone);
                 showNotification(`تم توليد ${codes.length} كود بنجاح`, 'success');
+                
+                // إعادة تعيين الحقول
+                if (userInfoToggle) {
+                    document.getElementById('userName').value = '';
+                    document.getElementById('userPhone').value = '';
+                    document.getElementById('userInfoToggle').checked = false;
+                    document.getElementById('userInfoContainer').classList.remove('show');
+                }
                 
                 // تحديث الإحصائيات
                 loadDashboardStats();
@@ -959,20 +1143,40 @@
             const newCodes = codes.map(code => ({
                 ...code,
                 id: Date.now() + Math.random(),
-                created_at: new Date().toISOString(),
-                used: false
+                user_name: code.user_name,
+                user_phone: code.user_phone
             }));
             
             localStorage.setItem('admin_codes', JSON.stringify([...existing, ...newCodes]));
         }
 
-        function displayGeneratedCodes(codes) {
-            const codesText = codes.map(c => 
-                `الكود: ${c.code}\nالمدة: ${getDurationText(c.duration)}\nالسعر: ${c.price} ر.س\nتاريخ الانتهاء: ${formatDate(c.expires_at)}\n────────────────────`
-            ).join('\n\n');
+        function displayGeneratedCodes(codes, userName, userPhone) {
+            let codesText = '';
+            
+            codes.forEach((code, index) => {
+                codesText += `الكود ${index + 1}: ${code.code}\n`;
+                codesText += `المدة: ${getDurationText(code.duration)}\n`;
+                codesText += `السعر: ${code.price} ر.س\n`;
+                
+                if (userName && userName !== 'غير محدد') {
+                    codesText += `اسم المستخدم: ${userName}\n`;
+                }
+                
+                if (userPhone && userPhone !== 'غير محدد') {
+                    codesText += `رقم الجوال: ${userPhone}\n`;
+                }
+                
+                codesText += `تاريخ الانتهاء: ${formatDate(code.expires_at)}\n`;
+                codesText += `────────────────────\n\n`;
+            });
             
             document.getElementById('generatedCodes').value = codesText;
             document.getElementById('generatedCodesCard').style.display = 'block';
+            
+            // تمرير إلى أسفل لعرض الأكواد المولدة
+            setTimeout(() => {
+                document.getElementById('generatedCodesCard').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
         }
 
         function copyCodes() {
@@ -1007,7 +1211,7 @@
                 if (codes.length === 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="5" style="text-align: center; padding: 40px;">
+                            <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f; color: var(--text-secondary);">
                                 <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.5; margin-bottom: 10px;"></i>
                                 <p>لا توجد أكواد نشطة</p>
                             </td>
@@ -1019,12 +1223,15 @@
                 tbody.innerHTML = '';
                 codes.forEach((code, index) => {
                     const status = getCodeStatus(code.expires_at);
+                    const statusElement = `<span class="status">${status.text}</span>`;
                     
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-family: monospace;">${code.code}</code></td>
+                        <td><code>${code.code}</code></td>
                         <td>${getDurationText(code.duration)}</td>
-                        <td><span style="padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; background: ${status.color}">${status.text}</span></td>
+                        <td>${code.user_name || 'غير محدد'}</td>
+                        <td>${code.user_phone || 'غير محدد'}</td>
+                        <td>${statusElement}</td>
                         <td>${formatDate(code.expires_at)}</td>
                         <td>
                             <button class="btn btn-sm btn-secondary" onclick="copyCode('${code.code}')">
@@ -1042,7 +1249,7 @@
                 console.error('خطأ في تحميل الأكواد:', error);
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="5" style="text-align: center; padding: 40px; color: #d9534f;">
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #d9534f; background: #0f2a3f;">
                             <i class="fas fa-exclamation-triangle"></i>
                             <p>خطأ في تحميل البيانات</p>
                         </td>
@@ -1060,14 +1267,14 @@
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 
                 if (days > 30) {
-                    return { color: 'rgba(37, 211, 102, 0.2)', text: 'نشط' };
+                    return { color: '#e0f2fe', text: 'نشط' };
                 } else if (days > 7) {
-                    return { color: 'rgba(77, 150, 255, 0.2)', text: days + ' يوم' };
+                    return { color: '#e0f2fe', text: days + ' يوم' };
                 } else {
-                    return { color: 'rgba(240, 173, 78, 0.2)', text: 'ينتهي قريباً' };
+                    return { color: '#fef3c7', text: 'ينتهي قريباً' };
                 }
             } else {
-                return { color: 'rgba(217, 83, 79, 0.2)', text: 'منتهي' };
+                return { color: '#fee2e2', text: 'منتهي' };
             }
         }
 
@@ -1087,58 +1294,42 @@
             }
         }
 
-        // ==================== إدارة المستخدمين ====================
-        async function loadUsers() {
-            // بيانات تجريبية
-            const users = [
-                { name: 'أحمد محمد', email: 'ahmed@example.com', status: 'active', registered: '2026-01-15', expires: '2026-04-15' },
-                { name: 'سارة علي', email: 'sara@example.com', status: 'active', registered: '2026-01-20', expires: '2026-02-20' },
-                { name: 'خالد حسن', email: 'khaled@example.com', status: 'expired', registered: '2025-12-01', expires: '2026-01-01' }
-            ];
-            
-            const tbody = document.getElementById('usersTable');
-            tbody.innerHTML = '';
-            
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                const statusColor = user.status === 'active' ? 'rgba(37, 211, 102, 0.2)' : 'rgba(217, 83, 79, 0.2)';
-                const statusText = user.status === 'active' ? 'نشط' : 'منتهي';
-                
-                row.innerHTML = `
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td><span style="padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; background: ${statusColor}">${statusText}</span></td>
-                    <td>${formatDate(user.registered)}</td>
-                    <td>
-                        <button class="btn btn-sm btn-secondary">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning">
-                            <i class="fas fa-redo"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
         // ==================== التقارير ====================
         async function loadDashboardStats() {
             const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
             
             document.getElementById('totalCodes').textContent = codes.length;
-            document.getElementById('activeUsers').textContent = Math.floor(codes.length * 0.7);
+            document.getElementById('activeUsers').textContent = calculateActiveUsers(codes);
             document.getElementById('todayCodes').textContent = getTodayCodesCount(codes);
             document.getElementById('totalRevenue').textContent = calculateTotalRevenue(codes);
         }
 
         async function loadReports() {
             const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+            const period = document.getElementById('reportPeriod').value;
+            const filteredCodes = filterCodesByPeriod(codes, period);
             
-            document.getElementById('totalGenerated').textContent = codes.length;
-            document.getElementById('totalUsed').textContent = Math.floor(codes.length * 0.65);
-            document.getElementById('avgDuration').textContent = calculateAverageDuration(codes);
-            document.getElementById('successRate').textContent = calculateSuccessRate(codes);
+            document.getElementById('totalGenerated').textContent = filteredCodes.length;
+            document.getElementById('totalUsed').textContent = calculateUsedCodes(filteredCodes);
+            document.getElementById('avgDuration').textContent = calculateAverageDuration(filteredCodes);
+            document.getElementById('successRate').textContent = calculateSuccessRate(filteredCodes);
+        }
+
+        function calculateActiveUsers(codes) {
+            const activeCodes = codes.filter(code => {
+                const expiry = new Date(code.expires_at);
+                return expiry > new Date();
+            });
+            
+            // عد المستخدمين الفريدين الذين لديهم أكواد نشطة
+            const uniqueUsers = new Set();
+            activeCodes.forEach(code => {
+                if (code.user_phone && code.user_phone !== 'غير محدد') {
+                    uniqueUsers.add(code.user_phone);
+                }
+            });
+            
+            return uniqueUsers.size;
         }
 
         function getTodayCodesCount(codes) {
@@ -1154,6 +1345,10 @@
                 return sum + (parseFloat(code.price) || 0);
             }, 0);
             return total.toFixed(0) + ' ر.س';
+        }
+
+        function calculateUsedCodes(codes) {
+            return Math.floor(codes.length * 0.65); // افتراضي - يمكن تعديله حسب البيانات الفعلية
         }
 
         function calculateAverageDuration(codes) {
@@ -1182,8 +1377,37 @@
 
         function calculateSuccessRate(codes) {
             if (codes.length === 0) return '0%';
-            const used = Math.floor(codes.length * 0.65);
+            const used = calculateUsedCodes(codes);
             return ((used / codes.length) * 100).toFixed(1) + '%';
+        }
+
+        function filterCodesByPeriod(codes, period) {
+            const now = new Date();
+            let startDate;
+            
+            switch(period) {
+                case 'today':
+                    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                    break;
+                case 'week':
+                    startDate = new Date(now);
+                    startDate.setDate(now.getDate() - 7);
+                    break;
+                case 'month':
+                    startDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+                    break;
+                case 'year':
+                    startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                    break;
+                case 'all':
+                default:
+                    return codes;
+            }
+            
+            return codes.filter(code => {
+                const codeDate = new Date(code.created_at || new Date());
+                return codeDate >= startDate;
+            });
         }
 
         // ==================== الإعدادات ====================
@@ -1303,6 +1527,8 @@
         window.resetSettings = resetSettings;
         window.showTab = showTab;
         window.hideNotification = hideNotification;
+        window.toggleUserInfo = toggleUserInfo;
+        window.loadReports = loadReports;
     </script>
 </body>
 </html>

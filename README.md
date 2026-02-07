@@ -483,9 +483,37 @@
             direction: ltr;
         }
 
-        .data-table .status {
+        .data-table td.expired {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            font-weight: 700;
+        }
+        
+        .data-table td.expired:first-child {
+            color: #dc2626 !important;
+        }
+
+        .data-table td.expiring-soon {
+            background: #fef3c7 !important;
+            color: #d97706 !important;
+            font-weight: 700;
+        }
+        
+        .data-table td.expiring-soon:first-child {
+            color: #d97706 !important;
+        }
+
+        .data-table td.active {
             background: #e0f2fe !important;
             color: #0369a1 !important;
+            font-weight: 700;
+        }
+        
+        .data-table td.active:first-child {
+            color: #0369a1 !important;
+        }
+
+        .badge {
             font-weight: 800;
             padding: 4px 10px;
             border-radius: 999px;
@@ -493,14 +521,19 @@
             display: inline-block;
         }
 
-        .badge {
+        .badge-active {
             background: #e0f2fe !important;
             color: #0369a1 !important;
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            display: inline-block;
+        }
+
+        .badge-expiring {
+            background: #fef3c7 !important;
+            color: #d97706 !important;
+        }
+
+        .badge-expired {
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
         }
 
         /* ========== حاوية معلومات المستخدم الاختيارية ========== */
@@ -685,16 +718,16 @@
                     <div class="stat-label">الأكواد النشطة</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="activeUsers">0</div>
-                    <div class="stat-label">المستخدمين النشطين</div>
+                    <div class="stat-value" id="expiringCodes">0</div>
+                    <div class="stat-label">الأكواد ستنتهي قريباً</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="expiredCodes">0</div>
+                    <div class="stat-label">الأكواد المنتهية</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="totalRevenue">0 ر.س</div>
                     <div class="stat-label">إجمالي الإيرادات</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="todayCodes">0</div>
-                    <div class="stat-label">أكواد اليوم</div>
                 </div>
             </div>
         </header>
@@ -705,9 +738,13 @@
                 <i class="fas fa-key tab-icon"></i>
                 <span>توليد أكواد</span>
             </button>
-            <button class="nav-tab" data-tab="codes">
-                <i class="fas fa-list tab-icon"></i>
+            <button class="nav-tab" data-tab="activeCodes">
+                <i class="fas fa-check-circle tab-icon"></i>
                 <span>الأكواد النشطة</span>
+            </button>
+            <button class="nav-tab" data-tab="expiredCodes">
+                <i class="fas fa-times-circle tab-icon"></i>
+                <span>الأكواد المنتهية</span>
             </button>
             <button class="nav-tab" data-tab="reports">
                 <i class="fas fa-chart-bar tab-icon"></i>
@@ -824,15 +861,57 @@
             </section>
 
             <!-- تبويب الأكواد النشطة -->
-            <section id="codes" class="tab-content">
+            <section id="activeCodes" class="tab-content">
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">
                             <h3>الأكواد النشطة</h3>
-                            <small>إدارة وتتبع جميع أكواد التفعيل</small>
+                            <small>يشمل الأكواد النشطة والأكواد التي ستنتهي قريباً</small>
                         </div>
                         <div style="position: relative; width: 100%; max-width: 300px;">
-                            <input type="text" id="searchCodes" class="form-control" placeholder="ابحث في الأكواد...">
+                            <input type="text" id="searchActiveCodes" class="form-control" placeholder="ابحث في الأكواد النشطة...">
+                            <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>الكود</th>
+                                        <th>المدة</th>
+                                        <th>اسم المستخدم</th>
+                                        <th>الجوال</th>
+                                        <th>الحالة</th>
+                                        <th>الوقت المتبقي</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activeCodesTable">
+                                    <tr>
+                                        <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f;">
+                                            <div class="loading"></div>
+                                            <p style="margin-top: 10px; color: var(--text-secondary);">جاري تحميل البيانات...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- تبويب الأكواد المنتهية -->
+            <section id="expiredCodes" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>الأكواد المنتهية</h3>
+                            <small>جميع الأكواد المنتهية المفعول</small>
+                        </div>
+                        <div style="position: relative; width: 100%; max-width: 300px;">
+                            <input type="text" id="searchExpiredCodes" class="form-control" placeholder="ابحث في الأكواد المنتهية...">
                             <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
                         </div>
                     </div>
@@ -851,7 +930,7 @@
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
-                                <tbody id="codesTable">
+                                <tbody id="expiredCodesTable">
                                     <tr>
                                         <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f;">
                                             <div class="loading"></div>
@@ -991,6 +1070,9 @@
             
             // منع التكبير التلقائي
             preventAutoZoom();
+            
+            // بدء التحديث التلقائي
+            startAutoRefresh();
         });
 
         // ==================== التنقل ====================
@@ -1022,8 +1104,11 @@
             
             // تحميل البيانات الخاصة بالتبويب
             switch(tabId) {
-                case 'codes':
+                case 'activeCodes':
                     loadActiveCodes();
+                    break;
+                case 'expiredCodes':
+                    loadExpiredCodes();
                     break;
                 case 'reports':
                     loadReports();
@@ -1090,15 +1175,15 @@
                 const codes = [];
                 
                 for (let i = 0; i < codeCount; i++) {
-                   const response = await fetch(
-  `${API_BASE_URL}/generate-code?duration=${currentDuration}`,
-  {
-    method: "POST",
-    headers: {
-      "X-Admin-Token": adminToken
-    }
-  }
-);
+                    const response = await fetch(
+                        `${API_BASE_URL}/generate-code?duration=${currentDuration}`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "X-Admin-Token": adminToken
+                            }
+                        }
+                    );
                     
                     if (!response.ok) {
                         throw new Error(`خطأ في توليد الكود: ${response.status}`);
@@ -1113,7 +1198,7 @@
                         user_name: userName || 'غير محدد',
                         user_phone: userPhone || 'غير محدد',
                         created_at: new Date().toISOString(),
-                        used: false
+                        status: 'active'
                     });
                     
                     await new Promise(resolve => setTimeout(resolve, 100));
@@ -1152,7 +1237,8 @@
                 ...code,
                 id: Date.now() + Math.random(),
                 user_name: code.user_name,
-                user_phone: code.user_phone
+                user_phone: code.user_phone,
+                status: getCodeStatus(code.expires_at).type
             }));
             
             localStorage.setItem('admin_codes', JSON.stringify([...existing, ...newCodes]));
@@ -1211,12 +1297,19 @@
 
         // ==================== تحميل الأكواد النشطة ====================
         async function loadActiveCodes() {
-            const tbody = document.getElementById('codesTable');
+            const tbody = document.getElementById('activeCodesTable');
             
             try {
-                const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+                const allCodes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+                const now = new Date();
                 
-                if (codes.length === 0) {
+                // تصفية الأكواد النشطة فقط (غير منتهية)
+                const activeCodes = allCodes.filter(code => {
+                    const expiry = new Date(code.expires_at);
+                    return expiry > now;
+                });
+                
+                if (activeCodes.length === 0) {
                     tbody.innerHTML = `
                         <tr>
                             <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f; color: var(--text-secondary);">
@@ -1229,18 +1322,19 @@
                 }
                 
                 tbody.innerHTML = '';
-                codes.forEach((code, index) => {
+                activeCodes.forEach((code, index) => {
                     const status = getCodeStatus(code.expires_at);
-                    const statusElement = `<span class="status">${status.text}</span>`;
+                    const statusClass = status.type === 'expiring' ? 'badge-expiring' : 'badge-active';
+                    const statusElement = `<span class="badge ${statusClass}">${status.text}</span>`;
                     
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td><code>${code.code}</code></td>
-                        <td>${getDurationText(code.duration)}</td>
-                        <td>${code.user_name || 'غير محدد'}</td>
-                        <td>${code.user_phone || 'غير محدد'}</td>
-                        <td>${statusElement}</td>
-                        <td>${formatDate(code.expires_at)}</td>
+                        <td class="${status.type}"><code>${code.code}</code></td>
+                        <td class="${status.type}">${getDurationText(code.duration)}</td>
+                        <td class="${status.type}">${code.user_name || 'غير محدد'}</td>
+                        <td class="${status.type}">${code.user_phone || 'غير محدد'}</td>
+                        <td class="${status.type}">${statusElement}</td>
+                        <td class="${status.type}">${getTimeRemaining(code.expires_at)}</td>
                         <td>
                             <button class="btn btn-sm btn-secondary" onclick="copyCode('${code.code}')">
                                 <i class="fas fa-copy"></i>
@@ -1266,23 +1360,113 @@
             }
         }
 
+        // ==================== تحميل الأكواد المنتهية ====================
+        async function loadExpiredCodes() {
+            const tbody = document.getElementById('expiredCodesTable');
+            
+            try {
+                const allCodes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+                const now = new Date();
+                
+                // تصفية الأكواد المنتهية فقط
+                const expiredCodes = allCodes.filter(code => {
+                    const expiry = new Date(code.expires_at);
+                    return expiry <= now;
+                });
+                
+                if (expiredCodes.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f; color: var(--text-secondary);">
+                                <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.5; margin-bottom: 10px;"></i>
+                                <p>لا توجد أكواد منتهية</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                tbody.innerHTML = '';
+                expiredCodes.forEach((code, index) => {
+                    const statusElement = `<span class="badge badge-expired">منتهي</span>`;
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="expired"><code>${code.code}</code></td>
+                        <td class="expired">${getDurationText(code.duration)}</td>
+                        <td class="expired">${code.user_name || 'غير محدد'}</td>
+                        <td class="expired">${code.user_phone || 'غير محدد'}</td>
+                        <td class="expired">${statusElement}</td>
+                        <td class="expired">${formatDate(code.expires_at)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="copyCode('${code.code}')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteExpiredCode(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+            } catch (error) {
+                console.error('خطأ في تحميل الأكواد المنتهية:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #d9534f; background: #0f2a3f;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>خطأ في تحميل البيانات</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
         function getCodeStatus(expiresAt) {
             const now = new Date();
             const expiry = new Date(expiresAt);
             
-            if (expiry > now) {
-                const diff = expiry - now;
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                
-                if (days > 30) {
-                    return { color: '#e0f2fe', text: 'نشط' };
-                } else if (days > 7) {
-                    return { color: '#e0f2fe', text: days + ' يوم' };
-                } else {
-                    return { color: '#fef3c7', text: 'ينتهي قريباً' };
-                }
+            if (expiry <= now) {
+                return { type: 'expired', text: 'منتهي', color: '#fee2e2' };
+            }
+            
+            const diff = expiry - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            // إذا كان أقل من 24 ساعة متبقة
+            if (hours < 24) {
+                return { type: 'expiring', text: 'ينتهي قريباً', color: '#fef3c7' };
+            }
+            
+            // إذا كان أقل من 7 أيام متبقية
+            if (days < 7) {
+                return { type: 'expiring', text: days + ' يوم', color: '#fef3c7' };
+            }
+            
+            return { type: 'active', text: 'نشط', color: '#e0f2fe' };
+        }
+
+        function getTimeRemaining(expiresAt) {
+            const now = new Date();
+            const expiry = new Date(expiresAt);
+            
+            if (expiry <= now) {
+                return 'منتهي';
+            }
+            
+            const diff = expiry - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (days > 0) {
+                return `${days} يوم ${hours} ساعة`;
+            } else if (hours > 0) {
+                return `${hours} ساعة ${minutes} دقيقة`;
             } else {
-                return { color: '#fee2e2', text: 'منتهي' };
+                return `${minutes} دقيقة`;
             }
         }
 
@@ -1294,6 +1478,16 @@
         function deleteCode(index) {
             if (confirm('هل أنت متأكد من حذف هذا الكود؟')) {
                 const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+                
+                // تأكد أن الكود غير منتهي
+                const code = codes[index];
+                const status = getCodeStatus(code.expires_at);
+                
+                if (status.type === 'expired') {
+                    showNotification('لا يمكن حذف الأكواد المنتهية من هذا القسم، استخدم قسم الأكواد المنتهية', 'error');
+                    return;
+                }
+                
                 codes.splice(index, 1);
                 localStorage.setItem('admin_codes', JSON.stringify(codes));
                 loadActiveCodes();
@@ -1302,13 +1496,58 @@
             }
         }
 
+        function deleteExpiredCode(index) {
+            if (confirm('هل أنت متأكد من حذف هذا الكود المنتهي؟')) {
+                const allCodes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+                const now = new Date();
+                
+                // تصفية الأكواد المنتهية فقط
+                const expiredCodes = allCodes.filter(code => {
+                    const expiry = new Date(code.expires_at);
+                    return expiry <= now;
+                });
+                
+                // إزالة الكود من القائمة الكاملة
+                const codeToDelete = expiredCodes[index];
+                const codeIndex = allCodes.findIndex(c => c.code === codeToDelete.code);
+                
+                if (codeIndex !== -1) {
+                    allCodes.splice(codeIndex, 1);
+                    localStorage.setItem('admin_codes', JSON.stringify(allCodes));
+                    loadExpiredCodes();
+                    loadDashboardStats();
+                    showNotification('تم حذف الكود المنتهي بنجاح', 'success');
+                }
+            }
+        }
+
         // ==================== التقارير ====================
         async function loadDashboardStats() {
             const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+            const now = new Date();
             
-            document.getElementById('totalCodes').textContent = codes.length;
-            document.getElementById('activeUsers').textContent = calculateActiveUsers(codes);
-            document.getElementById('todayCodes').textContent = getTodayCodesCount(codes);
+            // حساب الأكواد النشطة
+            const activeCodes = codes.filter(code => {
+                const expiry = new Date(code.expires_at);
+                const status = getCodeStatus(code.expires_at);
+                return expiry > now && status.type !== 'expiring';
+            });
+            
+            // حساب الأكواد التي ستنتهي قريباً
+            const expiringCodes = codes.filter(code => {
+                const status = getCodeStatus(code.expires_at);
+                return status.type === 'expiring';
+            });
+            
+            // حساب الأكواد المنتهية
+            const expiredCodes = codes.filter(code => {
+                const expiry = new Date(code.expires_at);
+                return expiry <= now;
+            });
+            
+            document.getElementById('totalCodes').textContent = activeCodes.length;
+            document.getElementById('expiringCodes').textContent = expiringCodes.length;
+            document.getElementById('expiredCodes').textContent = expiredCodes.length;
             document.getElementById('totalRevenue').textContent = calculateTotalRevenue(codes);
         }
 
@@ -1323,31 +1562,6 @@
             document.getElementById('successRate').textContent = calculateSuccessRate(filteredCodes);
         }
 
-        function calculateActiveUsers(codes) {
-            const activeCodes = codes.filter(code => {
-                const expiry = new Date(code.expires_at);
-                return expiry > new Date();
-            });
-            
-            // عد المستخدمين الفريدين الذين لديهم أكواد نشطة
-            const uniqueUsers = new Set();
-            activeCodes.forEach(code => {
-                if (code.user_phone && code.user_phone !== 'غير محدد') {
-                    uniqueUsers.add(code.user_phone);
-                }
-            });
-            
-            return uniqueUsers.size;
-        }
-
-        function getTodayCodesCount(codes) {
-            const today = new Date().toDateString();
-            return codes.filter(code => {
-                const codeDate = new Date(code.created_at || new Date()).toDateString();
-                return codeDate === today;
-            }).length;
-        }
-
         function calculateTotalRevenue(codes) {
             const total = codes.reduce((sum, code) => {
                 return sum + (parseFloat(code.price) || 0);
@@ -1356,7 +1570,14 @@
         }
 
         function calculateUsedCodes(codes) {
-            return Math.floor(codes.length * 0.65); // افتراضي - يمكن تعديله حسب البيانات الفعلية
+            // يمكن تعديل هذه الدالة حسب البيانات الفعلية
+            const now = new Date();
+            const expiredCodes = codes.filter(code => {
+                const expiry = new Date(code.expires_at);
+                return expiry <= now;
+            });
+            
+            return expiredCodes.length;
         }
 
         function calculateAverageDuration(codes) {
@@ -1444,6 +1665,30 @@
             if (settings.defaultToken) {
                 document.getElementById('adminToken').value = settings.defaultToken;
             }
+            
+            // إعادة تشغيل التحديث التلقائي
+            startAutoRefresh();
+        }
+
+        function startAutoRefresh() {
+            const settings = JSON.parse(localStorage.getItem('admin_settings') || '{}');
+            const interval = parseInt(settings.autoRefresh || '0');
+            
+            // إيقاف أي توقيت سابق
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // بدء توقيت جديد إذا كان مخصصاً
+            if (interval > 0) {
+                autoRefreshInterval = setInterval(() => {
+                    const activeTab = document.querySelector('.tab-content.active').id;
+                    if (activeTab === 'activeCodes') loadActiveCodes();
+                    if (activeTab === 'expiredCodes') loadExpiredCodes();
+                    if (activeTab === 'reports') loadReports();
+                    loadDashboardStats();
+                }, interval * 1000);
+            }
         }
 
         function resetSettings() {
@@ -1477,7 +1722,9 @@
             return date.toLocaleDateString('ar-SA', {
                 year: 'numeric',
                 month: 'long',
-                day: 'numeric'
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             });
         }
 
@@ -1531,6 +1778,7 @@
         window.shareCodes = shareCodes;
         window.copyCode = copyCode;
         window.deleteCode = deleteCode;
+        window.deleteExpiredCode = deleteExpiredCode;
         window.saveSettings = saveSettings;
         window.resetSettings = resetSettings;
         window.showTab = showTab;

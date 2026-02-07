@@ -1,966 +1,1710 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة إعداد التقارير</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>لوحة تحكم الإدارة - ناصر AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<style>
-/* ===== الخط ===== */
-@font-face {
-  font-family: 'KufamLocal';
-  src: url('static/Kufam-Regular.ttf') format('truetype');
-  font-weight: 400;
-}
-@font-face {
-  font-family: 'KufamLocal';
-  src: url('static/Kufam-Bold.ttf') format('truetype');
-  font-weight: 700;
-}
+        html, body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0a1929 0%, #132f4c 100%);
+            color: #ffffff;
+            direction: rtl;
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            touch-action: manipulation;
+        }
 
-/* ===== عام ===== */
-body {
-  font-family: 'KufamLocal', sans-serif;
-  background: linear-gradient(135deg, #f2f7f6 0%, #e8eff0 100%);
-  margin: 0;
-  padding: 20px;
-  color: #333;
-}
+        /* منع التكبير التلقائي */
+        input, select, textarea {
+            font-size: 16px !important;
+            max-height: 44px;
+        }
 
-/* ===== الأداة ===== */
-.tool {
-  max-width: 900px;
-  margin: 30px auto;
-  padding: 30px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(10, 59, 64, 0.08);
-  border: 1px solid #e0e6e5;
-}
+        @media screen and (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
 
-.tool-header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #0a3b40;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-.tool-header h1 {
-  color: #0a3b40;
-  margin: 0;
-  font-size: 26px;
-  font-weight: 700;
-}
+        /* الهيدر */
+        .header {
+            background: linear-gradient(135deg, #022e22 0%, #044a35 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
 
-.tool-header p {
-  color: #4f6f68;
-  margin-top: 8px;
-  font-size: 16px;
-}
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(45deg, rgba(255, 209, 102, 0.1), transparent);
+            border-radius: 50%;
+        }
 
-/* ===== حقول الإدخال ===== */
-.input-group {
-  margin-bottom: 25px;
-  position: relative;
-}
+        .header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: #ffd166;
+            text-shadow: 0 2px 10px rgba(255, 209, 102, 0.3);
+        }
 
-.tool label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 700;
-  color: #1b5e52;
-  font-size: 15px;
-}
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
 
-.tool input,
-.tool textarea,
-.tool select {
-  width: 100%;
-  padding: 14px;
-  border: 2px solid #cfd8dc;
-  border-radius: 12px;
-  font-family: 'KufamLocal', sans-serif;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-  background: #f9fbfb;
-}
+        .header-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
 
-.tool input:focus,
-.tool textarea:focus,
-.tool select:focus {
-  outline: none;
-  border-color: #0a3b40;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(10, 59, 64, 0.1);
-}
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 150px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
-.tool textarea {
-  min-height: 100px;
-  resize: vertical;
-  line-height: 1.6;
-}
+        .stat-box .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #4d96ff;
+        }
 
-.tool select {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230a3b40' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: left 15px center;
-  padding-right: 15px;
-}
+        .stat-box .stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
 
-/* ===== نص افتراضي ===== */
-.default-text-note {
-  font-size: 13px;
-  color: #4f6f68;
-  margin-top: 5px;
-  font-style: italic;
-  padding-right: 5px;
-}
+        /* التنقل */
+        .tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
 
-.clear-default-btn {
-  position: absolute;
-  left: 10px;
-  top: 38px;
-  background: #f0f4f3;
-  border: 1px solid #cfd8dc;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 13px;
-  cursor: pointer;
-  color: #4f6f68;
-  transition: all 0.3s ease;
-}
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            white-space: nowrap;
+            min-width: 120px;
+        }
 
-.clear-default-btn:hover {
-  background: #e8eff0;
-  color: #0a3b40;
-  border-color: #0a3b40;
-}
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
 
-/* ===== معاينة الصور ===== */
-.preview-container {
-  margin-top: 10px;
-}
+        .tab.active {
+            background: linear-gradient(135deg, #066d4d 0%, #044a35 100%);
+            box-shadow: 0 4px 15px rgba(6, 109, 77, 0.3);
+        }
 
-.preview-container h4 {
-  margin: 15px 0 10px;
-  color: #1b5e52;
-  font-size: 14px;
-}
+        .tab i {
+            margin-left: 8px;
+            font-size: 18px;
+        }
 
-.preview {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
-  margin-top: 10px;
-}
+        /* المحتوى */
+        .content {
+            display: none;
+        }
 
-.preview img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 2px solid #e0e6e5;
-  transition: transform 0.3s ease;
-}
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
 
-.preview img:hover {
-  transform: scale(1.03);
-  border-color: #0a3b40;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-/* ===== الأزرار ===== */
-.button-container {
-  display: flex;
-  gap: 15px;
-  margin-top: 30px;
-}
+        /* الكروت */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
 
-button {
-  flex: 1;
-  padding: 16px;
-  font-size: 17px;
-  font-weight: 700;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'KufamLocal', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-#printBtn {
-  background: linear-gradient(135deg, #0a3b40 0%, #1b5e52 100%);
-  color: white;
-}
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffd166;
+        }
 
-#printBtn:hover {
-  background: linear-gradient(135deg, #083136 0%, #164d44 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(10, 59, 64, 0.2);
-}
+        .card-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
 
-#resetBtn {
-  background: #f0f4f3;
-  color: #4f6f68;
-  border: 2px solid #cfd8dc;
-}
+        /* الأزرار */
+        .btn {
+            background: linear-gradient(135deg, #066d4d 0%, #044a35 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
 
-#resetBtn:hover {
-  background: #e8eff0;
-  border-color: #8fbfb3;
-}
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 109, 77, 0.4);
+        }
 
-.load-defaults-btn {
-  background: #1b5e52;
-  color: white;
-  margin-top: 10px;
-  padding: 10px 15px;
-  font-size: 14px;
-  width: auto;
-  flex: none;
-}
+        .btn:active {
+            transform: translateY(0);
+        }
 
-.load-defaults-btn:hover {
-  background: #164d44;
-}
+        .btn-secondary {
+            background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
+        }
 
-/* ===== قالب التقرير ===== */
-.report { display: none; }
+        .btn-danger {
+            background: linear-gradient(135deg, #d9534f 0%, #c9302c 100%);
+        }
 
-/* =================== الطباعة =================== */
-@page {
-  size: A4;
-  margin: 14mm;
-}
+        .btn-success {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        }
 
-@media print {
-  body {
-    background: white;
-    padding: 0;
-  }
-  
-  .tool { display: none; }
-  .report { display: block; }
+        .btn-warning {
+            background: linear-gradient(135deg, #ffd166 0%, #f0ad4e 100%);
+        }
 
-  .page {
-    page-break-after: always;
-    padding-bottom: 20mm;
-  }
-  
-  .page:last-child { page-break-after: auto; }
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 12px;
+            min-height: 36px;
+            width: auto;
+        }
 
-  /* ===== الهيدر ===== */
-  .header-full {
-    background: linear-gradient(135deg, #0a3b40 0%, #1b5e52 100%);
-    color: white;
-    border-radius: 18px;
-    padding: 22px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
+        /* نموذج الإدخال */
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-  .header-full img {
-    width: 110px;
-    margin-bottom: 12px;
-  }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4d96ff;
+        }
 
-  .header-full h1 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-  }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s;
+            min-height: 44px;
+        }
 
-  .header-full h2 {
-    margin: 8px 0 0;
-    font-size: 15px;
-    font-weight: 400;
-    opacity: 0.9;
-  }
+        .form-control:focus {
+            outline: none;
+            border-color: #4d96ff;
+            box-shadow: 0 0 0 3px rgba(77, 150, 255, 0.2);
+        }
 
-  .school-name {
-    background: #0a3b40;
-    color: white;
-    width: fit-content;
-    margin: 15px auto 20px;
-    padding: 10px 35px;
-    border-radius: 14px;
-    font-size: 16px;
-    font-weight: 700;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
 
-  /* ===== معلومات التقرير في جميع الصفحات ===== */
-  .report-info-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
-    background: #f9fbfb;
-    padding: 15px;
-    border-radius: 14px;
-    border: 2px solid #cfd8dc;
-    font-size: 14px;
-  }
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            background-size: 12px;
+            padding-left: 40px;
+        }
 
-  .report-info-item {
-    text-align: center;
-  }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-  .report-info-label {
-    display: block;
-    background: #0a3b40;
-    color: white;
-    border-radius: 10px;
-    padding: 6px;
-    font-weight: 700;
-    margin-bottom: 8px;
-    font-size: 13px;
-  }
+        /* الجدول */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-  .report-info-value {
-    padding: 4px;
-    min-height: 20px;
-  }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
 
-  /* ===== محتوى ===== */
-  .grid-desc {
-    display: grid;
-    grid-template-columns: 1fr 90px 1fr;
-    gap: 15px;
-    margin-top: 20px;
-  }
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            text-align: right;
+            font-weight: 600;
+            color: #ffd166;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-  .desc-box {
-    border: 2px solid #cfd8dc;
-    border-radius: 16px;
-    padding: 18px;
-    background: #f9fbfb;
-    font-size: 14px;
-    line-height: 1.6;
-  }
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-  .desc-box strong {
-    display: block;
-    color: #0a3b40;
-    margin-bottom: 10px;
-    font-size: 16px;
-    border-bottom: 1px dashed #cfd8dc;
-    padding-bottom: 8px;
-  }
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
 
-  .desc-box p {
-    margin: 8px 0;
-    white-space: pre-line;
-  }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
 
-  /* ===== المربع النصفي المعدل ===== */
-  .vertical {
-    background: #eef3f1;
-    border-radius: 16px;
-    display: grid;
-    grid-template-columns: 1fr 1px 1fr;
-    align-items: center;
-    padding: 15px 8px;
-    font-weight: 600;
-    height: 100%;
-  }
+        .badge-success {
+            background: rgba(37, 211, 102, 0.2);
+            color: #25D366;
+        }
 
-  .vertical .right {
-    writing-mode: vertical-rl;
-    font-size: 13px;
-    color: #1b5e52;
-    text-align: center;
-    font-weight: 700;
-  }
+        .badge-warning {
+            background: rgba(255, 209, 102, 0.2);
+            color: #ffd166;
+        }
 
-  .vertical .left {
-    writing-mode: vertical-lr;
-    transform: rotate(180deg);
-    font-size: 13px;
-    color: #4f6f68;
-    text-align: center;
-    font-weight: 700;
-  }
+        .badge-danger {
+            background: rgba(217, 83, 79, 0.2);
+            color: #d9534f;
+        }
 
-  .vertical .divider {
-    width: 1px;
-    height: 85%;
-    background: #8fbfb3;
-    margin: auto;
-  }
+        .badge-info {
+            background: rgba(77, 150, 255, 0.2);
+            color: #4d96ff;
+        }
 
-  /* ===== الصور ===== */
-  .images-page {
-    margin-top: 20px;
-  }
-  
-  .images-page h3 {
-    text-align: center;
-    color: #0a3b40;
-    font-size: 20px;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #cfd8dc;
-  }
+        /* الإشعارات */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #066d4d 0%, #044a35 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            max-width: 500px;
+            margin: 0 auto;
+        }
 
-  .images {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 15px;
-  }
+        .notification.show {
+            transform: translateX(0);
+        }
 
-  .images img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 12px;
-    border: 2px solid #b0bec5;
-  }
-  
-  /* ===== فوتر الصفحة ===== */
-  .page-footer {
-    position: absolute;
-    bottom: 10mm;
-    left: 14mm;
-    right: 14mm;
-    text-align: center;
-    color: #666;
-    font-size: 12px;
-    border-top: 1px solid #ddd;
-    padding-top: 10px;
-  }
-}
-</style>
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .notification-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* تحسينات للهواتف */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header-stats {
+                gap: 10px;
+            }
+
+            .stat-box {
+                min-width: calc(50% - 5px);
+                padding: 12px;
+            }
+
+            .stat-box .stat-value {
+                font-size: 20px;
+            }
+
+            .tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding: 3px;
+            }
+
+            .tab {
+                min-width: 100px;
+                padding: 12px 8px;
+                font-size: 13px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px 8px;
+                font-size: 13px;
+            }
+
+            .badge {
+                padding: 3px 8px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .stat-box {
+                min-width: 100%;
+            }
+
+            .tab {
+                min-width: 90px;
+                padding: 10px 5px;
+                font-size: 12px;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                padding: 12px;
+            }
+        }
+
+        /* إصلاحات للـ Web in App */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .container {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* تأثيرات التحميل */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #4d96ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* علامات المدة الزمنية */
+        .duration-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .duration-tag {
+            background: rgba(77, 150, 255, 0.1);
+            border: 1px solid rgba(77, 150, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .duration-tag:hover {
+            background: rgba(77, 150, 255, 0.2);
+        }
+
+        .duration-tag.active {
+            background: linear-gradient(135deg, #4d96ff 0%, #2d7dfd 100%);
+            color: white;
+            border-color: #4d96ff;
+        }
+
+        /* شريط البحث */
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* فلاتر */
+        .filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        /* تفاصيل المستخدم */
+        .user-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .user-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-detail:last-child {
+            border-bottom: none;
+        }
+
+        .user-detail-label {
+            font-weight: 600;
+            color: #ffd166;
+        }
+
+        .user-detail-value {
+            text-align: left;
+        }
+
+        /* إحصائيات متقدمة */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4d96ff;
+            margin-bottom: 5px;
+        }
+
+        .stat-item-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* تحسينات للوضع الليلي */
+        @media (prefers-color-scheme: light) {
+            body {
+                background: linear-gradient(135deg, #f0f9f6 0%, #e8f4f0 100%);
+                color: #044a35;
+            }
+
+            .card, .stat-box, .table-container {
+                background: rgba(255, 255, 255, 0.9);
+                border-color: rgba(4, 74, 53, 0.1);
+            }
+
+            .form-control {
+                background: white;
+                border-color: #d4ebe2;
+                color: #044a35;
+            }
+
+            .form-control::placeholder {
+                color: #666;
+            }
+
+            th {
+                color: #066d4d;
+                background: rgba(6, 109, 77, 0.1);
+            }
+
+            .notification {
+                background: linear-gradient(135deg, #066d4d 0%, #044a35 100%);
+            }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <h1><i class="fas fa-user-shield"></i> لوحة تحكم الإدارة - ناصر AI</h1>
+            <p>إدارة النظام وتوليد أكواد التفعيل والتحكم بالمستخدمين</p>
+            
+            <div class="header-stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalCodes">0</div>
+                    <div class="stat-label">الأكواد النشطة</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="activeUsers">0</div>
+                    <div class="stat-label">المستخدمين النشطين</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="totalRevenue">0 ر.س</div>
+                    <div class="stat-label">إجمالي الإيرادات</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="todayCodes">0</div>
+                    <div class="stat-label">أكواد اليوم</div>
+                </div>
+            </div>
+        </div>
 
-<!-- ========= الأداة ========= -->
-<div class="tool">
-  <div class="tool-header">
-    <h1>🖋️ أداة إعداد التقارير المدرسية</h1>
-    <p>اختر نوع التقرير لتحميل النصوص الافتراضية، ثم عدل كما تشاء</p>
-  </div>
+        <!-- أشرطة التنقل -->
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('generate')">
+                <i class="fas fa-key"></i>
+                <span>توليد أكواد</span>
+            </div>
+            <div class="tab" onclick="showTab('codes')">
+                <i class="fas fa-list"></i>
+                <span>الأكواد النشطة</span>
+            </div>
+            <div class="tab" onclick="showTab('users')">
+                <i class="fas fa-users"></i>
+                <span>المستخدمين</span>
+            </div>
+            <div class="tab" onclick="showTab('reports')">
+                <i class="fas fa-chart-bar"></i>
+                <span>التقارير</span>
+            </div>
+            <div class="tab" onclick="showTab('settings')">
+                <i class="fas fa-cog"></i>
+                <span>الإعدادات</span>
+            </div>
+        </div>
 
-  <div class="input-group">
-    <label>🏫 اسم المدرسة</label>
-    <input type="text" id="schoolInput" placeholder="أدخل اسم المدرسة">
-  </div>
+        <!-- محتوى التبويب: توليد أكواد -->
+        <div id="generate" class="content active">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">توليد كود تفعيل جديد</div>
+                        <div class="card-subtitle">اختر المدة الزمنية وانقر على توليد</div>
+                    </div>
+                    <i class="fas fa-key fa-2x" style="color: #ffd166;"></i>
+                </div>
 
-  <div class="input-group">
-    <label>📄 عنوان التقرير</label>
-    <select id="reportType">
-      <option value="">اختر نوع التقرير</option>
-      <option value="تقرير تنفيذ استراتيجية">تقرير تنفيذ استراتيجية</option>
-      <option value="تقرير تنفيذ أنشطة داخل الفصل">تقرير تنفيذ أنشطة داخل الفصل</option>
-      <option value="تقرير نشاط إثرائي">تقرير نشاط إثرائي</option>
-      <option value="تقرير خطة علاجية">تقرير خطة علاجية</option>
-      <option value="تقرير تكريم المتميزين">تقرير تكريم المتميزين</option>
-    </select>
-    <div class="default-text-note">سيتم تحميل نصوص افتراضية عند الاختيار</div>
-  </div>
+                <div class="form-group">
+                    <label class="form-label">مدة التفعيل</label>
+                    <div class="duration-tags" id="durationTags">
+                        <span class="duration-tag" data-duration="5m">5 دقائق</span>
+                        <span class="duration-tag" data-duration="30m">30 دقيقة</span>
+                        <span class="duration-tag" data-duration="1h">1 ساعة</span>
+                        <span class="duration-tag" data-duration="3h">3 ساعات</span>
+                        <span class="duration-tag active" data-duration="1d">1 يوم</span>
+                        <span class="duration-tag" data-duration="3d">3 أيام</span>
+                        <span class="duration-tag" data-duration="7d">أسبوع</span>
+                        <span class="duration-tag" data-duration="30d">شهر</span>
+                        <span class="duration-tag" data-duration="90d">3 أشهر</span>
+                        <span class="duration-tag" data-duration="150d">5 أشهر</span>
+                    </div>
+                </div>
 
-  <button class="load-defaults-btn" onclick="loadDefaultTexts()">📥 تحميل النصوص الافتراضية للتقريـر المختار</button>
+                <div class="form-group">
+                    <label class="form-label">عدد الأكواد</label>
+                    <select class="form-control" id="codeCount">
+                        <option value="1">1 كود</option>
+                        <option value="5">5 أكواد</option>
+                        <option value="10">10 أكواد</option>
+                        <option value="20">20 كود</option>
+                        <option value="50">50 كود</option>
+                    </select>
+                </div>
 
-  <div class="input-group">
-    <label>📅 تاريخ التنفيذ</label>
-    <input type="text" id="dateInput" placeholder="يوم / شهر / سنة">
-  </div>
+                <div class="form-group">
+                    <label class="form-label">كود الأمان (ADMIN_TOKEN)</label>
+                    <input type="password" class="form-control" id="adminToken" placeholder="أدخل كود الأمان">
+                </div>
 
-  <div class="input-group">
-    <label>👥 المستهدفون</label>
-    <input type="text" id="targetInput" placeholder="الفئة المستهدفة">
-  </div>
+                <div class="form-group">
+                    <label class="form-label">السعر (اختياري)</label>
+                    <input type="number" class="form-control" id="price" placeholder="أدخل السعر بالريال">
+                </div>
 
-  <div class="input-group">
-    <label>🔢 عدد المستفيدين</label>
-    <input type="text" id="countInput" placeholder="عدد المشاركين">
-  </div>
+                <button class="btn btn-success" onclick="generateCodes()">
+                    <i class="fas fa-bolt"></i>
+                    توليد الأكواد
+                </button>
+            </div>
 
-  <div class="input-group">
-    <label>📝 الوصف المختصر</label>
-    <button class="clear-default-btn" onclick="clearField('desc1Input')">مسح</button>
-    <textarea id="desc1Input" placeholder="وصف مختصر للنشاط أو البرنامج" rows="6"></textarea>
-    <div class="default-text-note">يمكنك حذف هذا النص والكتابة بما يناسبك (6 أسطر كحد أقصى)</div>
-  </div>
+            <div class="card" id="generatedCodesCard" style="display: none;">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">الأكواد المولدة</div>
+                        <div class="card-subtitle">انسخ الأكواد أو أرسلها مباشرة</div>
+                    </div>
+                    <i class="fas fa-copy fa-2x" style="color: #4d96ff;"></i>
+                </div>
 
-  <div class="input-group">
-    <label>⚙️ إجراءات التنفيذ</label>
-    <button class="clear-default-btn" onclick="clearField('desc2Input')">مسح</button>
-    <textarea id="desc2Input" placeholder="الخطوات والإجراءات التنفيذية" rows="6"></textarea>
-    <div class="default-text-note">يمكنك حذف هذا النص والكتابة بما يناسبك (6 أسطر كحد أقصى)</div>
-  </div>
+                <div class="form-group">
+                    <label class="form-label">الأكواد المولدة:</label>
+                    <textarea class="form-control" id="generatedCodes" rows="6" readonly style="font-family: monospace;"></textarea>
+                </div>
 
-  <div class="input-group">
-    <label>📊 النتائج</label>
-    <button class="clear-default-btn" onclick="clearField('desc3Input')">مسح</button>
-    <textarea id="desc3Input" placeholder="النتائج المتحققة من التنفيذ"></textarea>
-    <div class="default-text-note">يمكنك حذف هذا النص والكتابة بما يناسبك</div>
-  </div>
+                <div class="form-row">
+                    <button class="btn btn-secondary" onclick="copyCodes()">
+                        <i class="fas fa-copy"></i>
+                        نسخ الأكواد
+                    </button>
+                    <button class="btn btn-warning" onclick="shareCodes()">
+                        <i class="fas fa-share-alt"></i>
+                        مشاركة
+                    </button>
+                </div>
+            </div>
+        </div>
 
-  <div class="input-group">
-    <label>💡 التوصيات</label>
-    <button class="clear-default-btn" onclick="clearField('desc4Input')">مسح</button>
-    <textarea id="desc4Input" placeholder="التوصيات والمقترحات"></textarea>
-    <div class="default-text-note">يمكنك حذف هذا النص والكتابة بما يناسبك</div>
-  </div>
+        <!-- محتوى التبويب: الأكواد النشطة -->
+        <div id="codes" class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">الأكواد النشطة</div>
+                        <div class="card-subtitle">إدارة وتتبع جميع أكواد التفعيل</div>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="searchCodes" placeholder="ابحث في الأكواد..." oninput="searchCodes()">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
 
-  <div class="input-group">
-    <label>🖼️ إرفاق الصور (اختياري)</label>
-    <input type="file" id="imageInput" multiple accept="image/*">
-    <div class="preview-container">
-      <h4>معاينة الصور المرفوعة:</h4>
-      <div class="preview" id="preview"></div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الكود</th>
+                                <th>المدة</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الإنشاء</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="codesTable">
+                            <!-- سيتم ملؤه ديناميكياً -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="text-align: center; padding: 20px; color: rgba(255, 255, 255, 0.5);">
+                    <i class="fas fa-sync-alt loading"></i>
+                    <span>جاري تحميل البيانات...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوى التبويب: المستخدمين -->
+        <div id="users" class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">المستخدمين النشطين</div>
+                        <div class="card-subtitle">عرض وإدارة حسابات المستخدمين</div>
+                    </div>
+                    <div class="filters">
+                        <select class="form-control filter-select" onchange="filterUsers()">
+                            <option value="">جميع المستخدمين</option>
+                            <option value="active">النشطين فقط</option>
+                            <option value="expired">المنتهية صلاحيتهم</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>المستخدم</th>
+                                <th>البريد</th>
+                                <th>الحالة</th>
+                                <th>تاريخ التسجيل</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <!-- سيتم ملؤه ديناميكياً -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوى التبويب: التقارير -->
+        <div id="reports" class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">تقارير النظام</div>
+                        <div class="card-subtitle">إحصائيات وأداء النظام</div>
+                    </div>
+                    <i class="fas fa-chart-line fa-2x" style="color: #25D366;"></i>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-item-value" id="totalGenerated">0</div>
+                        <div class="stat-item-label">إجمالي الأكواد المولدة</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-item-value" id="totalUsed">0</div>
+                        <div class="stat-item-label">الأكواد المستخدمة</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-item-value" id="avgDuration">0 يوم</div>
+                        <div class="stat-item-label">متوسط المدة</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-item-value" id="successRate">0%</div>
+                        <div class="stat-item-label">معدل النجاح</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">إحصائيات زمنية</div>
+                    <div class="card-subtitle">توزيع الأكواد حسب المدة</div>
+                </div>
+
+                <div id="durationChart" style="padding: 20px; min-height: 300px;">
+                    <!-- مخطط بياني سيتم إنشاؤه ديناميكياً -->
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوى التبويب: الإعدادات -->
+        <div id="settings" class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">إعدادات النظام</div>
+                        <div class="card-subtitle">تخصيص وتكوين النظام</div>
+                    </div>
+                    <i class="fas fa-sliders-h fa-2x" style="color: #5a67d8;"></i>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">عنوان الـ API</label>
+                    <input type="text" class="form-control" id="apiUrl" value="https://tarafbackend.onrender.com" readonly>
+                    <small style="display: block; margin-top: 5px; opacity: 0.7;">عنوان خادم الباك إند</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">كود الأمان الافتراضي</label>
+                    <input type="password" class="form-control" id="defaultToken" placeholder="أدخل كود الأمان الافتراضي">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">السعر الافتراضي</label>
+                    <input type="number" class="form-control" id="defaultPrice" placeholder="السعر الافتراضي بالريال">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">تحديث البيانات تلقائياً</label>
+                    <select class="form-control" id="autoRefresh">
+                        <option value="30">كل 30 ثانية</option>
+                        <option value="60">كل دقيقة</option>
+                        <option value="300">كل 5 دقائق</option>
+                        <option value="0">غير مفعل</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <button class="btn btn-success" onclick="saveSettings()">
+                        <i class="fas fa-save"></i>
+                        حفظ الإعدادات
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetSettings()">
+                        <i class="fas fa-undo"></i>
+                        إعادة تعيين
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">معلومات النظام</div>
+                </div>
+
+                <div class="user-details">
+                    <div class="user-detail">
+                        <span class="user-detail-label">إصدار النظام:</span>
+                        <span class="user-detail-value">v2.6.0</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="user-detail-label">تاريخ التحديث:</span>
+                        <span class="user-detail-value">2026-02-07</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="user-detail-label">المطور:</span>
+                        <span class="user-detail-value">فهد الخالدي</span>
+                    </div>
+                    <div class="user-detail">
+                        <span class="user-detail-label">الدعم:</span>
+                        <span class="user-detail-value">iFahadenglish@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="button-container">
-    <button id="resetBtn" onclick="resetForm()">🔄 مسح النموذج</button>
-    <button id="printBtn" onclick="generateReport()">📥 تصدير PDF</button>
-  </div>
-</div>
-
-<!-- ========= التقرير ========= -->
-<div class="report">
-
-<!-- الصفحة الأولى -->
-<div class="page">
-  <div class="header-full">
-    <img src="https://i.ibb.co/2037zjqy/IMG-2102.jpg" alt="شعار الوزارة">
-    <h1>الإدارة العامة للتعليم</h1>
-    <h2>وزارة التعليم</h2>
-  </div>
-
-  <div class="school-name" id="school"></div>
-
-  <!-- معلومات التقرير - الصفحة الأولى -->
-  <div class="report-info-grid" id="reportInfo1">
-    <div class="report-info-item">
-      <span class="report-info-label">عنوان التقرير</span>
-      <div class="report-info-value" id="title1"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">تاريخ التنفيذ</span>
-      <div class="report-info-value" id="date1"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">المستهدفون</span>
-      <div class="report-info-value" id="target1"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">عدد المستفيدين</span>
-      <div class="report-info-value" id="count1"></div>
-    </div>
-  </div>
-
-  <div class="grid-desc">
-    <div class="desc-box">
-      <strong>وصف مختصر</strong>
-      <p id="desc1"></p>
+    <!-- إشعارات -->
+    <div class="notification" id="notification">
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="notificationMessage">تمت العملية بنجاح</span>
+        </div>
+        <button class="notification-close" onclick="hideNotification()">×</button>
     </div>
 
-    <div class="vertical">
-      <div class="right">وصف مختصر</div>
-      <div class="divider"></div>
-      <div class="left">إجراءات التنفيذ</div>
-    </div>
+    <script>
+        // ==================== التكوين ====================
+        const API_BASE_URL = "https://tarafbackend.onrender.com";
+        let currentDuration = "1d";
+        let autoRefreshInterval = null;
 
-    <div class="desc-box">
-      <strong>إجراءات التنفيذ</strong>
-      <p id="desc2"></p>
-    </div>
-  </div>
-  
-  <div class="page-footer">صفحة 1 من 3</div>
-</div>
+        // ==================== تهيئة الصفحة ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحميل الإعدادات المحفوظة
+            loadSettings();
+            
+            // إعداد علامات المدة
+            setupDurationTags();
+            
+            // تحميل البيانات الأولية
+            loadDashboardStats();
+            loadActiveCodes();
+            
+            // إعداد التحديث التلقائي
+            setupAutoRefresh();
+            
+            // منع التكبير التلقائي على الهواتف
+            preventZoom();
+        });
 
-<!-- الصفحة الثانية -->
-<div class="page">
-  <div class="header-full">
-    <img src="https://i.ibb.co/2037zjqy/IMG-2102.jpg" alt="شعار الوزارة">
-    <h1>الإدارة العامة للتعليم</h1>
-    <h2>وزارة التعليم</h2>
-  </div>
+        // ==================== وظائف التنقل ====================
+        function showTab(tabId) {
+            // إخفاء جميع المحتويات
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // إلغاء تفعيل جميع الألسنة
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // إظهار المحتوى المطلوب
+            document.getElementById(tabId).classList.add('active');
+            
+            // تفعيل اللسان المطلوب
+            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+            
+            // تحميل البيانات الخاصة بالتبويب
+            switch(tabId) {
+                case 'generate':
+                    break;
+                case 'codes':
+                    loadActiveCodes();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'reports':
+                    loadReports();
+                    break;
+                case 'settings':
+                    break;
+            }
+        }
 
-  <div class="school-name" id="school2"></div>
+        // ==================== إعداد المدة ====================
+        function setupDurationTags() {
+            const tags = document.querySelectorAll('.duration-tag');
+            tags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    tags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDuration = this.dataset.duration;
+                });
+            });
+        }
 
-  <!-- معلومات التقرير - الصفحة الثانية -->
-  <div class="report-info-grid" id="reportInfo2">
-    <div class="report-info-item">
-      <span class="report-info-label">عنوان التقرير</span>
-      <div class="report-info-value" id="title2"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">تاريخ التنفيذ</span>
-      <div class="report-info-value" id="date2"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">المستهدفون</span>
-      <div class="report-info-value" id="target2"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">عدد المستفيدين</span>
-      <div class="report-info-value" id="count2"></div>
-    </div>
-  </div>
+        // ==================== توليد الأكواد ====================
+        async function generateCodes() {
+            const adminToken = document.getElementById('adminToken').value;
+            const codeCount = parseInt(document.getElementById('codeCount').value);
+            const price = document.getElementById('price').value;
+            
+            if (!adminToken) {
+                showNotification('يرجى إدخال كود الأمان', 'error');
+                return;
+            }
+            
+            // عرض حالة التحميل
+            const generateBtn = document.querySelector('.btn-success');
+            const originalText = generateBtn.innerHTML;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التوليد...';
+            generateBtn.disabled = true;
+            
+            try {
+                const codes = [];
+                
+                // توليد أكواد متعددة
+                for (let i = 0; i < codeCount; i++) {
+                    const response = await fetch(`${API_BASE_URL}/generate-code?key=${encodeURIComponent(adminToken)}&duration=${currentDuration}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`خطأ في توليد الكود: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    codes.push({
+                        code: data.activation_code,
+                        duration: currentDuration,
+                        expires_at: data.expires_at,
+                        price: price || 'غير محدد'
+                    });
+                    
+                    // تأخير بسيط بين كل طلب
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                // عرض الأكواد المولدة
+                displayGeneratedCodes(codes);
+                showNotification(`تم توليد ${codes.length} كود بنجاح`, 'success');
+                
+                // تحديث الإحصائيات
+                loadDashboardStats();
+                
+            } catch (error) {
+                console.error('خطأ في توليد الأكواد:', error);
+                showNotification(`خطأ: ${error.message}`, 'error');
+            } finally {
+                // استعادة حالة الزر
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            }
+        }
 
-  <div class="grid-desc">
-    <div class="desc-box">
-      <strong>النتائج</strong>
-      <p id="desc3"></p>
-    </div>
+        function displayGeneratedCodes(codes) {
+            const codesText = codes.map(c => 
+                `الكود: ${c.code}\nالمدة: ${getDurationText(c.duration)}\nالسعر: ${c.price} ر.س\nتاريخ الانتهاء: ${formatDate(c.expires_at)}\n────────────────────`
+            ).join('\n\n');
+            
+            document.getElementById('generatedCodes').value = codesText;
+            document.getElementById('generatedCodesCard').style.display = 'block';
+        }
 
-    <div class="vertical">
-      <div class="right">النتائج</div>
-      <div class="divider"></div>
-      <div class="left">التوصيات</div>
-    </div>
+        function getDurationText(duration) {
+            const durations = {
+                '5m': '5 دقائق',
+                '30m': '30 دقيقة',
+                '1h': 'ساعة واحدة',
+                '3h': '3 ساعات',
+                '1d': 'يوم واحد',
+                '3d': '3 أيام',
+                '7d': 'أسبوع',
+                '30d': 'شهر',
+                '90d': '3 أشهر',
+                '150d': '5 أشهر'
+            };
+            return durations[duration] || duration;
+        }
 
-    <div class="desc-box">
-      <strong>التوصيات</strong>
-      <p id="desc4"></p>
-    </div>
-  </div>
-  
-  <div class="page-footer">صفحة 2 من 3</div>
-</div>
+        function copyCodes() {
+            const textarea = document.getElementById('generatedCodes');
+            textarea.select();
+            document.execCommand('copy');
+            showNotification('تم نسخ الأكواد إلى الحافظة', 'success');
+        }
 
-<!-- الصفحة الثالثة -->
-<div class="page images-page">
-  <div class="header-full">
-    <img src="https://i.ibb.co/2037zjqy/IMG-2102.jpg" alt="شعار الوزارة">
-    <h1>الإدارة العامة للتعليم</h1>
-    <h2>وزارة التعليم</h2>
-  </div>
+        function shareCodes() {
+            const codes = document.getElementById('generatedCodes').value;
+            const text = `أكواد تفعيل ناصر AI:\n\n${codes}\n\nتم إنشاؤها عبر لوحة التحكم`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'أكواد تفعيل ناصر AI',
+                    text: text
+                });
+            } else {
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        }
 
-  <div class="school-name" id="school3"></div>
+        // ==================== تحميل الأكواد النشطة ====================
+        async function loadActiveCodes() {
+            const tbody = document.getElementById('codesTable');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 20px;">
+                        <i class="fas fa-sync-alt loading"></i>
+                        <span>جاري تحميل البيانات...</span>
+                    </td>
+                </tr>
+            `;
+            
+            try {
+                // في الواقع، سنحتاج إلى إنشاء endpoint جديد في الباك إند
+                // لهذه الأغراض، سنستخدم تخزين مؤقت
+                const codes = JSON.parse(localStorage.getItem('generated_codes') || '[]');
+                
+                if (codes.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">
+                                <i class="fas fa-inbox"></i>
+                                <br>
+                                <span>لا توجد أكواد نشطة</span>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                tbody.innerHTML = '';
+                codes.forEach((code, index) => {
+                    const row = document.createElement('tr');
+                    const status = getCodeStatus(code.expires_at);
+                    
+                    row.innerHTML = `
+                        <td><code style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 5px; font-family: monospace;">${code.code}</code></td>
+                        <td>${getDurationText(code.duration)}</td>
+                        <td><span class="badge ${status.class}">${status.text}</span></td>
+                        <td>${formatDate(new Date().toISOString())}</td>
+                        <td>${formatDate(code.expires_at)}</td>
+                        <td>
+                            <button class="btn btn-small btn-secondary" onclick="copyCode('${code.code}')" title="نسخ">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="btn btn-small btn-danger" onclick="deleteCode(${index})" title="حذف">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+            } catch (error) {
+                console.error('خطأ في تحميل الأكواد:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 20px; color: #d9534f;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <br>
+                            <span>خطأ في تحميل البيانات</span>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
 
-  <!-- معلومات التقرير - الصفحة الثالثة -->
-  <div class="report-info-grid" id="reportInfo3">
-    <div class="report-info-item">
-      <span class="report-info-label">عنوان التقرير</span>
-      <div class="report-info-value" id="title3"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">تاريخ التنفيذ</span>
-      <div class="report-info-value" id="date3"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">المستهدفون</span>
-      <div class="report-info-value" id="target3"></div>
-    </div>
-    <div class="report-info-item">
-      <span class="report-info-label">عدد المستفيدين</span>
-      <div class="report-info-value" id="count3"></div>
-    </div>
-  </div>
+        function getCodeStatus(expiresAt) {
+            const now = new Date();
+            const expiry = new Date(expiresAt);
+            
+            if (expiry > now) {
+                const diff = expiry - now;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                
+                if (days > 30) {
+                    return { class: 'badge-success', text: 'نشط' };
+                } else if (days > 7) {
+                    return { class: 'badge-info', text: 'متبقي: ' + days + ' يوم' };
+                } else if (days > 1) {
+                    return { class: 'badge-warning', text: 'ينتهي قريباً' };
+                } else {
+                    return { class: 'badge-danger', text: 'ينتهي اليوم' };
+                }
+            } else {
+                return { class: 'badge-danger', text: 'منتهي' };
+            }
+        }
 
-  <h3>📸 شواهد الصور</h3>
-  <div class="images" id="imagesContainer"></div>
-  <div class="page-footer">صفحة 3 من 3</div>
-</div>
+        function copyCode(code) {
+            navigator.clipboard.writeText(code);
+            showNotification('تم نسخ الكود إلى الحافظة', 'success');
+        }
 
-</div>
+        function deleteCode(index) {
+            if (confirm('هل أنت متأكد من حذف هذا الكود؟')) {
+                const codes = JSON.parse(localStorage.getItem('generated_codes') || '[]');
+                codes.splice(index, 1);
+                localStorage.setItem('generated_codes', JSON.stringify(codes));
+                loadActiveCodes();
+                showNotification('تم حذف الكود بنجاح', 'success');
+            }
+        }
 
-<script>
-// عناصر DOM
-const schoolInput = document.getElementById('schoolInput');
-const reportType = document.getElementById('reportType');
-const dateInput = document.getElementById('dateInput');
-const targetInput = document.getElementById('targetInput');
-const countInput = document.getElementById('countInput');
-const desc1Input = document.getElementById('desc1Input');
-const desc2Input = document.getElementById('desc2Input');
-const desc3Input = document.getElementById('desc3Input');
-const desc4Input = document.getElementById('desc4Input');
-const imageInput = document.getElementById('imageInput');
+        function searchCodes() {
+            const searchTerm = document.getElementById('searchCodes').value.toLowerCase();
+            const rows = document.querySelectorAll('#codesTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
 
-// عناصر التقرير
-const schoolElement = document.getElementById('school');
-const schoolElement2 = document.getElementById('school2');
-const schoolElement3 = document.getElementById('school3');
-const titleElement = document.getElementById('title1');
-const titleElement2 = document.getElementById('title2');
-const titleElement3 = document.getElementById('title3');
-const dateElement = document.getElementById('date1');
-const dateElement2 = document.getElementById('date2');
-const dateElement3 = document.getElementById('date3');
-const targetElement = document.getElementById('target1');
-const targetElement2 = document.getElementById('target2');
-const targetElement3 = document.getElementById('target3');
-const countElement = document.getElementById('count1');
-const countElement2 = document.getElementById('count2');
-const countElement3 = document.getElementById('count3');
-const desc1Element = document.getElementById('desc1');
-const desc2Element = document.getElementById('desc2');
-const desc3Element = document.getElementById('desc3');
-const desc4Element = document.getElementById('desc4');
+        // ==================== إدارة المستخدمين ====================
+        async function loadUsers() {
+            // هذه دالة تجريبية - في الواقع ستستدعي API المستخدمين
+            const users = [
+                { name: 'أحمد محمد', email: 'ahmed@example.com', status: 'active', registered: '2026-01-15', expires: '2026-04-15' },
+                { name: 'سارة علي', email: 'sara@example.com', status: 'active', registered: '2026-01-20', expires: '2026-02-20' },
+                { name: 'خالد حسن', email: 'khaled@example.com', status: 'expired', registered: '2025-12-01', expires: '2026-01-01' },
+                { name: 'فاطمة أحمد', email: 'fatima@example.com', status: 'active', registered: '2026-02-01', expires: '2026-05-01' }
+            ];
+            
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                const statusClass = user.status === 'active' ? 'badge-success' : 'badge-danger';
+                const statusText = user.status === 'active' ? 'نشط' : 'منتهي';
+                
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge ${statusClass}">${statusText}</span></td>
+                    <td>${formatDate(user.registered)}</td>
+                    <td>${formatDate(user.expires)}</td>
+                    <td>
+                        <button class="btn btn-small btn-secondary" title="عرض التفاصيل">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-small btn-warning" title="تجديد الاشتراك">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
 
-// النصوص الافتراضية لكل نوع تقرير (مختصرة إلى 6 أسطر)
-const defaultTexts = {
-  "تقرير تنفيذ استراتيجية": {
-    desc1: "تنفيذ استراتيجية تدريسية متطورة لتحسين نواتج التعلم.\n\nاستهدفت رفع مستوى المهارات الأساسية.\n\nاعتمدت على أساليب التعلم النشط.\n\nركزت على التفاعل والمشاركة الصفية.\n\nتم تطبيقها وفق خطة زمنية محددة.\n\nشارك فيها جميع معلمي المادة.",
-    desc2: "عقد ورشة عمل للمعلمين للتعريف بالاستراتيجية.\n\nتصميم أدوات تقييم قبلي وبعدي.\n\nتطبيق الاستراتيجية داخل الفصول.\n\nمتابعة أسبوعية من فريق التطوير.\n\nتوثيق الممارسات الناجحة.\n\nتقييم أثر التنفيذ على الطلاب.",
-    desc3: "1. تحسن ملحوظ في دافعية الطلاب نحو التعلم\n2. ارتفاع في نسب التفاعل الصفي بنسبة 40%\n3. تحسن في نتائج الاختبارات التكوينية\n4. رضا المعلمين عن الأساليب الجديدة بنسبة 85%\n5. توثيق 15 ممارسة ناجحة قابلة للتعميم",
-    desc4: "1. تعميم الاستراتيجية على جميع الصفوف المماثلة\n2. تدريب معلمين جدد على الاستراتيجية\n3. توفير موارد إضافية لدعم التنفيذ\n4. استمرار المتابعة والتقييم الدوري\n5. عقد لقاءات تبادل خبرات بين المعلمين"
-  },
-  "تقرير تنفيذ أنشطة داخل الفصل": {
-    desc1: "سلسلة أنشطة صفية تفاعلية لتعزيز المهارات.\n\nركزت على التفكير الناقد والتعلم التعاوني.\n\nدمجت التقنية والألعاب التعليمية.\n\nصممت لتناسب مختلف أنماط التعلم.\n\nنفذت في بيئة صفية محفزة.\n\nاستهدفت جميع طلاب الصف.",
-    desc2: "تقسيم الطلاب إلى مجموعات تعاونية.\n\nتوزيع المهام والأدوار على المجموعات.\n\nاستخدام وسائل تعليمية تفاعلية.\n\nتخصيص وقت للمناقشة والعرض.\n\nتقديم تغذية راجعة فورية.\n\nتقويم أداء المجموعات.",
-    desc3: "1. تفاعل إيجابي من جميع الطلاب مع الأنشطة\n2. تنمية مهارات العمل الجماعي والتعاون\n3. تحسن في قدرة الطلاب على التعبير عن الأفكار\n4. زيادة ثقة الطلاب بأنفسهم\n5. تحقيق الأهداف التعليمية المخطط لها بنسبة 90%",
-    desc4: "1. الاستمرار في تطبيق الأنشطة التفاعلية بشكل دوري\n2. تنويع أساليب التقويم المستخدمة\n3. تخصيص وقت كافٍ لكل نشاط\n4. تدريب الطلاب على مهارات الحوار والمناقشة\n5. توثيق الأنشطة الناجحة في بنك الأنشطة المدرسية"
-  },
-  "تقرير نشاط إثرائي": {
-    desc1: "نشاط إثرائي خارج الإطار الدراسي.\n\nهدف إلى تنمية مواهب الطلاب وصقل مهاراتهم.\n\nغطى مجالات فنية وأدبية وعلمية.\n\nشارك فيه طلاب بمختلف اهتماماتهم.\n\nنظم في بيئة جاذبة ومحفزة.\n\nاستمر لمدة فصل دراسي كامل.",
-    desc2: "تحديد المجالات الإثرائية المطلوبة.\n\nدعوة الطلاب للمشاركة حسب اهتماماتهم.\n\nتوفير المواد والأدوات اللازمة.\n\nتنظيم ورش العمل والجلسات التدريبية.\n\nمتابعة تقدم المشاركين أسبوعياً.\n\nعرض منتجات الطلاب وإنجازاتهم.",
-    desc3: "1. اكتشاف مواهب جديدة لدى 25 طالباً\n2. تنمية الثقة بالنفس لدى المشاركين\n3. إنتاج أعمال فنية وأدبية متميزة\n4. زيادة الانتماء للمدرسة والمجتمع\n5. رضا أولياء الأمور عن الأنشطة الإثرائية",
-    desc4: "1. استمرار النشاط الإثرائي كبرنامج دائم\n2. تخصيص مساحة مناسبة للأنشطة الإثرائية\n3. تدريب معلمين متخصصين في المجالات المختلفة\n4. مشاركة الأعمال في معارض ومناسبات\n5. توفير جوائز تشجيعية للمتميزين"
-  },
-  "تقرير خطة علاجية": {
-    desc1: "خطة علاجية شاملة للطلاب المتعثرين.\n\nهدفت لرفع المستوى التحصيلي.\n\nتجاوزت الصعوبات التعليمية.\n\nركزت على المواد الأساسية.\n\nصممت برامج فردية وجماعية.\n\nتابعت التقدم أسبوعياً.",
-    desc2: "تشخيص الصعوبات التعليمية لكل طالب.\n\nوضع أهداف علاجية قابلة للقياس.\n\nتصميم برامج علاجية فردية وجماعية.\n\nتنفيذ جلسات علاجية مكثفة.\n\nمتابعة التقدم وتعديل الخطة.\n\nتواصل مع أولياء الأمور.",
-    desc3: "1. تحسن ملحوظ في مستوى 18 طالباً من أصل 25\n2. ارتفاع درجات الطلاب في الاختبارات\n3. تحسن في دافعية التعلم لدى الطلاب المتعثرين\n4. انخفاض نسبة الغياب بين الطلاب المستهدفين\n5. رضا أولياء الأمور عن الخطة العلاجية",
-    desc4: "1. الاستمرار في المتابعة للطلاب الذين يحتاجون مزيداً من الوقت\n2. تدريب المعلمين على استراتيجيات العلاج الفعالة\n3. توفير مواد تعليمية علاجية إضافية\n4. عقد لقاءات دورية مع أولياء الأمور\n5. توثيق الحالات الناجحة للاستفادة منها مستقبلاً"
-  },
-  "تقرير تكريم المتميزين": {
-    desc1: "حفل تكريم للطلاب المتميزين بمختلف المجالات.\n\nهدف لتحفيز الطلاب وتعزيز التنافس الإيجابي.\n\nشمل المجالات الدراسية والسلوكية.\n\nتضمن الرياضية والفنية والإبداعية.\n\nنظم بحضور أولياء الأمور.\n\nشمل فقرات فنية وتكريمية.",
-    desc2: "تحديد معايير التميز والتفوق.\n\nترشيح الطلاب المتميزين من قبل المعلمين.\n\nتشكيل لجنة لاختيار المكرمين.\n\nإعداد شهادات التقدير والهدايا.\n\nتنظيم حفل التكريم.\n\nتغطية إعلامية للفعالية.",
-    desc3: "1. تكريم 35 طالباً وطالبة في مختلف المجالات\n2. ارتفاع الروح المعنوية لدى الطلاب المكرمين\n3. تحفيز باقي الطلاب للسعي نحو التميز\n4. تعزيز الشراكة مع أولياء الأمور\n5. تغطية إعلامية إيجابية للفعالية",
-    desc4: "1. جعل التكريم حدثاً سنوياً للمدرسة\n2. تنويع مجالات التكريم لتشمل جميع المواهب\n3. ربط التكريم بجوائز معنوية ومادية\n4. توثيق إنجازات المتميزين في سجلات المدرسة\n5. إشراك الطلاب في تنظيم فعاليات التكريم"
-  }
-};
+        function filterUsers() {
+            const filter = document.querySelector('#users select').value;
+            const rows = document.querySelectorAll('#usersTable tr');
+            
+            rows.forEach(row => {
+                const statusBadge = row.querySelector('.badge').textContent;
+                const show = !filter || 
+                    (filter === 'active' && statusBadge === 'نشط') ||
+                    (filter === 'expired' && statusBadge === 'منتهي');
+                
+                row.style.display = show ? '' : 'none';
+            });
+        }
 
-// تحديث جميع نسخ التقرير في الوقت الحقيقي
-function updateAllReports() {
-  // اسم المدرسة في جميع الصفحات
-  schoolElement.textContent = schoolInput.value;
-  schoolElement2.textContent = schoolInput.value;
-  schoolElement3.textContent = schoolInput.value;
-  
-  // عنوان التقرير في جميع الصفحات
-  titleElement.textContent = reportType.value;
-  titleElement2.textContent = reportType.value;
-  titleElement3.textContent = reportType.value;
-  
-  // تاريخ التنفيذ في جميع الصفحات
-  dateElement.textContent = dateInput.value;
-  dateElement2.textContent = dateInput.value;
-  dateElement3.textContent = dateInput.value;
-  
-  // المستهدفون في جميع الصفحات
-  targetElement.textContent = targetInput.value;
-  targetElement2.textContent = targetInput.value;
-  targetElement3.textContent = targetInput.value;
-  
-  // عدد المستفيدين في جميع الصفحات
-  countElement.textContent = countInput.value;
-  countElement2.textContent = countInput.value;
-  countElement3.textContent = countInput.value;
-  
-  // المحتوى
-  desc1Element.textContent = desc1Input.value;
-  desc2Element.textContent = desc2Input.value;
-  desc3Element.textContent = desc3Input.value;
-  desc4Element.textContent = desc4Input.value;
-}
+        // ==================== التقارير والإحصائيات ====================
+        async function loadDashboardStats() {
+            // تحميل الإحصائيات
+            const codes = JSON.parse(localStorage.getItem('generated_codes') || '[]');
+            
+            document.getElementById('totalCodes').textContent = codes.length;
+            document.getElementById('activeUsers').textContent = Math.floor(codes.length * 0.7); // تقدير تجريبي
+            document.getElementById('todayCodes').textContent = getTodayCodesCount(codes);
+            document.getElementById('totalRevenue').textContent = calculateTotalRevenue(codes);
+        }
 
-// إضافة المستمعين للأحداث
-schoolInput.addEventListener('input', updateAllReports);
-reportType.addEventListener('change', () => {
-  updateAllReports();
-  // تحديث العنوان في الواجهة أيضًا
-  const title = reportType.value;
-  titleElement.textContent = title;
-  titleElement2.textContent = title;
-  titleElement3.textContent = title;
-});
-dateInput.addEventListener('input', updateAllReports);
-targetInput.addEventListener('input', updateAllReports);
-countInput.addEventListener('input', updateAllReports);
-desc1Input.addEventListener('input', () => desc1Element.textContent = desc1Input.value);
-desc2Input.addEventListener('input', () => desc2Element.textContent = desc2Input.value);
-desc3Input.addEventListener('input', () => desc3Element.textContent = desc3Input.value);
-desc4Input.addEventListener('input', () => desc4Element.textContent = desc4Input.value);
+        async function loadReports() {
+            const codes = JSON.parse(localStorage.getItem('generated_codes') || '[]');
+            
+            // إحصائيات عامة
+            document.getElementById('totalGenerated').textContent = codes.length;
+            document.getElementById('totalUsed').textContent = Math.floor(codes.length * 0.65);
+            document.getElementById('avgDuration').textContent = calculateAverageDuration(codes);
+            document.getElementById('successRate').textContent = calculateSuccessRate(codes);
+            
+            // إنشاء مخطط بياني بسيط
+            createDurationChart(codes);
+        }
 
-// تحميل النصوص الافتراضية
-function loadDefaultTexts() {
-  const selectedReport = reportType.value;
-  
-  if (!selectedReport) {
-    alert('⚠️ الرجاء اختيار نوع التقرير أولاً');
-    reportType.focus();
-    return;
-  }
-  
-  if (confirm(`هل تريد تحميل النصوص الافتراضية لتقرير "${selectedReport}"؟\n(يمكنك تعديلها لاحقاً كما تشاء)`)) {
-    const texts = defaultTexts[selectedReport];
-    
-    desc1Input.value = texts.desc1;
-    desc2Input.value = texts.desc2;
-    desc3Input.value = texts.desc3;
-    desc4Input.value = texts.desc4;
-    
-    // تحديث المعاينة
-    desc1Element.textContent = texts.desc1;
-    desc2Element.textContent = texts.desc2;
-    desc3Element.textContent = texts.desc3;
-    desc4Element.textContent = texts.desc4;
-    
-    alert('✅ تم تحميل النصوص الافتراضية بنجاح\nيمكنك الآن تعديلها كما تريد');
-  }
-}
+        function getTodayCodesCount(codes) {
+            const today = new Date().toDateString();
+            return codes.filter(code => {
+                const codeDate = new Date(code.created_at || new Date()).toDateString();
+                return codeDate === today;
+            }).length;
+        }
 
-// مسح حقل معين
-function clearField(fieldId) {
-  const field = document.getElementById(fieldId);
-  field.value = '';
-  
-  // تحديث المعاينة
-  if (fieldId === 'desc1Input') desc1Element.textContent = '';
-  if (fieldId === 'desc2Input') desc2Element.textContent = '';
-  if (fieldId === 'desc3Input') desc3Element.textContent = '';
-  if (fieldId === 'desc4Input') desc4Element.textContent = '';
-}
+        function calculateTotalRevenue(codes) {
+            const total = codes.reduce((sum, code) => {
+                return sum + (parseFloat(code.price) || 0);
+            }, 0);
+            return total.toFixed(0) + ' ر.س';
+        }
 
-// تحميل الصور
-imageInput.addEventListener('change', function(e) {
-  const preview = document.getElementById('preview');
-  const container = document.getElementById('imagesContainer');
-  
-  preview.innerHTML = '';
-  container.innerHTML = '';
-  
-  const files = Array.from(e.target.files);
-  
-  files.forEach((file, index) => {
-    if (!file.type.startsWith('image/')) return;
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      // صورة المعاينة
-      const previewImg = document.createElement('img');
-      previewImg.src = e.target.result;
-      previewImg.title = `صورة ${index + 1}`;
-      preview.appendChild(previewImg);
-      
-      // صورة التقرير
-      const reportImg = document.createElement('img');
-      reportImg.src = e.target.result;
-      reportImg.alt = `شاهد ${index + 1}`;
-      container.appendChild(reportImg);
-    };
-    reader.readAsDataURL(file);
-  });
-});
+        function calculateAverageDuration(codes) {
+            if (codes.length === 0) return '0 يوم';
+            
+            const durationMap = {
+                '5m': 5/(60*24), // أيام
+                '30m': 30/(60*24),
+                '1h': 1/24,
+                '3h': 3/24,
+                '1d': 1,
+                '3d': 3,
+                '7d': 7,
+                '30d': 30,
+                '90d': 90,
+                '150d': 150
+            };
+            
+            const total = codes.reduce((sum, code) => {
+                return sum + (durationMap[code.duration] || 0);
+            }, 0);
+            
+            const avg = total / codes.length;
+            return avg >= 1 ? avg.toFixed(1) + ' يوم' : (avg * 24).toFixed(0) + ' ساعة';
+        }
 
-// توليد التقرير
-function generateReport() {
-  // التحقق من الحقول المطلوبة
-  if (!schoolInput.value.trim()) {
-    alert('⚠️ الرجاء إدخال اسم المدرسة');
-    schoolInput.focus();
-    return;
-  }
-  
-  if (!reportType.value) {
-    alert('⚠️ الرجاء اختيار نوع التقرير');
-    reportType.focus();
-    return;
-  }
-  
-  if (!dateInput.value.trim()) {
-    alert('⚠️ الرجاء إدخال تاريخ التنفيذ');
-    dateInput.focus();
-    return;
-  }
-  
-  // تحديث جميع نسخ التقرير
-  updateAllReports();
-  
-  // تعيين قيم افتراضية إذا كانت فارغة
-  if (!targetInput.value.trim()) {
-    targetElement.textContent = targetElement2.textContent = targetElement3.textContent = 'غير محدد';
-  }
-  
-  if (!countInput.value.trim()) {
-    countElement.textContent = countElement2.textContent = countElement3.textContent = 'غير محدد';
-  }
-  
-  if (!desc1Input.value.trim()) {
-    desc1Element.textContent = 'لا يوجد وصف';
-  }
-  
-  if (!desc2Input.value.trim()) {
-    desc2Element.textContent = 'لا توجد إجراءات محددة';
-  }
-  
-  if (!desc3Input.value.trim()) {
-    desc3Element.textContent = 'لا توجد نتائج مسجلة';
-  }
-  
-  if (!desc4Input.value.trim()) {
-    desc4Element.textContent = 'لا توجد توصيات';
-  }
-  
-  // إظهار رسالة نجاح
-  alert('✅ تم إنشاء التقرير بنجاح! جارٍ فتح نافذة الطباعة...');
-  
-  // تأخير بسيط لضمان تحديث العناصر
-  setTimeout(() => {
-    window.print();
-  }, 500);
-}
+        function calculateSuccessRate(codes) {
+            if (codes.length === 0) return '0%';
+            const used = Math.floor(codes.length * 0.65);
+            return ((used / codes.length) * 100).toFixed(1) + '%';
+        }
 
-// مسح النموذج
-function resetForm() {
-  if (confirm('هل تريد مسح جميع الحقول؟')) {
-    schoolInput.value = '';
-    reportType.selectedIndex = 0;
-    dateInput.value = '';
-    targetInput.value = '';
-    countInput.value = '';
-    desc1Input.value = '';
-    desc2Input.value = '';
-    desc3Input.value = '';
-    desc4Input.value = '';
-    imageInput.value = '';
-    
-    // مسح المعاينة
-    document.getElementById('preview').innerHTML = '';
-    document.getElementById('imagesContainer').innerHTML = '';
-    
-    // إعادة تعيين التقرير
-    updateAllReports();
-    
-    // إعادة تعيين القيم الخاصة
-    desc1Element.textContent = '';
-    desc2Element.textContent = '';
-    desc3Element.textContent = '';
-    desc4Element.textContent = '';
-    
-    alert('✅ تم مسح النموذج بنجاح');
-  }
-}
+        function createDurationChart(codes) {
+            const durationMap = {
+                '5m': '5 دقائق',
+                '30m': '30 دقيقة',
+                '1h': 'ساعة',
+                '3h': '3 ساعات',
+                '1d': 'يوم',
+                '3d': '3 أيام',
+                '7d': 'أسبوع',
+                '30d': 'شهر',
+                '90d': '3 أشهر',
+                '150d': '5 أشهر'
+            };
+            
+            const counts = {};
+            codes.forEach(code => {
+                counts[code.duration] = (counts[code.duration] || 0) + 1;
+            });
+            
+            const chartContainer = document.getElementById('durationChart');
+            let chartHTML = '<div style="max-width: 600px; margin: 0 auto;">';
+            
+            Object.entries(durationMap).forEach(([key, label]) => {
+                const count = counts[key] || 0;
+                const percentage = codes.length > 0 ? (count / codes.length * 100) : 0;
+                
+                chartHTML += `
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>${label}</span>
+                            <span>${count} (${percentage.toFixed(1)}%)</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); height: 20px; border-radius: 10px; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, #4d96ff, #2d7dfd); width: ${percentage}%; height: 100%; border-radius: 10px;"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            chartHTML += '</div>';
+            chartContainer.innerHTML = chartHTML;
+        }
 
-// تعيين تاريخ افتراضي
-window.onload = function() {
-  const today = new Date();
-  const formattedDate = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
-  dateInput.value = formattedDate;
-  
-  // تحديث جميع النسخ بالتاريخ
-  updateAllReports();
-};
-</script>
+        // ==================== الإعدادات ====================
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('admin_settings') || '{}');
+            
+            if (settings.apiUrl) document.getElementById('apiUrl').value = settings.apiUrl;
+            if (settings.defaultToken) document.getElementById('defaultToken').value = settings.defaultToken;
+            if (settings.defaultPrice) document.getElementById('defaultPrice').value = settings.defaultPrice;
+            if (settings.autoRefresh) document.getElementById('autoRefresh').value = settings.autoRefresh;
+            
+            // ملء كود الأمان تلقائياً إذا كان محفوظاً
+            if (settings.defaultToken) {
+                document.getElementById('adminToken').value = settings.defaultToken;
+            }
+        }
 
+        function saveSettings() {
+            const settings = {
+                apiUrl: document.getElementById('apiUrl').value,
+                defaultToken: document.getElementById('defaultToken').value,
+                defaultPrice: document.getElementById('defaultPrice').value,
+                autoRefresh: document.getElementById('autoRefresh').value
+            };
+            
+            localStorage.setItem('admin_settings', JSON.stringify(settings));
+            showNotification('تم حفظ الإعدادات بنجاح', 'success');
+            
+            // إعادة إعداد التحديث التلقائي
+            setupAutoRefresh();
+            
+            // ملء كود الأمان تلقائياً
+            if (settings.defaultToken) {
+                document.getElementById('adminToken').value = settings.defaultToken;
+            }
+        }
+
+        function resetSettings() {
+            if (confirm('هل أنت متأكد من إعادة تعيين جميع الإعدادات؟')) {
+                localStorage.removeItem('admin_settings');
+                loadSettings();
+                showNotification('تم إعادة تعيين الإعدادات', 'success');
+            }
+        }
+
+        function setupAutoRefresh() {
+            const settings = JSON.parse(localStorage.getItem('admin_settings') || '{}');
+            const interval = parseInt(settings.autoRefresh || '60');
+            
+            // إلغاء أي فاصل زمني سابق
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // إعداد فاصل زمني جديد إذا كان مفعلاً
+            if (interval > 0) {
+                autoRefreshInterval = setInterval(() => {
+                    const activeTab = document.querySelector('.content.active').id;
+                    
+                    switch(activeTab) {
+                        case 'codes':
+                            loadActiveCodes();
+                            break;
+                        case 'users':
+                            loadUsers();
+                            break;
+                        case 'reports':
+                            loadReports();
+                            break;
+                        default:
+                            loadDashboardStats();
+                    }
+                    
+                    console.log('تم تحديث البيانات تلقائياً');
+                }, interval * 1000);
+            }
+        }
+
+        // ==================== أدوات مساعدة ====================
+        function formatDate(dateString) {
+            if (!dateString) return 'غير محدد';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ar-SA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const messageEl = document.getElementById('notificationMessage');
+            const icon = notification.querySelector('i');
+            
+            // تغيير الأيقونة حسب النوع
+            icon.className = type === 'success' ? 'fas fa-check-circle' :
+                            type === 'error' ? 'fas fa-exclamation-circle' :
+                            'fas fa-info-circle';
+            
+            // تغيير اللون حسب النوع
+            notification.style.background = type === 'success' ? 
+                'linear-gradient(135deg, #066d4d 0%, #044a35 100%)' :
+                type === 'error' ?
+                'linear-gradient(135deg, #d9534f 0%, #c9302c 100%)' :
+                'linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%)';
+            
+            messageEl.textContent = message;
+            notification.classList.add('show');
+            
+            // إخفاء التلقائي بعد 5 ثواني
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+        }
+
+        function hideNotification() {
+            document.getElementById('notification').classList.remove('show');
+        }
+
+        function preventZoom() {
+            document.addEventListener('touchstart', function(event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, { passive: false });
+        }
+
+        // ==================== Web in App Optimization ====================
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            // إذا كان التطبيق يعمل في وضع standalone
+            document.body.style.paddingTop = 'env(safe-area-inset-top)';
+            document.body.style.paddingBottom = 'env(safe-area-inset-bottom)';
+        }
+
+        // حفظ الأكواد المولدة في localStorage (للتوضيح فقط)
+        // في الواقع، سيتم حفظها في قاعدة بيانات عبر API
+        function saveGeneratedCodes(codes) {
+            const existing = JSON.parse(localStorage.getItem('generated_codes') || '[]');
+            const newCodes = codes.map(code => ({
+                ...code,
+                created_at: new Date().toISOString(),
+                used: false
+            }));
+            
+            localStorage.setItem('generated_codes', JSON.stringify([...existing, ...newCodes]));
+        }
+
+        // تعديل دالة generateCodes لحفظ الأكواد
+        async function generateCodesEnhanced() {
+            const adminToken = document.getElementById('adminToken').value;
+            const codeCount = parseInt(document.getElementById('codeCount').value);
+            const price = document.getElementById('price').value;
+            
+            if (!adminToken) {
+                showNotification('يرجى إدخال كود الأمان', 'error');
+                return;
+            }
+            
+            const generateBtn = document.querySelector('.btn-success');
+            const originalText = generateBtn.innerHTML;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التوليد...';
+            generateBtn.disabled = true;
+            
+            try {
+                const codes = [];
+                
+                for (let i = 0; i < codeCount; i++) {
+                    const response = await fetch(`${API_BASE_URL}/generate-code?key=${encodeURIComponent(adminToken)}&duration=${currentDuration}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`خطأ في توليد الكود: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    codes.push({
+                        code: data.activation_code,
+                        duration: currentDuration,
+                        expires_at: data.expires_at,
+                        price: price || 'غير محدد'
+                    });
+                    
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                // حفظ الأكواد في localStorage
+                saveGeneratedCodes(codes);
+                
+                displayGeneratedCodes(codes);
+                showNotification(`تم توليد ${codes.length} كود بنجاح`, 'success');
+                
+                loadDashboardStats();
+                
+            } catch (error) {
+                console.error('خطأ في توليد الأكواد:', error);
+                showNotification(`خطأ: ${error.message}`, 'error');
+            } finally {
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            }
+        }
+
+        // استبدال دالة generateCodes بالنسخة المحسنة
+        window.generateCodes = generateCodesEnhanced;
+    </script>
 </body>
 </html>

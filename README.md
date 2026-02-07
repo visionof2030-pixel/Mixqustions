@@ -1090,7 +1090,15 @@
                 const codes = [];
                 
                 for (let i = 0; i < codeCount; i++) {
-                    const response = await fetch(`${API_BASE_URL}/generate-code?key=${encodeURIComponent(adminToken)}&duration=${currentDuration}`);
+                   const response = await fetch(
+  `${API_BASE_URL}/generate-code?duration=${currentDuration}`,
+  {
+    method: "POST",
+    headers: {
+      "X-Admin-Token": adminToken
+    }
+  }
+);
                     
                     if (!response.ok) {
                         throw new Error(`خطأ في توليد الكود: ${response.status}`);

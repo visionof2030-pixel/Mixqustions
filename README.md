@@ -2,703 +2,358 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#044a35">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="format-detection" content="telephone=no">
     <title>لوحة تحكم الإدارة - ناصر AI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ========== CSS Reset شامل لجميع الأجهزة ========== */
-        *, *::before, *::after {
+        /* ========== CSS Reset ========== */
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         :root {
-            /* نظام الألوان */
-            --primary-50: #e8f4f0;
-            --primary-100: #d4ebe2;
-            --primary-200: #a3d7c5;
-            --primary-300: #72c3a8;
-            --primary-400: #41af8b;
-            --primary-500: #066d4d;
-            --primary-600: #05553d;
-            --primary-700: #044a35;
-            --primary-800: #022e22;
-            --primary-900: #011611;
-            
+            /* الألوان */
+            --primary: #044a35;
+            --primary-light: #066d4d;
             --secondary: #ffd166;
             --danger: #d9534f;
             --success: #25D366;
             --warning: #f0ad4e;
             --info: #4d96ff;
-            --purple: #5a67d8;
             
-            /* الخلفيات */
-            --bg-body: #0a1929;
+            --bg-dark: #0a1929;
             --bg-card: rgba(255, 255, 255, 0.05);
             --bg-surface: rgba(255, 255, 255, 0.1);
-            --bg-overlay: rgba(0, 0, 0, 0.7);
             
-            /* النصوص */
             --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.85);
-            --text-muted: rgba(255, 255, 255, 0.6);
-            --text-on-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --border: rgba(255, 255, 255, 0.2);
             
-            /* الحدود */
-            --border-light: rgba(255, 255, 255, 0.15);
-            --border-medium: rgba(255, 255, 255, 0.25);
-            --border-heavy: rgba(255, 255, 255, 0.35);
-            
-            /* الظلال */
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.25);
-            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.3);
-            
-            /* المسافات (Systematic Spacing) */
-            --space-0: 0;
-            --space-1: 0.25rem;    /* 4px */
-            --space-2: 0.5rem;     /* 8px */
-            --space-3: 0.75rem;    /* 12px */
-            --space-4: 1rem;       /* 16px */
-            --space-5: 1.25rem;    /* 20px */
-            --space-6: 1.5rem;     /* 24px */
-            --space-8: 2rem;       /* 32px */
-            --space-10: 2.5rem;    /* 40px */
-            --space-12: 3rem;      /* 48px */
-            --space-16: 4rem;      /* 64px */
+            /* المسافات */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
             
             /* الأنصاف */
-            --radius-xs: 0.25rem;  /* 4px */
-            --radius-sm: 0.5rem;   /* 8px */
-            --radius-md: 0.75rem;  /* 12px */
-            --radius-lg: 1rem;     /* 16px */
-            --radius-xl: 1.25rem;  /* 20px */
-            --radius-2xl: 1.5rem;  /* 24px */
-            --radius-3xl: 2rem;    /* 32px */
-            --radius-full: 9999px;
-            
-            /* أحجام الخطوط (Fluid Typography) */
-            --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-            --text-sm: clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
-            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-            --text-lg: clamp(1.125rem, 1.075rem + 0.25vw, 1.25rem);
-            --text-xl: clamp(1.25rem, 1.2rem + 0.25vw, 1.5rem);
-            --text-2xl: clamp(1.5rem, 1.4rem + 0.5vw, 1.875rem);
-            --text-3xl: clamp(1.875rem, 1.775rem + 0.5vw, 2.25rem);
-            --text-4xl: clamp(2.25rem, 2.15rem + 0.5vw, 2.5rem);
-            
-            /* التوقيتات */
-            --duration-75: 75ms;
-            --duration-100: 100ms;
-            --duration-150: 150ms;
-            --duration-200: 200ms;
-            --duration-300: 300ms;
-            --duration-500: 500ms;
-            --duration-700: 700ms;
-            
-            /* الزوايا الآمنة للشاشات المختلفة */
-            --safe-top: env(safe-area-inset-top);
-            --safe-right: env(safe-area-inset-right);
-            --safe-bottom: env(safe-area-inset-bottom);
-            --safe-left: env(safe-area-inset-left);
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
         }
 
-        /* ========== تحسينات عامة لجميع الأجهزة ========== */
         html {
-            font-size: 100%;
+            font-size: 16px;
             height: 100%;
             overflow-x: hidden;
-            text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
         }
 
         body {
-            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-body);
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #132f4c 100%);
             color: var(--text-primary);
-            line-height: 1.5;
+            line-height: 1.6;
             min-height: 100vh;
-            min-height: -webkit-fill-available;
-            display: flex;
-            flex-direction: column;
+            position: relative;
             overflow-x: hidden;
-            position: relative;
+            overflow-y: auto;
         }
 
-        /* إصلاح لحلقة التمرير المطاطية في iOS */
-        body.ios-scroll-fix {
-            position: fixed;
-            width: 100%;
-        }
-
-        /* تحسينات اللمس للأندرويد */
-        .android-touch-fix {
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-        }
-
-        /* ========== تحسينات خاصة لكل جهاز ========== */
-        /* iPhone Notch Support */
-        .iphone-notch {
-            padding-top: constant(safe-area-inset-top);
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: constant(safe-area-inset-bottom);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        /* iPhone SE و الأجهزة الصغيرة */
-        @media only screen 
-            and (device-width: 375px) 
-            and (device-height: 667px) 
-            and (-webkit-device-pixel-ratio: 2) {
-            :root {
-                --text-base: 15px;
-            }
-        }
-
-        /* iPhone 12/13/14 Mini */
-        @media only screen 
-            and (device-width: 360px) 
-            and (device-height: 780px) 
-            and (-webkit-device-pixel-ratio: 3) {
-            :root {
-                --text-base: 15px;
-            }
-        }
-
-        /* iPhone 13/14/15 Pro/Pro Max */
-        @media only screen 
-            and (device-width: 393px) 
-            and (device-height: 852px) 
-            and (-webkit-device-pixel-ratio: 3) {
-            :root {
-                --space-4: 1.125rem;
-            }
-        }
-
-        /* iPhone 16/17 (توقع) */
-        @media only screen 
-            and (device-width: 430px) 
-            and (device-height: 932px) 
-            and (-webkit-device-pixel-ratio: 3) {
-            :root {
-                --space-4: 1.25rem;
-            }
-        }
-
-        /* Samsung Galaxy S系列 */
-        @media only screen 
-            and (min-device-width: 360px) 
-            and (max-device-width: 412px) {
-            .android-optimize {
-                -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-            }
-        }
-
-        /* Samsung Galaxy Fold */
-        @media only screen 
-            and (device-width: 280px) 
-            and (device-height: 653px) {
-            :root {
-                --text-base: 14px;
-                --space-4: 0.875rem;
-            }
-        }
-
-        /* Huawei و Xiaomi */
-        @media only screen 
-            and (-webkit-min-device-pixel-ratio: 3) 
-            and (max-device-width: 480px) {
-            .huawei-fix {
-                font-weight: 500;
-            }
-        }
-
-        /* OnePlus و Oppo */
-        @media only screen 
-            and (device-width: 412px) 
-            and (device-height: 892px) {
-            :root {
-                --text-base: 15.5px;
-            }
-        }
-
-        /* ========== Layout Principal ========== */
+        /* ========== الحاوية الرئيسية ========== */
         .app-wrapper {
-            flex: 1;
             width: 100%;
-            max-width: 100%;
+            max-width: 100vw;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            padding: 
-                max(var(--space-4), var(--safe-top))
-                max(var(--space-4), var(--safe-right))
-                max(var(--space-4), var(--safe-bottom))
-                max(var(--space-4), var(--safe-left));
+            padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
+            overflow-x: hidden;
         }
 
-        /* ========== Header متكيف مع جميع الشاشات ========== */
+        /* ========== الهيدر ========== */
         .app-header {
-            background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-600) 100%);
-            border-radius: var(--radius-xl);
-            padding: var(--space-4);
-            margin-bottom: var(--space-4);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
+            border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
-            border: 1px solid var(--border-light);
-            box-shadow: var(--shadow-lg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
         }
 
-        .header-decoration {
+        .app-header::before {
+            content: '';
             position: absolute;
             top: 0;
             right: 0;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle at 30% 30%, var(--secondary) 0%, transparent 70%);
-            opacity: 0.1;
-            pointer-events: none;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(255, 209, 102, 0.1) 0%, transparent 70%);
         }
 
         .header-title {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
             color: var(--secondary);
-            font-size: var(--text-xl);
-            font-weight: 800;
         }
 
-        .header-subtitle {
-            color: var(--text-secondary);
-            font-size: var(--text-sm);
-            line-height: 1.6;
-        }
-
-        .stats-container {
+        .header-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-3);
-            margin-top: var(--space-3);
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            position: relative;
+            z-index: 1;
         }
 
-        .stat-item {
+        .stat-card {
             background: var(--bg-surface);
             backdrop-filter: blur(10px);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-lg);
-            padding: var(--space-3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: var(--space-sm);
             text-align: center;
-            min-height: 80px;
-            justify-content: center;
         }
 
         .stat-value {
-            font-size: var(--text-xl);
-            font-weight: 800;
+            font-size: 1.25rem;
+            font-weight: 700;
             color: var(--info);
-            margin-bottom: var(--space-1);
-            line-height: 1.2;
+            margin-bottom: var(--space-xs);
         }
 
         .stat-label {
-            font-size: var(--text-xs);
-            color: var(--text-muted);
-            line-height: 1.4;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
-        /* ========== Navigation متجاوب للغاية ========== */
-        .nav-scroll-wrapper {
-            position: relative;
-            width: 100%;
+        /* ========== التنقل ========== */
+        .nav-tabs {
+            display: flex;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 4px;
+            margin-bottom: var(--space-md);
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
-            margin-bottom: var(--space-4);
-            padding: 0 var(--space-2);
+            max-width: 100%;
         }
 
-        .nav-scroll-wrapper::-webkit-scrollbar {
+        .nav-tabs::-webkit-scrollbar {
             display: none;
         }
 
-        .nav-container {
-            display: inline-flex;
-            gap: var(--space-2);
-            padding: var(--space-2);
-            background: var(--bg-card);
-            border-radius: var(--radius-xl);
-            border: 1px solid var(--border-light);
-            min-width: 100%;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .nav-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
-            background: transparent;
+        .nav-tab {
+            flex: 1;
+            min-width: 80px;
+            padding: var(--space-sm);
             border: none;
-            border-radius: var(--radius-lg);
+            background: transparent;
             color: var(--text-secondary);
-            font-size: var(--text-xs);
+            font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all var(--duration-300) ease;
-            min-width: 80px;
-            min-height: 70px;
-            flex-shrink: 0;
-            touch-action: manipulation;
-            -webkit-touch-callout: none;
-        }
-
-        .nav-button:active {
-            transform: scale(0.95);
-        }
-
-        .nav-button.active {
-            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
-            color: var(--text-primary);
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border-medium);
-        }
-
-        .nav-icon {
-            font-size: 1.25rem;
-            width: 24px;
-            height: 24px;
+            border-radius: var(--radius-sm);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            gap: 4px;
+            transition: all 0.3s;
+            min-height: 60px;
         }
 
-        /* ========== Content Sections ========== */
-        .content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-4);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: var(--space-6);
+        .nav-tab:active {
+            transform: scale(0.98);
         }
 
-        .content-section {
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            color: var(--text-primary);
+        }
+
+        .tab-icon {
+            font-size: 1.125rem;
+        }
+
+        /* ========== المحتوى ========== */
+        .tab-content {
             display: none;
-            flex-direction: column;
-            gap: var(--space-4);
-            animation: slideIn var(--duration-500) ease;
+            animation: fadeIn 0.3s ease;
         }
 
-        .content-section.active {
-            display: flex;
+        .tab-content.active {
+            display: block;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* ========== Cards متجاوبة مع جميع الأحجام ========== */
-        .app-card {
+        /* ========== الكروت ========== */
+        .card {
             background: var(--bg-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-light);
-            border-radius: var(--radius-xl);
-            padding: var(--space-4);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-4);
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            margin-bottom: var(--space-md);
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: var(--space-3);
-            padding-bottom: var(--space-3);
-            border-bottom: 1px solid var(--border-light);
+            margin-bottom: var(--space-md);
         }
 
-        .card-title {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-1);
-        }
-
-        .card-heading {
-            font-size: var(--text-lg);
-            font-weight: 700;
+        .card-title h3 {
+            font-size: 1.125rem;
             color: var(--secondary);
-            line-height: 1.3;
+            margin-bottom: var(--space-xs);
         }
 
-        .card-subheading {
-            font-size: var(--text-sm);
-            color: var(--text-muted);
-            line-height: 1.5;
+        .card-title small {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
-        .card-icon {
-            font-size: 1.5rem;
-            color: var(--secondary);
-            flex-shrink: 0;
-        }
-
-        /* ========== Form Elements بلمسات محسنة ========== */
+        /* ========== النماذج ========== */
         .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2);
+            margin-bottom: var(--space-md);
         }
 
         .form-label {
-            font-size: var(--text-sm);
+            display: block;
+            font-size: 0.875rem;
             font-weight: 600;
             color: var(--info);
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
+            margin-bottom: var(--space-xs);
         }
 
         .form-control {
             width: 100%;
-            padding: var(--space-3) var(--space-4);
+            padding: 0.875rem;
             background: var(--bg-surface);
-            border: 1.5px solid var(--border-medium);
-            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
             color: var(--text-primary);
-            font-size: var(--text-base);
+            font-size: 1rem;
             font-family: inherit;
-            line-height: 1.5;
-            transition: all var(--duration-300) ease;
-            min-height: 52px;
+            min-height: 44px;
             -webkit-appearance: none;
             appearance: none;
-            touch-action: manipulation;
-        }
-
-        /* iOS خاص لإصلاح ارتفاع الحقول في */
-        input.form-control,
-        select.form-control,
-        textarea.form-control {
-            min-height: 52px;
-            line-height: 1.5;
         }
 
         .form-control:focus {
             outline: none;
             border-color: var(--info);
-            box-shadow: 0 0 0 3px rgba(77, 150, 255, 0.25);
-            background: var(--bg-surface);
-        }
-
-        .form-control::placeholder {
-            color: var(--text-muted);
-            opacity: 0.8;
-        }
-
-        /* تحسين خاص لـ Android */
-        .form-control.android-input {
-            padding-top: var(--space-4);
-            padding-bottom: var(--space-4);
-        }
-
-        /* تحسين خاص لـ iOS */
-        .form-control.ios-input {
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        select.form-control {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%234d96ff' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left var(--space-4) center;
-            background-size: 16px;
-            padding-left: 3rem;
+            box-shadow: 0 0 0 3px rgba(77, 150, 255, 0.2);
         }
 
         textarea.form-control {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
-            line-height: 1.6;
         }
 
-        /* ========== Buttons محسنة لللمس ========== */
+        select.form-control {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 0.875rem center;
+            background-size: 12px;
+            padding-left: 2.5rem;
+        }
+
+        /* ========== الأزرار ========== */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: var(--space-2);
-            padding: var(--space-3) var(--space-4);
+            gap: var(--space-xs);
+            padding: 0.875rem 1.25rem;
             border: none;
-            border-radius: var(--radius-lg);
-            font-size: var(--text-base);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
             font-weight: 700;
             font-family: inherit;
             cursor: pointer;
-            transition: all var(--duration-300) ease;
+            transition: all 0.3s;
             text-decoration: none;
-            min-height: 52px;
+            min-height: 44px;
             width: 100%;
-            touch-action: manipulation;
-            position: relative;
-            overflow: hidden;
-            -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* تحسين اللمس للأندرويد */
-        .btn.android-btn:active {
-            transform: scale(0.97);
-        }
-
-        /* تحسين اللمس لـ iOS */
-        .btn.ios-btn:active {
-            opacity: 0.8;
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: translateX(-100%);
-        }
-
-        .btn:active::after {
-            animation: buttonShine 0.6s ease;
-        }
-
-        @keyframes buttonShine {
-            to {
-                transform: translateX(100%);
-            }
+            transform: none;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
             color: var(--text-primary);
-            border: 1px solid var(--border-heavy);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, var(--purple) 0%, #4c51bf 100%);
+            background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
             color: var(--text-primary);
-            border: 1px solid var(--border-heavy);
         }
 
         .btn-success {
             background: linear-gradient(135deg, var(--success) 0%, #128C7E 100%);
             color: var(--text-primary);
-            border: 1px solid var(--border-heavy);
         }
 
         .btn-danger {
             background: linear-gradient(135deg, var(--danger) 0%, #c9302c 100%);
             color: var(--text-primary);
-            border: 1px solid var(--border-heavy);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, var(--warning) 0%, #ec971f 100%);
-            color: var(--text-primary);
-            border: 1px solid var(--border-heavy);
         }
 
         .btn-sm {
-            padding: var(--space-2) var(--space-3);
-            font-size: var(--text-sm);
-            min-height: 44px;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            min-height: 36px;
             width: auto;
         }
 
         .btn-group {
             display: flex;
-            gap: var(--space-3);
-            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
         }
 
-        .btn-group-horizontal {
-            flex-direction: row;
-        }
-
-        .btn-group-vertical {
-            flex-direction: column;
-        }
-
-        /* ========== Duration Tags محسنة ========== */
-        .duration-container {
+        /* ========== علامات المدة ========== */
+        .duration-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: var(--space-2);
+            gap: var(--space-xs);
+            margin-top: var(--space-xs);
         }
 
         .duration-tag {
-            padding: var(--space-2) var(--space-3);
-            background: rgba(77, 150, 255, 0.15);
-            border: 1.5px solid rgba(77, 150, 255, 0.3);
-            border-radius: var(--radius-full);
-            font-size: var(--text-sm);
+            padding: 0.5rem 1rem;
+            background: rgba(77, 150, 255, 0.1);
+            border: 1px solid rgba(77, 150, 255, 0.3);
+            border-radius: 2rem;
+            font-size: 0.75rem;
             color: var(--info);
             cursor: pointer;
-            transition: all var(--duration-300) ease;
-            flex-shrink: 0;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
+            transition: all 0.3s;
         }
 
         .duration-tag:active {
@@ -709,18 +364,17 @@
             background: linear-gradient(135deg, var(--info) 0%, #2d7dfd 100%);
             color: var(--text-primary);
             border-color: var(--info);
-            box-shadow: var(--shadow-md);
         }
 
-        /* ========== Tables متجاوبة تماماً ========== */
-        .table-responsive {
-            width: 100%;
+        /* ========== الجداول ========== */
+        .table-container {
+            max-width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
             background: var(--bg-surface);
-            margin-top: var(--space-4);
+            border: 1px solid var(--border);
+            margin-top: var(--space-md);
         }
 
         .data-table {
@@ -730,97 +384,42 @@
         }
 
         .data-table th {
-            padding: var(--space-3);
+            padding: var(--space-sm);
             text-align: right;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--secondary);
             background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid var(--border-light);
-            font-size: var(--text-sm);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
             white-space: nowrap;
-            position: sticky;
-            top: 0;
-            backdrop-filter: blur(10px);
         }
 
         .data-table td {
-            padding: var(--space-3);
-            border-bottom: 1px solid var(--border-light);
-            font-size: var(--text-sm);
-            line-height: 1.6;
+            padding: var(--space-sm);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.875rem;
         }
 
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .data-table tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        /* ========== Badges متجاوبة ========== */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: var(--space-1) var(--space-3);
-            border-radius: var(--radius-full);
-            font-size: var(--text-xs);
-            font-weight: 700;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .badge-success {
-            background: rgba(37, 211, 102, 0.2);
-            color: var(--success);
-            border: 1px solid rgba(37, 211, 102, 0.3);
-        }
-
-        .badge-warning {
-            background: rgba(240, 173, 78, 0.2);
-            color: var(--warning);
-            border: 1px solid rgba(240, 173, 78, 0.3);
-        }
-
-        .badge-danger {
-            background: rgba(217, 83, 79, 0.2);
-            color: var(--danger);
-            border: 1px solid rgba(217, 83, 79, 0.3);
-        }
-
-        .badge-info {
-            background: rgba(77, 150, 255, 0.2);
-            color: var(--info);
-            border: 1px solid rgba(77, 150, 255, 0.3);
-        }
-
-        /* ========== Notifications محسنة ========== */
-        .notification-wrapper {
-            position: fixed;
-            top: max(var(--space-4), var(--safe-top));
-            right: max(var(--space-4), var(--safe-right));
-            left: max(var(--space-4), var(--safe-left));
-            z-index: 9999;
-            pointer-events: none;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
+        /* ========== الإشعارات ========== */
         .notification {
-            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+            position: fixed;
+            top: var(--space-md);
+            right: 16px;
+            left: 16px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
             color: var(--text-primary);
-            padding: var(--space-3) var(--space-4);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transform: translateY(-100%);
+            transform: translateY(-100px);
             opacity: 0;
-            transition: all var(--duration-500) cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            pointer-events: all;
-            border: 1px solid var(--border-medium);
-            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .notification.show {
@@ -828,52 +427,27 @@
             opacity: 1;
         }
 
-        .notification-content {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            flex: 1;
-        }
-
-        .notification-icon {
-            font-size: 1.25rem;
-            flex-shrink: 0;
-        }
-
-        .notification-message {
-            font-size: var(--text-sm);
-            line-height: 1.5;
-            flex: 1;
-        }
-
         .notification-close {
             background: none;
             border: none;
             color: inherit;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             cursor: pointer;
-            padding: var(--space-1);
-            min-width: 44px;
-            min-height: 44px;
+            padding: 0.25rem;
+            min-height: 32px;
+            min-width: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: var(--radius-full);
-            transition: background var(--duration-200) ease;
-            flex-shrink: 0;
-            touch-action: manipulation;
+            border-radius: 50%;
         }
 
-        .notification-close:active {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* ========== Loading States ========== */
+        /* ========== الحالات ========== */
         .loading {
             display: inline-block;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: var(--info);
             animation: spin 1s linear infinite;
@@ -883,470 +457,198 @@
             to { transform: rotate(360deg); }
         }
 
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-3);
-            padding: var(--space-8) var(--space-4);
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        /* ========== Empty States ========== */
         .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-3);
-            padding: var(--space-8) var(--space-4);
             text-align: center;
-            color: var(--text-muted);
-        }
-
-        .empty-icon {
-            font-size: 3rem;
-            opacity: 0.3;
-            margin-bottom: var(--space-2);
-        }
-
-        .empty-title {
-            font-size: var(--text-lg);
-            font-weight: 600;
+            padding: var(--space-lg);
             color: var(--text-secondary);
         }
 
-        .empty-description {
-            font-size: var(--text-sm);
-            line-height: 1.6;
-            max-width: 300px;
-        }
-
-        /* ========== Search and Filters ========== */
-        .search-container {
-            position: relative;
-            margin-bottom: var(--space-4);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: var(--space-3) var(--space-4) var(--space-3) 3rem;
-            background: var(--bg-surface);
-            border: 1.5px solid var(--border-medium);
-            border-radius: var(--radius-lg);
-            color: var(--text-primary);
-            font-size: var(--text-base);
-            min-height: 52px;
-            line-height: 1.5;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: var(--space-4);
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-        }
-
-        .filters-container {
-            display: flex;
-            gap: var(--space-3);
-            margin-bottom: var(--space-4);
-            flex-wrap: wrap;
-        }
-
-        .filter-select {
-            flex: 1;
-            min-width: 140px;
-        }
-
-        /* ========== تحسينات للأجهزة الكبيرة ========== */
-        @media (min-width: 375px) {
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .nav-button {
-                min-width: 85px;
-            }
-        }
-
-        @media (min-width: 414px) {
-            .stats-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .nav-button {
-                min-width: 90px;
-                min-height: 75px;
-            }
-            
-            .form-control {
-                min-height: 56px;
-            }
-            
-            .btn {
-                min-height: 56px;
-            }
-        }
-
-        @media (min-width: 480px) {
-            .stats-container {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .nav-container {
-                justify-content: center;
-            }
-            
-            .nav-button {
-                flex: 1;
-                min-width: auto;
-                min-height: 80px;
-            }
-            
-            .btn-group-horizontal .btn {
-                width: auto;
-                flex: 1;
-            }
-        }
-
+        /* ========== Responsive ========== */
         @media (min-width: 768px) {
             .app-wrapper {
                 max-width: 768px;
-                padding: 
-                    max(var(--space-6), var(--safe-top))
-                    max(var(--space-6), var(--safe-right))
-                    max(var(--space-6), var(--safe-bottom))
-                    max(var(--space-6), var(--safe-left));
+                padding: 20px 16px;
             }
             
-            .app-header {
-                padding: var(--space-6);
+            .header-stats {
+                grid-template-columns: repeat(4, 1fr);
             }
             
-            .stat-item {
-                padding: var(--space-4);
-                min-height: 100px;
+            .nav-tabs {
+                flex-wrap: nowrap;
             }
             
-            .stat-value {
-                font-size: var(--text-2xl);
+            .nav-tab {
+                min-width: 100px;
+                font-size: 0.875rem;
             }
             
-            .form-row {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: var(--space-4);
+            .btn-group {
+                flex-direction: row;
+            }
+            
+            .btn {
+                width: auto;
             }
         }
 
         @media (min-width: 1024px) {
             .app-wrapper {
                 max-width: 1024px;
-                padding: 
-                    max(var(--space-8), var(--safe-top))
-                    max(var(--space-8), var(--safe-right))
-                    max(var(--space-8), var(--safe-bottom))
-                    max(var(--space-8), var(--safe-left));
+            }
+        }
+
+        /* ========== تحسينات اللمس ========== */
+        @media (hover: none) and (pointer: coarse) {
+            .btn,
+            .nav-tab,
+            .duration-tag {
+                min-height: 44px;
             }
             
-            .content-layout {
-                display: grid;
-                grid-template-columns: 280px 1fr;
-                gap: var(--space-6);
-                align-items: start;
-            }
-            
-            .nav-scroll-wrapper {
-                position: sticky;
-                top: var(--space-6);
-                height: fit-content;
-            }
-            
-            .nav-container {
-                flex-direction: column;
-                min-width: auto;
-                padding: var(--space-4);
-            }
-            
-            .nav-button {
-                min-width: 100%;
-                min-height: 85px;
-                flex-direction: row;
-                justify-content: flex-start;
-                padding: var(--space-4);
-                font-size: var(--text-sm);
-            }
-            
-            .nav-icon {
-                font-size: 1.5rem;
-                width: 28px;
-                height: 28px;
+            .form-control {
+                font-size: 16px;
             }
         }
 
-        /* ========== High DPI Screens ========== */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .app-card,
-            .stat-item,
-            .nav-container {
-                border-width: 0.5px;
-            }
-        }
-
-        @media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 288dpi) {
-            .app-card,
-            .stat-item,
-            .nav-container {
-                border-width: 0.33px;
-            }
-        }
-
-        /* ========== Accessibility ========== */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        @media (prefers-contrast: high) {
-            :root {
-                --border-light: rgba(255, 255, 255, 0.5);
-                --border-medium: rgba(255, 255, 255, 0.8);
-            }
-            
-            .btn {
-                border-width: 2px;
-            }
-        }
-
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* ========== تحسينات خاصة للعرض في التطبيقات ========== */
-        .web-in-app {
-            /* إصلاحات للعرض في WebView */
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
-        }
-
-        /* إصلاح ارتفاع الشاشة في iOS Safari */
-        @supports (-webkit-touch-callout: none) {
-            body {
-                height: -webkit-fill-available;
-            }
-            
-            .app-wrapper {
-                min-height: -webkit-fill-available;
-            }
-        }
-
-        /* إصلاحات للمتصفحات المختلفة */
+        /* ========== دعم safe-area ========== */
         @supports (padding: max(0px)) {
             .app-wrapper {
-                padding-top: max(env(safe-area-inset-top), var(--space-4));
-                padding-bottom: max(env(safe-area-inset-bottom), var(--space-4));
-            }
-        }
-
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-body: #0a1929;
-                --text-primary: #ffffff;
-            }
-        }
-
-        @media (prefers-color-scheme: light) {
-            :root {
-                --bg-body: #f8fafc;
-                --bg-card: rgba(255, 255, 255, 0.9);
-                --bg-surface: rgba(255, 255, 255, 0.95);
-                --text-primary: #1e293b;
-                --text-secondary: #475569;
-                --text-muted: #64748b;
-                --border-light: rgba(0, 0, 0, 0.1);
-                --border-medium: rgba(0, 0, 0, 0.2);
-            }
-            
-            .app-header {
-                border: 1px solid rgba(255, 255, 255, 0.2);
-            }
-            
-            .notification {
-                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding-top: max(16px, env(safe-area-inset-top));
+                padding-bottom: max(16px, env(safe-area-inset-bottom));
             }
         }
     </style>
 </head>
-<body class="web-in-app">
+<body>
     <div class="app-wrapper">
-        <!-- Header -->
+        <!-- الهيدر -->
         <header class="app-header">
-            <div class="header-decoration"></div>
-            <div class="header-content">
-                <h1 class="header-title">
-                    <i class="fas fa-user-shield"></i>
-                    لوحة تحكم الإدارة
-                </h1>
-                <p class="header-subtitle">إدارة النظام وتوليد أكواد التفعيل والتحكم بالمستخدمين</p>
-                
-                <div class="stats-container">
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalCodes">0</div>
-                        <div class="stat-label">الأكواد النشطة</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="activeUsers">0</div>
-                        <div class="stat-label">المستخدمين النشطين</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalRevenue">0 ر.س</div>
-                        <div class="stat-label">إجمالي الإيرادات</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="todayCodes">0</div>
-                        <div class="stat-label">أكواد اليوم</div>
-                    </div>
+            <div class="header-title">
+                <i class="fas fa-user-shield"></i>
+                <h1>لوحة تحكم الإدارة</h1>
+            </div>
+            <p>إدارة النظام وتوليد أكواد التفعيل والتحكم بالمستخدمين</p>
+            
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCodes">0</div>
+                    <div class="stat-label">الأكواد النشطة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeUsers">0</div>
+                    <div class="stat-label">المستخدمين النشطين</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalRevenue">0 ر.س</div>
+                    <div class="stat-label">إجمالي الإيرادات</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todayCodes">0</div>
+                    <div class="stat-label">أكواد اليوم</div>
                 </div>
             </div>
         </header>
 
-        <!-- Navigation -->
-        <div class="nav-scroll-wrapper">
-            <nav class="nav-container">
-                <button class="nav-button active" data-tab="generate">
-                    <i class="fas fa-key nav-icon"></i>
-                    <span>توليد أكواد</span>
-                </button>
-                <button class="nav-button" data-tab="codes">
-                    <i class="fas fa-list nav-icon"></i>
-                    <span>الأكواد النشطة</span>
-                </button>
-                <button class="nav-button" data-tab="users">
-                    <i class="fas fa-users nav-icon"></i>
-                    <span>المستخدمين</span>
-                </button>
-                <button class="nav-button" data-tab="reports">
-                    <i class="fas fa-chart-bar nav-icon"></i>
-                    <span>التقارير</span>
-                </button>
-                <button class="nav-button" data-tab="settings">
-                    <i class="fas fa-cog nav-icon"></i>
-                    <span>الإعدادات</span>
-                </button>
-            </nav>
-        </div>
+        <!-- التنقل -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="generate">
+                <i class="fas fa-key tab-icon"></i>
+                <span>توليد أكواد</span>
+            </button>
+            <button class="nav-tab" data-tab="codes">
+                <i class="fas fa-list tab-icon"></i>
+                <span>الأكواد النشطة</span>
+            </button>
+            <button class="nav-tab" data-tab="users">
+                <i class="fas fa-users tab-icon"></i>
+                <span>المستخدمين</span>
+            </button>
+            <button class="nav-tab" data-tab="reports">
+                <i class="fas fa-chart-bar tab-icon"></i>
+                <span>التقارير</span>
+            </button>
+            <button class="nav-tab" data-tab="settings">
+                <i class="fas fa-cog tab-icon"></i>
+                <span>الإعدادات</span>
+            </button>
+        </nav>
 
-        <!-- Main Content -->
-        <main class="content-area">
-            <!-- Generate Codes Section -->
-            <section id="generate" class="content-section active">
-                <div class="app-card">
+        <!-- المحتوى -->
+        <main>
+            <!-- تبويب توليد الأكواد -->
+            <section id="generate" class="tab-content active">
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <h2 class="card-heading">توليد كود تفعيل جديد</h2>
-                            <p class="card-subheading">اختر المدة الزمنية وانقر على توليد</p>
+                            <h3>توليد كود تفعيل جديد</h3>
+                            <small>اختر المدة الزمنية وانقر على توليد</small>
                         </div>
-                        <i class="fas fa-key card-icon"></i>
+                        <i class="fas fa-key" style="color: var(--secondary);"></i>
                     </div>
 
-                    <form id="generateForm">
-                        <div class="form-group">
-                            <label class="form-label">
-                                <i class="fas fa-clock"></i>
-                                مدة التفعيل
-                            </label>
-                            <div class="duration-container" id="durationTags">
-                                <span class="duration-tag" data-duration="5m">5 دقائق</span>
-                                <span class="duration-tag" data-duration="30m">30 دقيقة</span>
-                                <span class="duration-tag" data-duration="1h">ساعة واحدة</span>
-                                <span class="duration-tag active" data-duration="1d">يوم واحد</span>
-                                <span class="duration-tag" data-duration="3d">3 أيام</span>
-                                <span class="duration-tag" data-duration="7d">أسبوع</span>
-                                <span class="duration-tag" data-duration="30d">شهر</span>
-                                <span class="duration-tag" data-duration="90d">3 أشهر</span>
-                                <span class="duration-tag" data-duration="150d">5 أشهر</span>
-                            </div>
+                    <div class="form-group">
+                        <label class="form-label">مدة التفعيل</label>
+                        <div class="duration-tags" id="durationTags">
+                            <span class="duration-tag" data-duration="5m">5 دقائق</span>
+                            <span class="duration-tag" data-duration="30m">30 دقيقة</span>
+                            <span class="duration-tag" data-duration="1h">ساعة واحدة</span>
+                            <span class="duration-tag active" data-duration="1d">يوم واحد</span>
+                            <span class="duration-tag" data-duration="3d">3 أيام</span>
+                            <span class="duration-tag" data-duration="7d">أسبوع</span>
+                            <span class="duration-tag" data-duration="30d">شهر</span>
+                            <span class="duration-tag" data-duration="90d">3 أشهر</span>
+                            <span class="duration-tag" data-duration="150d">5 أشهر</span>
                         </div>
+                    </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="codeCount" class="form-label">
-                                    <i class="fas fa-hashtag"></i>
-                                    عدد الأكواد
-                                </label>
-                                <select id="codeCount" class="form-control" required>
-                                    <option value="1">1 كود</option>
-                                    <option value="5">5 أكواد</option>
-                                    <option value="10">10 أكواد</option>
-                                    <option value="20">20 كود</option>
-                                    <option value="50">50 كود</option>
-                                </select>
-                            </div>
+                    <div class="form-group">
+                        <label for="codeCount" class="form-label">عدد الأكواد</label>
+                        <select id="codeCount" class="form-control">
+                            <option value="1">1 كود</option>
+                            <option value="5">5 أكواد</option>
+                            <option value="10">10 أكواد</option>
+                            <option value="20">20 كود</option>
+                            <option value="50">50 كود</option>
+                        </select>
+                    </div>
 
-                            <div class="form-group">
-                                <label for="price" class="form-label">
-                                    <i class="fas fa-money-bill"></i>
-                                    السعر (اختياري)
-                                </label>
-                                <input type="number" id="price" class="form-control" placeholder="أدخل السعر بالريال" min="0" step="1">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="adminToken" class="form-label">كود الأمان (ADMIN_TOKEN)</label>
+                        <input type="password" id="adminToken" class="form-control" placeholder="أدخل كود الأمان">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="adminToken" class="form-label">
-                                <i class="fas fa-lock"></i>
-                                كود الأمان (ADMIN_TOKEN)
-                            </label>
-                            <input type="password" id="adminToken" class="form-control" placeholder="أدخل كود الأمان" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="price" class="form-label">السعر (اختياري)</label>
+                        <input type="number" id="price" class="form-control" placeholder="أدخل السعر بالريال">
+                    </div>
 
-                        <button type="button" class="btn btn-success" onclick="generateCodes()">
-                            <i class="fas fa-bolt"></i>
-                            توليد الأكواد
-                        </button>
-                    </form>
+                    <button class="btn btn-success" onclick="generateCodes()">
+                        <i class="fas fa-bolt"></i>
+                        توليد الأكواد
+                    </button>
                 </div>
 
-                <div class="app-card" id="generatedCodesCard" style="display: none;">
+                <div class="card" id="generatedCodesCard" style="display: none;">
                     <div class="card-header">
                         <div class="card-title">
-                            <h2 class="card-heading">الأكواد المولدة</h2>
-                            <p class="card-subheading">انسخ الأكواد أو أرسلها مباشرة</p>
+                            <h3>الأكواد المولدة</h3>
+                            <small>انسخ الأكواد أو أرسلها مباشرة</small>
                         </div>
-                        <i class="fas fa-copy card-icon"></i>
+                        <i class="fas fa-copy" style="color: var(--info);"></i>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">الأكواد المولدة:</label>
-                        <textarea id="generatedCodes" class="form-control" rows="6" readonly style="font-family: 'Courier New', monospace;"></textarea>
+                        <textarea id="generatedCodes" class="form-control" rows="6" readonly></textarea>
                     </div>
 
-                    <div class="btn-group btn-group-horizontal">
-                        <button type="button" class="btn btn-secondary" onclick="copyCodes()">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="copyCodes()">
                             <i class="fas fa-copy"></i>
                             نسخ الأكواد
                         </button>
-                        <button type="button" class="btn btn-warning" onclick="shareCodes()">
+                        <button class="btn btn-warning" onclick="shareCodes()">
                             <i class="fas fa-share-alt"></i>
                             مشاركة
                         </button>
@@ -1354,21 +656,21 @@
                 </div>
             </section>
 
-            <!-- Active Codes Section -->
-            <section id="codes" class="content-section">
-                <div class="app-card">
+            <!-- تبويب الأكواد النشطة -->
+            <section id="codes" class="tab-content">
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <h2 class="card-heading">الأكواد النشطة</h2>
-                            <p class="card-subheading">إدارة وتتبع جميع أكواد التفعيل</p>
+                            <h3>الأكواد النشطة</h3>
+                            <small>إدارة وتتبع جميع أكواد التفعيل</small>
                         </div>
-                        <div class="search-container">
-                            <input type="text" id="searchCodes" class="search-input" placeholder="ابحث في الأكواد...">
-                            <i class="fas fa-search search-icon"></i>
+                        <div style="position: relative; width: 100%; max-width: 300px;">
+                            <input type="text" id="searchCodes" class="form-control" placeholder="ابحث في الأكواد...">
+                            <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
                         </div>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-container">
                         <table class="data-table">
                             <thead>
                                 <tr>
@@ -1381,11 +683,9 @@
                             </thead>
                             <tbody id="codesTable">
                                 <tr>
-                                    <td colspan="5">
-                                        <div class="loading-container">
-                                            <div class="loading"></div>
-                                            <span>جاري تحميل البيانات...</span>
-                                        </div>
+                                    <td colspan="5" style="text-align: center; padding: 40px;">
+                                        <div class="loading"></div>
+                                        <p style="margin-top: 10px;">جاري تحميل البيانات...</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -1394,24 +694,22 @@
                 </div>
             </section>
 
-            <!-- Users Section -->
-            <section id="users" class="content-section">
-                <div class="app-card">
+            <!-- تبويب المستخدمين -->
+            <section id="users" class="tab-content">
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <h2 class="card-heading">المستخدمين النشطين</h2>
-                            <p class="card-subheading">عرض وإدارة حسابات المستخدمين</p>
+                            <h3>المستخدمين النشطين</h3>
+                            <small>عرض وإدارة حسابات المستخدمين</small>
                         </div>
-                        <div class="filters-container">
-                            <select id="userFilter" class="form-control filter-select" onchange="filterUsers()">
-                                <option value="">جميع المستخدمين</option>
-                                <option value="active">النشطين فقط</option>
-                                <option value="expired">المنتهية صلاحيتهم</option>
-                            </select>
-                        </div>
+                        <select id="userFilter" class="form-control" style="width: auto; min-width: 150px;">
+                            <option value="">جميع المستخدمين</option>
+                            <option value="active">النشطين فقط</option>
+                            <option value="expired">المنتهية صلاحيتهم</option>
+                        </select>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-container">
                         <table class="data-table">
                             <thead>
                                 <tr>
@@ -1430,31 +728,31 @@
                 </div>
             </section>
 
-            <!-- Reports Section -->
-            <section id="reports" class="content-section">
-                <div class="app-card">
+            <!-- تبويب التقارير -->
+            <section id="reports" class="tab-content">
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <h2 class="card-heading">تقارير النظام</h2>
-                            <p class="card-subheading">إحصائيات وأداء النظام</p>
+                            <h3>تقارير النظام</h3>
+                            <small>إحصائيات وأداء النظام</small>
                         </div>
-                        <i class="fas fa-chart-line card-icon"></i>
+                        <i class="fas fa-chart-line" style="color: var(--success);"></i>
                     </div>
 
-                    <div class="stats-container">
-                        <div class="stat-item">
+                    <div class="header-stats">
+                        <div class="stat-card">
                             <div class="stat-value" id="totalGenerated">0</div>
                             <div class="stat-label">إجمالي الأكواد المولدة</div>
                         </div>
-                        <div class="stat-item">
+                        <div class="stat-card">
                             <div class="stat-value" id="totalUsed">0</div>
                             <div class="stat-label">الأكواد المستخدمة</div>
                         </div>
-                        <div class="stat-item">
+                        <div class="stat-card">
                             <div class="stat-value" id="avgDuration">0 يوم</div>
                             <div class="stat-label">متوسط المدة</div>
                         </div>
-                        <div class="stat-item">
+                        <div class="stat-card">
                             <div class="stat-value" id="successRate">0%</div>
                             <div class="stat-label">معدل النجاح</div>
                         </div>
@@ -1462,573 +760,549 @@
                 </div>
             </section>
 
-            <!-- Settings Section -->
-            <section id="settings" class="content-section">
-                <div class="app-card">
+            <!-- تبويب الإعدادات -->
+            <section id="settings" class="tab-content">
+                <div class="card">
                     <div class="card-header">
                         <div class="card-title">
-                            <h2 class="card-heading">إعدادات النظام</h2>
-                            <p class="card-subheading">تخصيص وتكوين النظام</p>
+                            <h3>إعدادات النظام</h3>
+                            <small>تخصيص وتكوين النظام</small>
                         </div>
-                        <i class="fas fa-sliders-h card-icon"></i>
+                        <i class="fas fa-sliders-h" style="color: #5a67d8;"></i>
                     </div>
 
-                    <form id="settingsForm">
-                        <div class="form-group">
-                            <label for="apiUrl" class="form-label">
-                                <i class="fas fa-server"></i>
-                                عنوان الـ API
-                            </label>
-                            <input type="text" id="apiUrl" class="form-control" value="https://tarafbackend.onrender.com" readonly>
-                            <small style="display: block; margin-top: var(--space-1); color: var(--text-muted);">
-                                عنوان خادم الباك إند
-                            </small>
-                        </div>
+                    <div class="form-group">
+                        <label for="apiUrl" class="form-label">عنوان الـ API</label>
+                        <input type="text" id="apiUrl" class="form-control" value="https://tarafbackend.onrender.com" readonly>
+                        <small style="display: block; margin-top: 4px; color: var(--text-secondary);">عنوان خادم الباك إند</small>
+                    </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="defaultToken" class="form-label">
-                                    <i class="fas fa-key"></i>
-                                    كود الأمان الافتراضي
-                                </label>
-                                <input type="password" id="defaultToken" class="form-control" placeholder="أدخل كود الأمان الافتراضي">
-                            </div>
+                    <div class="form-group">
+                        <label for="defaultToken" class="form-label">كود الأمان الافتراضي</label>
+                        <input type="password" id="defaultToken" class="form-control" placeholder="أدخل كود الأمان الافتراضي">
+                    </div>
 
-                            <div class="form-group">
-                                <label for="defaultPrice" class="form-label">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                    السعر الافتراضي
-                                </label>
-                                <input type="number" id="defaultPrice" class="form-control" placeholder="السعر الافتراضي بالريال">
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="defaultPrice" class="form-label">السعر الافتراضي</label>
+                        <input type="number" id="defaultPrice" class="form-control" placeholder="السعر الافتراضي بالريال">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="autoRefresh" class="form-label">
-                                <i class="fas fa-sync"></i>
-                                تحديث البيانات تلقائياً
-                            </label>
-                            <select id="autoRefresh" class="form-control">
-                                <option value="30">كل 30 ثانية</option>
-                                <option value="60">كل دقيقة</option>
-                                <option value="300">كل 5 دقائق</option>
-                                <option value="0">غير مفعل</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="autoRefresh" class="form-label">تحديث البيانات تلقائياً</label>
+                        <select id="autoRefresh" class="form-control">
+                            <option value="30">كل 30 ثانية</option>
+                            <option value="60">كل دقيقة</option>
+                            <option value="300">كل 5 دقائق</option>
+                            <option value="0">غير مفعل</option>
+                        </select>
+                    </div>
 
-                        <div class="btn-group btn-group-horizontal">
-                            <button type="button" class="btn btn-success" onclick="saveSettings()">
-                                <i class="fas fa-save"></i>
-                                حفظ الإعدادات
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="resetSettings()">
-                                <i class="fas fa-undo"></i>
-                                إعادة تعيين
-                            </button>
-                        </div>
-                    </form>
+                    <div class="btn-group">
+                        <button class="btn btn-success" onclick="saveSettings()">
+                            <i class="fas fa-save"></i>
+                            حفظ الإعدادات
+                        </button>
+                        <button class="btn btn-secondary" onclick="resetSettings()">
+                            <i class="fas fa-undo"></i>
+                            إعادة تعيين
+                        </button>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Notification -->
-    <div class="notification-wrapper">
-        <div class="notification" id="notification">
-            <div class="notification-content">
-                <i class="fas fa-check-circle notification-icon"></i>
-                <span id="notificationMessage" class="notification-message">تمت العملية بنجاح</span>
-            </div>
-            <button class="notification-close" onclick="hideNotification()" aria-label="إغلاق">
-                ×
-            </button>
+    <!-- إشعارات -->
+    <div class="notification" id="notification">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-check-circle"></i>
+            <span id="notificationMessage">تمت العملية بنجاح</span>
         </div>
+        <button class="notification-close" onclick="hideNotification()">×</button>
     </div>
 
     <script>
-        // ========== Device Detection and Optimization ==========
-        class DeviceOptimizer {
-            constructor() {
-                this.init();
-            }
-            
-            init() {
-                this.detectDevice();
-                this.applyOptimizations();
-                this.setupViewport();
-            }
-            
-            detectDevice() {
-                const ua = navigator.userAgent;
-                
-                // iOS Detection
-                this.isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-                this.isIPhone = /iPhone/.test(ua);
-                this.isIPad = /iPad/.test(ua);
-                
-                // Android Detection
-                this.isAndroid = /Android/.test(ua);
-                this.isChrome = /Chrome/.test(ua);
-                this.isSamsung = /Samsung/.test(ua);
-                this.isHuawei = /Huawei/.test(ua);
-                this.isXiaomi = /Mi|Redmi|Xiaomi/.test(ua);
-                
-                // Screen Size Detection
-                this.screenWidth = window.screen.width;
-                this.screenHeight = window.screen.height;
-                this.pixelRatio = window.devicePixelRatio;
-                
-                // Notch Detection
-                this.hasNotch = this.isIOS && (this.screenHeight >= 812 && this.screenWidth >= 375);
-                
-                // Foldable Detection
-                this.isFoldable = window.matchMedia('(horizontal-viewport-segments: 2)').matches ||
-                                 window.matchMedia('(vertical-viewport-segments: 2)').matches;
-            }
-            
-            applyOptimizations() {
-                // iOS Optimizations
-                if (this.isIOS) {
-                    document.body.classList.add('ios-device');
-                    
-                    // Add iOS specific classes
-                    document.querySelectorAll('.form-control').forEach(el => {
-                        el.classList.add('ios-input');
-                    });
-                    
-                    document.querySelectorAll('.btn').forEach(el => {
-                        el.classList.add('ios-btn');
-                    });
-                    
-                    // Fix for iOS bounce
-                    document.body.style.overflow = 'hidden';
-                    document.body.style.position = 'fixed';
-                    document.body.style.width = '100%';
-                }
-                
-                // Android Optimizations
-                if (this.isAndroid) {
-                    document.body.classList.add('android-device', 'android-touch-fix');
-                    
-                    document.querySelectorAll('.form-control').forEach(el => {
-                        el.classList.add('android-input');
-                    });
-                    
-                    document.querySelectorAll('.btn').forEach(el => {
-                        el.classList.add('android-btn');
-                    });
-                    
-                    // Samsung specific
-                    if (this.isSamsung) {
-                        document.body.classList.add('samsung-device');
-                    }
-                    
-                    // Huawei specific
-                    if (this.isHuawei) {
-                        document.body.classList.add('huawei-device', 'huawei-fix');
-                    }
-                    
-                    // Xiaomi specific
-                    if (this.isXiaomi) {
-                        document.body.classList.add('xiaomi-device');
-                    }
-                }
-                
-                // Apply notch padding
-                if (this.hasNotch) {
-                    document.body.classList.add('iphone-notch');
-                }
-                
-                // Apply foldable optimizations
-                if (this.isFoldable) {
-                    document.body.classList.add('foldable-device');
-                }
-            }
-            
-            setupViewport() {
-                // Prevent zoom on input focus for iOS
-                if (this.isIOS) {
-                    document.addEventListener('touchstart', (e) => {
-                        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-                            document.body.style.zoom = '100%';
-                        }
-                    });
-                    
-                    document.addEventListener('focusin', (e) => {
-                        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
-                            setTimeout(() => {
-                                e.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }, 300);
-                        }
-                    });
-                }
-                
-                // Android viewport fixes
-                if (this.isAndroid) {
-                    const viewport = document.querySelector('meta[name="viewport"]');
-                    if (viewport) {
-                        viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no';
-                    }
-                }
-            }
-            
-            getDeviceInfo() {
-                return {
-                    isIOS: this.isIOS,
-                    isAndroid: this.isAndroid,
-                    isIPhone: this.isIPhone,
-                    isIPad: this.isIPad,
-                    hasNotch: this.hasNotch,
-                    screenWidth: this.screenWidth,
-                    screenHeight: this.screenHeight,
-                    pixelRatio: this.pixelRatio,
-                    userAgent: navigator.userAgent
-                };
-            }
-        }
-
-        // ========== Main Application ==========
+        // ==================== التكوين ====================
         const API_BASE_URL = "https://tarafbackend.onrender.com";
         let currentDuration = "1d";
         let autoRefreshInterval = null;
-        let deviceOptimizer;
 
-        // Initialize when DOM is loaded
+        // ==================== تهيئة الصفحة ====================
         document.addEventListener('DOMContentLoaded', function() {
-            initializeApplication();
-        });
-
-        function initializeApplication() {
-            // Initialize device optimizer
-            deviceOptimizer = new DeviceOptimizer();
-            console.log('Device Info:', deviceOptimizer.getDeviceInfo());
+            // إعداد التنقل
+            setupNavigation();
             
-            // Setup event listeners
-            setupEventListeners();
-            
-            // Load settings
-            loadSettings();
-            
-            // Setup duration tags
+            // إعداد علامات المدة
             setupDurationTags();
             
-            // Load initial data
+            // تحميل الإعدادات
+            loadSettings();
+            
+            // تحميل الإحصائيات
             loadDashboardStats();
             
-            // Setup auto refresh
-            setupAutoRefresh();
-            
-            // Apply device-specific optimizations
-            applyDeviceSpecificOptimizations();
-            
-            // Prevent default touch behaviors
-            preventDefaultTouchBehaviors();
-        }
+            // منع التكبير التلقائي
+            preventAutoZoom();
+        });
 
-        function applyDeviceSpecificOptimizations() {
-            const deviceInfo = deviceOptimizer.getDeviceInfo();
-            
-            // iPhone specific optimizations
-            if (deviceInfo.isIPhone) {
-                // Adjust for different iPhone models
-                if (deviceInfo.screenWidth === 375) { // iPhone 12/13 mini, iPhone SE
-                    document.documentElement.style.setProperty('--space-4', '0.875rem');
-                } else if (deviceInfo.screenWidth === 390) { // iPhone 12/13
-                    document.documentElement.style.setProperty('--space-4', '1rem');
-                } else if (deviceInfo.screenWidth === 393) { // iPhone 14/15
-                    document.documentElement.style.setProperty('--space-4', '1.125rem');
-                } else if (deviceInfo.screenWidth === 430) { // iPhone 14 Pro Max / 15 Pro Max
-                    document.documentElement.style.setProperty('--space-4', '1.25rem');
-                }
-                
-                // High pixel ratio adjustments
-                if (deviceInfo.pixelRatio >= 3) {
-                    document.body.classList.add('high-dpi');
-                }
-            }
-            
-            // Android specific optimizations
-            if (deviceInfo.isAndroid) {
-                // Adjust for common Android screen sizes
-                if (deviceInfo.screenWidth <= 360) { // Small Android devices
-                    document.documentElement.style.setProperty('--text-base', '15px');
-                } else if (deviceInfo.screenWidth >= 412) { // Large Android devices
-                    document.documentElement.style.setProperty('--space-4', '1.125rem');
-                }
-            }
-        }
-
-        function preventDefaultTouchBehaviors() {
-            // Prevent bounce on iOS
-            document.addEventListener('touchmove', function(e) {
-                if (e.scale !== 1) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            
-            // Prevent double tap zoom
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(e) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    e.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, { passive: false });
-            
-            // Prevent pull-to-refresh
-            document.addEventListener('touchstart', function(e) {
-                if (e.touches.length !== 1) return;
-                
-                const touch = e.touches[0];
-                if (touch.clientY <= 10) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-        }
-
-        // ... باقي الدوال كما هي مع بعض التحسينات الإضافية
-
-        function setupEventListeners() {
-            // Navigation
-            document.querySelectorAll('.nav-button').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    e.preventDefault();
+        // ==================== التنقل ====================
+        function setupNavigation() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
                     const tabId = this.dataset.tab;
                     showTab(tabId);
-                    
-                    // Add touch feedback
-                    this.classList.add('active-touch');
-                    setTimeout(() => {
-                        this.classList.remove('active-touch');
-                    }, 200);
                 });
-                
-                // Add touch feedback for mobile
-                button.addEventListener('touchstart', function() {
-                    this.classList.add('touch-active');
-                });
-                
-                button.addEventListener('touchend', function() {
-                    this.classList.remove('touch-active');
-                });
-            });
-            
-            // Form inputs
-            document.querySelectorAll('.form-control').forEach(input => {
-                // iOS specific input handling
-                if (deviceOptimizer.isIOS) {
-                    input.addEventListener('focus', function() {
-                        setTimeout(() => {
-                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }, 100);
-                    });
-                }
-                
-                // Android specific input handling
-                if (deviceOptimizer.isAndroid) {
-                    input.addEventListener('touchstart', function() {
-                        this.style.transform = 'scale(0.99)';
-                    });
-                    
-                    input.addEventListener('touchend', function() {
-                        this.style.transform = '';
-                    });
-                }
-            });
-            
-            // Buttons touch feedback
-            document.querySelectorAll('.btn').forEach(button => {
-                button.addEventListener('touchstart', function() {
-                    this.style.opacity = '0.9';
-                });
-                
-                button.addEventListener('touchend', function() {
-                    this.style.opacity = '';
-                });
-            });
-            
-            // Search functionality
-            const searchInput = document.getElementById('searchCodes');
-            if (searchInput) {
-                searchInput.addEventListener('input', debounce(function() {
-                    searchCodes(this.value);
-                }, 300));
-                
-                // Prevent keyboard from pushing content on iOS
-                if (deviceOptimizer.isIOS) {
-                    searchInput.addEventListener('focus', function() {
-                        setTimeout(() => {
-                            document.body.scrollTop = 0;
-                        }, 100);
-                    });
-                }
-            }
-            
-            // Handle orientation changes
-            window.addEventListener('orientationchange', function() {
-                setTimeout(() => {
-                    window.scrollTo(0, 0);
-                    // Re-apply optimizations for new orientation
-                    applyDeviceSpecificOptimizations();
-                }, 300);
-            });
-            
-            // Handle resize events
-            let resizeTimeout;
-            window.addEventListener('resize', function() {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    applyDeviceSpecificOptimizations();
-                }, 250);
             });
         }
-
-        // ... باقي الدوال (showTab, setupDurationTags, generateCodes, etc.) 
-        // تبقى كما هي مع تحسينات إضافية للتوافق
 
         function showTab(tabId) {
-            // Hide all content sections
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.style.display = 'none';
-                section.classList.remove('active');
+            // إخفاء جميع المحتويات
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
             });
             
-            // Deactivate all nav buttons
-            document.querySelectorAll('.nav-button').forEach(button => {
-                button.classList.remove('active');
+            // إلغاء تفعيل جميع الألسنة
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
             });
             
-            // Show target section
-            const targetSection = document.getElementById(tabId);
-            if (targetSection) {
-                targetSection.style.display = 'flex';
-                setTimeout(() => {
-                    targetSection.classList.add('active');
-                }, 10);
-                
-                // Activate corresponding nav button
-                document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-                
-                // Load tab data
-                loadTabData(tabId);
-                
-                // Scroll to top for mobile
-                if (window.innerWidth < 768) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
+            // إظهار المحتوى المطلوب
+            document.getElementById(tabId).classList.add('active');
+            
+            // تفعيل اللسان المطلوب
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            
+            // تحميل البيانات الخاصة بالتبويب
+            switch(tabId) {
+                case 'codes':
+                    loadActiveCodes();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'reports':
+                    loadReports();
+                    break;
             }
         }
 
-        function generateCodes() {
-            const adminToken = document.getElementById('adminToken').value.trim();
+        // ==================== إعداد المدة ====================
+        function setupDurationTags() {
+            const tags = document.querySelectorAll('.duration-tag');
+            tags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    tags.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDuration = this.dataset.duration;
+                });
+            });
+        }
+
+        // ==================== توليد الأكواد ====================
+        async function generateCodes() {
+            const adminToken = document.getElementById('adminToken').value;
             const codeCount = parseInt(document.getElementById('codeCount').value);
             const price = document.getElementById('price').value;
             
-            // Validation
             if (!adminToken) {
                 showNotification('يرجى إدخال كود الأمان', 'error');
                 return;
             }
             
-            if (codeCount < 1 || codeCount > 50) {
-                showNotification('عدد الأكواد يجب أن يكون بين 1 و 50', 'error');
-                return;
+            const btn = document.querySelector('#generate .btn-success');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التوليد...';
+            btn.disabled = true;
+            
+            try {
+                const codes = [];
+                
+                for (let i = 0; i < codeCount; i++) {
+                    const response = await fetch(`${API_BASE_URL}/generate-code?key=${encodeURIComponent(adminToken)}&duration=${currentDuration}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`خطأ في توليد الكود: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    codes.push({
+                        code: data.activation_code,
+                        duration: currentDuration,
+                        expires_at: data.expires_at,
+                        price: price || 'غير محدد'
+                    });
+                    
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                // حفظ الأكواد
+                saveGeneratedCodes(codes);
+                
+                // عرض الأكواد
+                displayGeneratedCodes(codes);
+                showNotification(`تم توليد ${codes.length} كود بنجاح`, 'success');
+                
+                // تحديث الإحصائيات
+                loadDashboardStats();
+                
+            } catch (error) {
+                console.error('خطأ في توليد الأكواد:', error);
+                showNotification(`خطأ: ${error.message}`, 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
-            
-            // Show loading state with device-specific feedback
-            const generateBtn = document.querySelector('#generate .btn-success');
-            const originalContent = generateBtn.innerHTML;
-            
-            // Device-specific loading feedback
-            if (deviceOptimizer.isIOS) {
-                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>جاري التوليد...</span>';
-            } else if (deviceOptimizer.isAndroid) {
-                generateBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i><span>جاري التوليد...</span>';
-            } else {
-                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>جاري التوليد...</span>';
-            }
-            
-            generateBtn.disabled = true;
-            
-            // Haptic feedback for supported devices
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
-            }
-            
-            // Generate codes
-            // ... بقية كود generateCodes كما هو
         }
 
-        // ... باقي الدوال تبقى كما هي مع إضافة تحسينات التوافق
+        function saveGeneratedCodes(codes) {
+            const existing = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+            const newCodes = codes.map(code => ({
+                ...code,
+                id: Date.now() + Math.random(),
+                created_at: new Date().toISOString(),
+                used: false
+            }));
+            
+            localStorage.setItem('admin_codes', JSON.stringify([...existing, ...newCodes]));
+        }
 
-        // Utility functions
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
+        function displayGeneratedCodes(codes) {
+            const codesText = codes.map(c => 
+                `الكود: ${c.code}\nالمدة: ${getDurationText(c.duration)}\nالسعر: ${c.price} ر.س\nتاريخ الانتهاء: ${formatDate(c.expires_at)}\n────────────────────`
+            ).join('\n\n');
+            
+            document.getElementById('generatedCodes').value = codesText;
+            document.getElementById('generatedCodesCard').style.display = 'block';
+        }
+
+        function copyCodes() {
+            const textarea = document.getElementById('generatedCodes');
+            textarea.select();
+            document.execCommand('copy');
+            showNotification('تم نسخ الأكواد إلى الحافظة', 'success');
+        }
+
+        function shareCodes() {
+            const codes = document.getElementById('generatedCodes').value;
+            const text = `أكواد تفعيل ناصر AI:\n\n${codes}\n\nتم إنشاؤها عبر لوحة التحكم`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'أكواد تفعيل ناصر AI',
+                    text: text
+                });
+            } else {
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(whatsappUrl, '_blank');
+            }
+        }
+
+        // ==================== تحميل الأكواد النشطة ====================
+        async function loadActiveCodes() {
+            const tbody = document.getElementById('codesTable');
+            
+            try {
+                const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+                
+                if (codes.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 40px;">
+                                <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.5; margin-bottom: 10px;"></i>
+                                <p>لا توجد أكواد نشطة</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                tbody.innerHTML = '';
+                codes.forEach((code, index) => {
+                    const status = getCodeStatus(code.expires_at);
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><code style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; font-family: monospace;">${code.code}</code></td>
+                        <td>${getDurationText(code.duration)}</td>
+                        <td><span style="padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; background: ${status.color}">${status.text}</span></td>
+                        <td>${formatDate(code.expires_at)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary" onclick="copyCode('${code.code}')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteCode(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                
+            } catch (error) {
+                console.error('خطأ في تحميل الأكواد:', error);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 40px; color: #d9534f;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>خطأ في تحميل البيانات</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function getCodeStatus(expiresAt) {
+            const now = new Date();
+            const expiry = new Date(expiresAt);
+            
+            if (expiry > now) {
+                const diff = expiry - now;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                
+                if (days > 30) {
+                    return { color: 'rgba(37, 211, 102, 0.2)', text: 'نشط' };
+                } else if (days > 7) {
+                    return { color: 'rgba(77, 150, 255, 0.2)', text: days + ' يوم' };
+                } else {
+                    return { color: 'rgba(240, 173, 78, 0.2)', text: 'ينتهي قريباً' };
+                }
+            } else {
+                return { color: 'rgba(217, 83, 79, 0.2)', text: 'منتهي' };
+            }
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code);
+            showNotification('تم نسخ الكود إلى الحافظة', 'success');
+        }
+
+        function deleteCode(index) {
+            if (confirm('هل أنت متأكد من حذف هذا الكود؟')) {
+                const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+                codes.splice(index, 1);
+                localStorage.setItem('admin_codes', JSON.stringify(codes));
+                loadActiveCodes();
+                loadDashboardStats();
+                showNotification('تم حذف الكود بنجاح', 'success');
+            }
+        }
+
+        // ==================== إدارة المستخدمين ====================
+        async function loadUsers() {
+            // بيانات تجريبية
+            const users = [
+                { name: 'أحمد محمد', email: 'ahmed@example.com', status: 'active', registered: '2026-01-15', expires: '2026-04-15' },
+                { name: 'سارة علي', email: 'sara@example.com', status: 'active', registered: '2026-01-20', expires: '2026-02-20' },
+                { name: 'خالد حسن', email: 'khaled@example.com', status: 'expired', registered: '2025-12-01', expires: '2026-01-01' }
+            ];
+            
+            const tbody = document.getElementById('usersTable');
+            tbody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                const statusColor = user.status === 'active' ? 'rgba(37, 211, 102, 0.2)' : 'rgba(217, 83, 79, 0.2)';
+                const statusText = user.status === 'active' ? 'نشط' : 'منتهي';
+                
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td><span style="padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; background: ${statusColor}">${statusText}</span></td>
+                    <td>${formatDate(user.registered)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // ==================== التقارير ====================
+        async function loadDashboardStats() {
+            const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+            
+            document.getElementById('totalCodes').textContent = codes.length;
+            document.getElementById('activeUsers').textContent = Math.floor(codes.length * 0.7);
+            document.getElementById('todayCodes').textContent = getTodayCodesCount(codes);
+            document.getElementById('totalRevenue').textContent = calculateTotalRevenue(codes);
+        }
+
+        async function loadReports() {
+            const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
+            
+            document.getElementById('totalGenerated').textContent = codes.length;
+            document.getElementById('totalUsed').textContent = Math.floor(codes.length * 0.65);
+            document.getElementById('avgDuration').textContent = calculateAverageDuration(codes);
+            document.getElementById('successRate').textContent = calculateSuccessRate(codes);
+        }
+
+        function getTodayCodesCount(codes) {
+            const today = new Date().toDateString();
+            return codes.filter(code => {
+                const codeDate = new Date(code.created_at || new Date()).toDateString();
+                return codeDate === today;
+            }).length;
+        }
+
+        function calculateTotalRevenue(codes) {
+            const total = codes.reduce((sum, code) => {
+                return sum + (parseFloat(code.price) || 0);
+            }, 0);
+            return total.toFixed(0) + ' ر.س';
+        }
+
+        function calculateAverageDuration(codes) {
+            if (codes.length === 0) return '0 يوم';
+            
+            const durationMap = {
+                '5m': 5/(60*24),
+                '30m': 30/(60*24),
+                '1h': 1/24,
+                '3h': 3/24,
+                '1d': 1,
+                '3d': 3,
+                '7d': 7,
+                '30d': 30,
+                '90d': 90,
+                '150d': 150
             };
+            
+            const total = codes.reduce((sum, code) => {
+                return sum + (durationMap[code.duration] || 0);
+            }, 0);
+            
+            const avg = total / codes.length;
+            return avg >= 1 ? avg.toFixed(1) + ' يوم' : (avg * 24).toFixed(0) + ' ساعة';
+        }
+
+        function calculateSuccessRate(codes) {
+            if (codes.length === 0) return '0%';
+            const used = Math.floor(codes.length * 0.65);
+            return ((used / codes.length) * 100).toFixed(1) + '%';
+        }
+
+        // ==================== الإعدادات ====================
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('admin_settings') || '{}');
+            
+            if (settings.defaultToken) document.getElementById('defaultToken').value = settings.defaultToken;
+            if (settings.defaultPrice) document.getElementById('defaultPrice').value = settings.defaultPrice;
+            if (settings.autoRefresh) document.getElementById('autoRefresh').value = settings.autoRefresh;
+            
+            if (settings.defaultToken) {
+                document.getElementById('adminToken').value = settings.defaultToken;
+            }
+        }
+
+        function saveSettings() {
+            const settings = {
+                defaultToken: document.getElementById('defaultToken').value,
+                defaultPrice: document.getElementById('defaultPrice').value,
+                autoRefresh: document.getElementById('autoRefresh').value
+            };
+            
+            localStorage.setItem('admin_settings', JSON.stringify(settings));
+            showNotification('تم حفظ الإعدادات بنجاح', 'success');
+            
+            if (settings.defaultToken) {
+                document.getElementById('adminToken').value = settings.defaultToken;
+            }
+        }
+
+        function resetSettings() {
+            if (confirm('هل أنت متأكد من إعادة تعيين الإعدادات؟')) {
+                localStorage.removeItem('admin_settings');
+                loadSettings();
+                showNotification('تم إعادة تعيين الإعدادات', 'success');
+            }
+        }
+
+        // ==================== أدوات مساعدة ====================
+        function getDurationText(duration) {
+            const durations = {
+                '5m': '5 دقائق',
+                '30m': '30 دقيقة',
+                '1h': 'ساعة واحدة',
+                '3h': '3 ساعات',
+                '1d': 'يوم واحد',
+                '3d': '3 أيام',
+                '7d': 'أسبوع',
+                '30d': 'شهر',
+                '90d': '3 أشهر',
+                '150d': '5 أشهر'
+            };
+            return durations[duration] || duration;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'غير محدد';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ar-SA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
         }
 
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             const messageEl = document.getElementById('notificationMessage');
-            const icon = notification.querySelector('.notification-icon');
+            const icon = notification.querySelector('i');
             
-            // Set type-specific styling
-            switch(type) {
-                case 'success':
-                    icon.className = 'fas fa-check-circle notification-icon';
-                    notification.style.background = 'linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%)';
-                    break;
-                case 'error':
-                    icon.className = 'fas fa-exclamation-circle notification-icon';
-                    notification.style.background = 'linear-gradient(135deg, var(--danger) 0%, #c9302c 100%)';
-                    break;
-                case 'warning':
-                    icon.className = 'fas fa-exclamation-triangle notification-icon';
-                    notification.style.background = 'linear-gradient(135deg, var(--warning) 0%, #ec971f 100%)';
-                    break;
-                default:
-                    icon.className = 'fas fa-info-circle notification-icon';
-                    notification.style.background = 'linear-gradient(135deg, var(--info) 0%, #2d7dfd 100%)';
-            }
+            icon.className = type === 'success' ? 'fas fa-check-circle' :
+                            type === 'error' ? 'fas fa-exclamation-circle' :
+                            'fas fa-info-circle';
+            
+            notification.style.background = type === 'success' ? 
+                'linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%)' :
+                type === 'error' ?
+                'linear-gradient(135deg, var(--danger) 0%, #c9302c 100%)' :
+                'linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%)';
             
             messageEl.textContent = message;
             notification.classList.add('show');
             
-            // Device-specific notification duration
-            const duration = deviceOptimizer.isIOS ? 4000 : 3000;
-            
             setTimeout(() => {
                 hideNotification();
-            }, duration);
-            
-            // Haptic feedback for supported devices
-            if (type === 'success' && navigator.vibrate) {
-                navigator.vibrate([50, 50, 50]);
-            }
+            }, 5000);
         }
 
         function hideNotification() {
-            const notification = document.getElementById('notification');
-            notification.classList.remove('show');
+            document.getElementById('notification').classList.remove('show');
         }
 
-        // Export functions to window
+        function preventAutoZoom() {
+            document.addEventListener('touchstart', function(event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            }, { passive: false });
+
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, { passive: false });
+        }
+
+        // ==================== التصدير ====================
         window.generateCodes = generateCodes;
         window.copyCodes = copyCodes;
         window.shareCodes = shareCodes;
-        window.showTab = showTab;
-        window.hideNotification = hideNotification;
+        window.copyCode = copyCode;
+        window.deleteCode = deleteCode;
         window.saveSettings = saveSettings;
         window.resetSettings = resetSettings;
-        window.filterUsers = filterUsers;
+        window.showTab = showTab;
+        window.hideNotification = hideNotification;
     </script>
 </body>
 </html>

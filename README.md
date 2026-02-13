@@ -54,7 +54,7 @@ html, body {
     width: 100%;
 }
 
-/* ========== شريط الأخبار العلوي ========== */
+/* شريط الأخبار العلوي */
 .top-marquee {
     position: fixed;
     top: 0;
@@ -92,7 +92,7 @@ html, body {
     animation-play-state: paused;
 }
 
-/* ========== نظام الأزرار المحسّن ========== */
+/* نظام الأزرار المحسّن */
 .top-small-buttons button,
 .main-buttons-bar button,
 #aiFillFloatingBtn {
@@ -105,7 +105,7 @@ html, body {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ========== المجموعة الأولى: الأزرار الصغيرة ========== */
+/* المجموعة الأولى: الأزرار الصغيرة */
 .top-small-buttons {
     position: fixed;
     top: 45px;
@@ -196,7 +196,7 @@ html, body {
     transition: none;
 }
 
-/* ========== المجموعة الثانية: الأزرار الكبيرة ========== */
+/* المجموعة الثانية: الأزرار الكبيرة */
 .main-buttons-bar {
     position: fixed;
     top: 98px;
@@ -275,7 +275,7 @@ html, body {
     transition: none;
 }
 
-/* ========== شريط التقدم العلوي ========== */
+/* شريط التقدم العلوي - مبسط */
 .progress-bar-container {
     position: fixed;
     top: 163px;
@@ -284,15 +284,14 @@ html, body {
     width: 100%;
     z-index: 230;
     background: linear-gradient(135deg, #ffffff 0%, #f8fdfa 100%);
-    padding: 15px 20px;
+    padding: 12px 20px;
     border-bottom: 2px solid #d4ebe2;
     box-shadow: 0 4px 15px rgba(4, 74, 53, 0.15);
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-family: 'Cairo', sans-serif;
-    backdrop-filter: blur(5px);
     box-sizing: border-box;
 }
 
@@ -305,7 +304,7 @@ html, body {
     margin: 0 auto;
     color: #044a35;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .progress-stats {
@@ -317,9 +316,9 @@ html, body {
 .progress-percentage {
     background: linear-gradient(135deg, #ffd166, #ffc233);
     color: #5a3e00;
-    padding: 5px 15px;
+    padding: 4px 12px;
     border-radius: 30px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     box-shadow: 0 2px 8px rgba(255, 209, 102, 0.3);
     border: 1px solid #ffb830;
@@ -327,10 +326,10 @@ html, body {
 
 .progress-message {
     color: #066d4d;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     background: #e8f4f0;
-    padding: 5px 15px;
+    padding: 4px 12px;
     border-radius: 30px;
     border: 1px solid #c0e0d6;
 }
@@ -339,7 +338,7 @@ html, body {
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
-    height: 18px;
+    height: 16px;
     background: #e0f0ea;
     border-radius: 30px;
     overflow: hidden;
@@ -350,65 +349,13 @@ html, body {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #066d4d, #0a9d72, #066d4d);
-    background-size: 200% 100%;
-    animation: progressShimmer 2s linear infinite;
+    background: linear-gradient(90deg, #066d4d, #0a9d72);
     border-radius: 30px;
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 0 0 15px rgba(6, 109, 77, 0.5);
 }
 
-@keyframes progressShimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-.criteria-status {
-    width: 100%;
-    max-width: 900px;
-    margin: 5px auto 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    font-size: 11px;
-}
-
-.criterion-badge {
-    background: #f0f9f6;
-    border: 1px solid #c0e0d6;
-    border-radius: 20px;
-    padding: 3px 10px;
-    color: #044a35;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.criterion-badge.completed {
-    background: #d4edda;
-    border-color: #066d4d;
-    color: #066d4d;
-}
-
-.criterion-badge i {
-    font-size: 10px;
-}
-
-.criterion-weight {
-    background: #ffd166;
-    color: #5a3e00;
-    border-radius: 12px;
-    padding: 2px 6px;
-    font-size: 9px;
-    font-weight: 800;
-    margin-right: 5px;
-}
-
-/* ========== زر التعبئة الذكية العائم ========== */
+/* زر التعبئة الذكية العائم */
 #aiFillFloatingBtn {
     position: fixed;
     bottom: 30px;
@@ -520,7 +467,7 @@ html, body {
     100% { transform: rotate(360deg); }
 }
 
-/* ========== شاشة التفعيل ========== */
+/* شاشة التفعيل */
 #activationScreen {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -631,12 +578,12 @@ html, body {
     display: none;
 }
 
-/* ========== تحسين واجهة الإدخال ========== */
+/* تحسين واجهة الإدخال */
 .input-section {
     background: #ffffff;
     padding: 25px;
     border-radius: 20px;
-    margin-top: 220px;
+    margin-top: 210px;
     border: 2px solid #e0f0ea;
     box-shadow: 0 10px 30px rgba(4, 74, 53, 0.12);
     position: relative;
@@ -817,7 +764,7 @@ button[title]:hover::before {
     font-size: 18px;
 }
 
-/* ========== أنماط القوائم ========== */
+/* أنماط القوائم */
 .levels-container {
     background: #f8fdfa;
     border-radius: 12px;
@@ -1067,7 +1014,7 @@ button[title]:hover::before {
     display: inline-block;
 }
 
-/* ========== نافذة التقارير المحفوظة ========== */
+/* نافذة التقارير المحفوظة */
 #savedReportsModal {
     display: none;
     position: fixed;
@@ -1251,7 +1198,7 @@ button[title]:hover::before {
     margin-bottom: 10px;
 }
 
-/* ========== نافذة الإعدادات ========== */
+/* نافذة الإعدادات */
 #settingsModal {
     display: none;
     position: fixed;
@@ -1355,7 +1302,7 @@ button[title]:hover::before {
     border-top: 1px solid #d4ebe2;
 }
 
-/* ========== أنماط الثيمات ========== */
+/* أنماط الثيمات */
 .theme-light-blue body {
     background: linear-gradient(135deg, #e8f0ff 0%, #d6e4ff 50%, #c2d4ff 100%) !important;
 }
@@ -1435,7 +1382,7 @@ button[title]:hover::before {
     background: linear-gradient(135deg, #27ae60 0%, #2ecc71 25%, #3498db 50%, #9b59b6 100%) !important;
 }
 
-/* ========== قسم PDF ========== */
+/* قسم PDF */
 @page {
     size: A4;
     margin: 10mm;
@@ -1803,7 +1750,7 @@ button[title]:hover::before {
     transition: all 0.3s ease;
 }
 
-/* ========== تحسينات للهواتف المحمولة ========== */
+/* تحسينات للهواتف المحمولة */
 @media (max-width: 768px) {
     .top-small-buttons {
         padding: 6px 15px;
@@ -1886,7 +1833,7 @@ button[title]:hover::before {
     }
     
     .input-section {
-        margin-top: 210px;
+        margin-top: 200px;
         padding: 15px;
     }
     
@@ -1947,15 +1894,6 @@ button[title]:hover::before {
         padding: 8px 10px;
     }
     
-    .criteria-status {
-        gap: 4px;
-    }
-    
-    .criterion-badge {
-        padding: 2px 6px;
-        font-size: 9px;
-    }
-    
     #aiFillFloatingBtn {
         width: 75px;
         height: 75px;
@@ -1972,7 +1910,7 @@ button[title]:hover::before {
     }
     
     .input-section {
-        margin-top: 190px;
+        margin-top: 185px;
         padding: 12px;
     }
     
@@ -1998,7 +1936,7 @@ button[title]:hover::before {
     }
 }
 
-/* ========== ثيمات PDF ========== */
+/* ثيمات PDF */
 .pdf-theme-classic {
     --main: #062f25;
     --border: #2f9e8f;
@@ -2114,19 +2052,18 @@ button[title]:hover::before {
     </div>
 </div>
 
-<!-- ========== شريط التقدم العلوي ========== -->
+<!-- ========== شريط التقدم العلوي - مبسط ========== -->
 <div class="progress-bar-container" id="progressBarContainer">
     <div class="progress-header">
         <div><i class="fas fa-chart-line"></i> تقدم إنجاز التقارير</div>
         <div class="progress-stats">
             <span class="progress-percentage" id="progressPercentage">0%</span>
-            <span class="progress-message" id="progressMessage"></span>
+            <span class="progress-message" id="progressMessage">0 من 0 معايير مكتملة</span>
         </div>
     </div>
     <div class="progress-track">
         <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
     </div>
-    <div class="criteria-status" id="criteriaStatus"></div>
 </div>
 
 <!-- المحتوى الرئيسي -->
@@ -2714,8 +2651,7 @@ function calculateProgress() {
     
     const totalWeight = criteria.reduce((sum, c) => sum + (parseFloat(c.weight) || 0), 0);
     let completedWeight = 0;
-    const completedCriteria = [];
-    const pendingCriteria = [];
+    let completedCount = 0;
     
     criteria.forEach(criterion => {
         const criterionId = criterion.id;
@@ -2723,9 +2659,7 @@ function calculateProgress() {
         
         if (savedReports[criterionId]) {
             completedWeight += criterionWeight;
-            completedCriteria.push(criterion);
-        } else {
-            pendingCriteria.push(criterion);
+            completedCount++;
         }
     });
     
@@ -2733,28 +2667,8 @@ function calculateProgress() {
     
     document.getElementById('progressPercentage').textContent = percentage + '%';
     document.getElementById('progressFill').style.width = percentage + '%';
-    
-    const completedCount = completedCriteria.length;
-    const totalCount = criteria.length;
     document.getElementById('progressMessage').textContent = 
-        `${completedCount} من ${totalCount} معايير مكتملة (${completedWeight} من ${totalWeight} نقطة)`;
-    
-    const criteriaStatus = document.getElementById('criteriaStatus');
-    criteriaStatus.innerHTML = '';
-    
-    completedCriteria.forEach(criterion => {
-        const badge = document.createElement('span');
-        badge.className = 'criterion-badge completed';
-        badge.innerHTML = `<i class="fas fa-check-circle"></i> ${criterion.name} <span class="criterion-weight">${criterion.weight}%</span>`;
-        criteriaStatus.appendChild(badge);
-    });
-    
-    pendingCriteria.forEach(criterion => {
-        const badge = document.createElement('span');
-        badge.className = 'criterion-badge';
-        badge.innerHTML = `<i class="fas fa-hourglass-half"></i> ${criterion.name} <span class="criterion-weight">${criterion.weight}%</span>`;
-        criteriaStatus.appendChild(badge);
-    });
+        `${completedCount} من ${criteria.length} معايير مكتملة (${completedWeight} من ${totalWeight} نقطة)`;
 }
 
 function saveCurrentReport() {
@@ -2824,7 +2738,6 @@ function loadSavedReport(criterionId) {
     
     if (!report) return false;
     
-    // تعبئة الحقول بالبيانات المحفوظة
     document.getElementById('education').value = report.data.education || '';
     document.getElementById('school').value = report.data.school || '';
     document.getElementById('teacherType').value = report.data.teacherType || 'المعلم';
@@ -2847,7 +2760,6 @@ function loadSavedReport(criterionId) {
     document.getElementById('recomm').value = report.data.recomm || '';
     document.getElementById('manualReportTitle').value = report.title || '';
     
-    // تحديد الأدوات
     if (report.data.tools && Array.isArray(report.data.tools)) {
         const toolCheckboxes = document.querySelectorAll('.tool-checkbox');
         toolCheckboxes.forEach(toolElement => {
@@ -3153,8 +3065,8 @@ async function fillWithAI() {
         return;
     }
     
-    const reportName = document.getElementById('manualReportTitle').value.trim();
-    if (!reportName) {
+    const reportTitle = document.getElementById('manualReportTitle').value.trim();
+    if (!reportTitle) {
         alert('الرجاء إدخال عنوان التقرير أولاً');
         return;
     }
@@ -3173,7 +3085,6 @@ async function fillWithAI() {
     aiButton.disabled = true;
     
     try {
-        // حتى لو لم يتم اختيار معايير، نرسل الطلب مع بيانات افتراضية
         const response = await fetch(BACKEND_URL + "/api/generate-report-content", {
             method: 'POST',
             headers: {

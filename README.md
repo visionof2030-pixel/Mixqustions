@@ -1,1790 +1,3694 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#044a35">
-    <title>لوحة تحكم الإدارة - ناصر AI</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        /* ========== CSS Reset ========== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        :root {
-            /* الألوان */
-            --primary: #044a35;
-            --primary-light: #066d4d;
-            --secondary: #ffd166;
-            --danger: #d9534f;
-            --success: #25D366;
-            --warning: #f0ad4e;
-            --info: #4d96ff;
-            
-            --bg-dark: #0a1929;
-            --bg-card: rgba(255, 255, 255, 0.05);
-            --bg-surface: rgba(255, 255, 255, 0.1);
-            
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.8);
-            --border: rgba(255, 255, 255, 0.2);
-            
-            /* المسافات */
-            --space-xs: 0.5rem;
-            --space-sm: 1rem;
-            --space-md: 1.5rem;
-            --space-lg: 2rem;
-            
-            /* الأنصاف */
-            --radius-sm: 0.5rem;
-            --radius-md: 0.75rem;
-            --radius-lg: 1rem;
-        }
-
-        html {
-            font-size: 16px;
-            height: 100%;
-            overflow-x: hidden;
-        }
-
-        body {
-            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #132f4c 100%);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
-
-        /* ========== الحاوية الرئيسية ========== */
-        .app-wrapper {
-            width: 100%;
-            max-width: 100vw;
-            margin: 0 auto;
-            padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom);
-            overflow-x: hidden;
-        }
-
-        /* ========== الهيدر ========== */
-        .app-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-            border-radius: var(--radius-lg);
-            padding: var(--space-md);
-            margin-bottom: var(--space-md);
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .app-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(255, 209, 102, 0.1) 0%, transparent 70%);
-        }
-
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            margin-bottom: var(--space-sm);
-            position: relative;
-            z-index: 1;
-        }
-
-        .header-title h1 {
-            font-size: 1.5rem;
-            color: var(--secondary);
-        }
-
-        .header-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-sm);
-            margin-top: var(--space-md);
-            position: relative;
-            z-index: 1;
-        }
-
-        .stat-card {
-            background: var(--bg-surface);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: var(--space-sm);
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--info);
-            margin-bottom: var(--space-xs);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* ========== التنقل ========== */
-        .nav-tabs {
-            display: flex;
-            background: var(--bg-card);
-            border-radius: var(--radius-md);
-            padding: 4px;
-            margin-bottom: var(--space-md);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            max-width: 100%;
-        }
-
-        .nav-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .nav-tab {
-            flex: 1;
-            min-width: 80px;
-            padding: var(--space-sm);
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: var(--radius-sm);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.3s;
-            min-height: 60px;
-        }
-
-        .nav-tab:active {
-            transform: scale(0.98);
-        }
-
-        .nav-tab.active {
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-            color: var(--text-primary);
-        }
-
-        .tab-icon {
-            font-size: 1.125rem;
-        }
-
-        /* ========== المحتوى ========== */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* ========== الكروت ========== */
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            padding: var(--space-md);
-            margin-bottom: var(--space-md);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: var(--space-md);
-        }
-
-        .card-title h3 {
-            font-size: 1.125rem;
-            color: var(--secondary);
-            margin-bottom: var(--space-xs);
-        }
-
-        .card-title small {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        /* ========== النماذج ========== */
-        .form-group {
-            margin-bottom: var(--space-md);
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--info);
-            margin-bottom: var(--space-xs);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.875rem;
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: inherit;
-            min-height: 44px;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--info);
-            box-shadow: 0 0 0 3px rgba(77, 150, 255, 0.2);
-        }
-
-        textarea.form-control {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        select.form-control {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 0.875rem center;
-            background-size: 12px;
-            padding-left: 2.5rem;
-        }
-
-        /* ========== زر التبديل (Toggle Switch) ========== */
-        .toggle-group {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-md);
-            padding: var(--space-sm);
-            background: var(--bg-surface);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-        }
-
-        .toggle-label {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.1);
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        .toggle-switch input:checked + .toggle-slider {
-            background-color: var(--success);
-        }
-
-        .toggle-switch input:checked + .toggle-slider:before {
-            transform: translateX(24px);
-        }
-
-        /* ========== الأزرار ========== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-xs);
-            padding: 0.875rem 1.25rem;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            min-height: 44px;
-            width: 100%;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
-            color: var(--text-primary);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--success) 0%, #128C7E 100%);
-            color: var(--text-primary);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger) 0%, #c9302c 100%);
-            color: var(--text-primary);
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-            min-height: 36px;
-            width: auto;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: var(--space-sm);
-            margin-top: var(--space-md);
-        }
-
-        /* ========== علامات المدة ========== */
-        .duration-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-xs);
-            margin-top: var(--space-xs);
-        }
-
-        .duration-tag {
-            padding: 0.5rem 1rem;
-            background: rgba(77, 150, 255, 0.1);
-            border: 1px solid rgba(77, 150, 255, 0.3);
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            color: var(--info);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .duration-tag:active {
-            transform: scale(0.95);
-        }
-
-        .duration-tag.active {
-            background: linear-gradient(135deg, var(--info) 0%, #2d7dfd 100%);
-            color: var(--text-primary);
-            border-color: var(--info);
-        }
-
-        /* ========== إصلاح: وضوح جدول الأكواد في لوحة الأدمن ========== */
-        .table-container {
-            max-width: 100%;
-            background: #0f2a3f;
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            margin-top: var(--space-md);
-        }
-
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            background: #0f2a3f;
-            border-radius: 14px;
-        }
-
-        .data-table {
-            width: 100%;
-            min-width: 0 !important;
-            border-collapse: collapse;
-        }
-
-        .data-table th {
-            background: #0b3a2c;
-            color: #ffd166;
-            font-weight: 800;
-            font-size: 13px;
-            padding: 12px;
-            text-align: center;
-            white-space: nowrap;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .data-table td {
-            background: #ffffff;
-            color: #0a1929;
-            font-weight: 700;
-            font-size: 13px;
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #e5e7eb;
-            white-space: nowrap;
-        }
-
-        .data-table td:first-child {
-            font-family: "Courier New", monospace;
-            letter-spacing: 1px;
-            color: #0b5ed7 !important;
-            font-weight: 800;
-            direction: ltr;
-        }
-
-        .data-table td.expired {
-            background: #fee2e2 !important;
-            color: #dc2626 !important;
-            font-weight: 700;
-        }
-        
-        .data-table td.expired:first-child {
-            color: #dc2626 !important;
-        }
-
-        .data-table td.expiring-soon {
-            background: #fef3c7 !important;
-            color: #d97706 !important;
-            font-weight: 700;
-        }
-        
-        .data-table td.expiring-soon:first-child {
-            color: #d97706 !important;
-        }
-
-        .data-table td.active {
-            background: #e0f2fe !important;
-            color: #0369a1 !important;
-            font-weight: 700;
-        }
-        
-        .data-table td.active:first-child {
-            color: #0369a1 !important;
-        }
-
-        .badge {
-            font-weight: 800;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            display: inline-block;
-        }
-
-        .badge-active {
-            background: #e0f2fe !important;
-            color: #0369a1 !important;
-        }
-
-        .badge-expiring {
-            background: #fef3c7 !important;
-            color: #d97706 !important;
-        }
-
-        .badge-expired {
-            background: #fee2e2 !important;
-            color: #dc2626 !important;
-        }
-
-        /* ========== حاوية معلومات المستخدم الاختيارية ========== */
-        .user-info-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-md);
-            padding: var(--space-md);
-            margin-bottom: var(--space-md);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-        }
-
-        .user-info-container.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ========== الإشعارات ========== */
-        .notification {
-            position: fixed;
-            top: var(--space-md);
-            right: 16px;
-            left: 16px;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-            color: var(--text-primary);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transform: translateY(-100px);
-            opacity: 0;
-            transition: all 0.3s;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            color: inherit;
-            font-size: 1.25rem;
-            cursor: pointer;
-            padding: 0.25rem;
-            min-height: 32px;
-            min-width: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        /* ========== الحالات ========== */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--info);
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: var(--space-lg);
-            color: var(--text-secondary);
-        }
-
-        /* ========== Responsive ========== */
-        @media (min-width: 768px) {
-            .app-wrapper {
-                max-width: 768px;
-                padding: 20px 16px;
-            }
-            
-            .header-stats {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .nav-tabs {
-                flex-wrap: nowrap;
-            }
-            
-            .nav-tab {
-                min-width: 100px;
-                font-size: 0.875rem;
-            }
-            
-            .btn-group {
-                flex-direction: row;
-            }
-            
-            .btn {
-                width: auto;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .app-wrapper {
-                max-width: 1024px;
-            }
-        }
-
-        /* ========== تحسينات الجوال ========== */
-        @media (max-width: 480px) {
-            .data-table th,
-            .data-table td {
-                font-size: 12px;
-                padding: 10px 8px;
-            }
-            
-            .data-table td:first-child {
-                font-size: 11px;
-                letter-spacing: 0.5px;
-            }
-            
-            .data-table .status,
-            .badge {
-                font-size: 11px;
-                padding: 3px 8px;
-            }
-        }
-
-        /* ========== تحسينات اللمس ========== */
-        @media (hover: none) and (pointer: coarse) {
-            .btn,
-            .nav-tab,
-            .duration-tag {
-                min-height: 44px;
-            }
-            
-            .form-control {
-                font-size: 16px;
-            }
-        }
-
-        /* ========== دعم safe-area ========== */
-        @supports (padding: max(0px)) {
-            .app-wrapper {
-                padding-top: max(16px, env(safe-area-inset-top));
-                padding-bottom: max(16px, env(safe-area-inset-bottom));
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>أداة إصدار التقارير التربوية - النظام المتكامل</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+html,body{font-family:'Cairo',sans-serif;background: linear-gradient(135deg, #f0f9f6 0%, #e8f4f0 50%, #d4ebe2 100%);direction:rtl;overflow-x:hidden;min-height:100vh;-webkit-text-size-adjust:100%; -moz-text-size-adjust:100%; -ms-text-size-adjust:100%; text-size-adjust:100%; touch-action: manipulation;}
+.wrapper{max-width:900px;margin:auto;padding:20px;width:100%;}
+
+/* شريط الأخبار العلوي */
+.top-marquee{
+position:fixed;top:0;left:0;right:0;width:100%;background:linear-gradient(135deg, #022e22 0%, #044a35 100%);color:#fff;
+padding:10px 5px;font-size:12px;z-index:300;overflow:hidden;height:45px;
+white-space:nowrap;border-bottom:3px solid #ffd166;box-shadow:0 4px 12px rgba(2, 46, 34, 0.25);
+display:flex;align-items:center;
+}
+.marquee-inner{
+display:inline-block;
+padding-left:2%;
+animation:newsScroll 30s linear infinite;
+color:#e8f4f0;font-weight:500;
+}
+@keyframes newsScroll{
+0%{transform:translateX(-100%);}
+100%{transform:translateX(100%);}
+}
+.top-marquee:hover .marquee-inner{animation-play-state:paused;}
+
+/* ==================== نظام الأزرار المحسّن ==================== */
+
+/* إعادة تعيين موحد لجميع الأزرار */
+.top-small-buttons button,
+.main-buttons-bar button,
+#aiFillFloatingBtn {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    box-sizing: border-box;
+    outline: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* المجموعة الأولى: الأزرار الصغيرة أعلى الهيدر */
+.top-small-buttons {
+    position: fixed;
+    top: 45px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 250;
+    background: linear-gradient(135deg, #ffffff 0%, #f5fcf9 100%);
+    padding: 8px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #e0f0ea;
+    box-shadow: 0 2px 8px rgba(4, 74, 53, 0.08);
+    box-sizing: border-box;
+}
+
+.small-buttons-grid {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    max-width: 400px;
+    justify-content: center;
+}
+
+/* تصميم الأزرار الصغيرة */
+.small-btn {
+    border: 2px solid;
+    padding: 6px 4px;
+    font-size: 9px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 40px;
+    min-width: 80px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* إزالة تأثيرات الحركة والاهتزاز */
+.small-btn:active,
+.small-btn:focus,
+.small-btn:hover {
+    transform: none !important;
+    line-height: inherit !important;
+    font-weight: 700 !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+/* تأثير الضغط الخفيف */
+.small-btn:active {
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.5), inset 0 3px 5px rgba(0,0,0,0.1) !important;
+    filter: brightness(0.95);
+}
+
+/* زر حفظ البيانات - أزرق */
+#saveTeacherBtn {
+    background: linear-gradient(135deg, #4f7bff 0%, #3b5bdb 100%);
+    color: white;
+    border-color: #3b5bdb;
+}
+
+#saveTeacherBtn:hover {
+    background: linear-gradient(135deg, #3b5bdb 0%, #2d4ac0 100%);
+    filter: brightness(1.05);
+    box-shadow: 0 3px 8px rgba(59, 91, 219, 0.3);
+}
+
+#saveTeacherBtn:active {
+    filter: brightness(0.9);
+}
+
+/* زر مسح البيانات - أصفر */
+#clearBtn {
+    background: linear-gradient(135deg, #ffd166 0%, #ffc145 100%);
+    color: #5a3e00;
+    border-color: #ffc145;
+}
+
+#clearBtn:hover {
+    background: linear-gradient(135deg, #ffc145 0%, #ffb830 100%);
+    filter: brightness(1.05);
+    box-shadow: 0 3px 8px rgba(255, 193, 69, 0.3);
+}
+
+#clearBtn:active {
+    filter: brightness(0.9);
+}
+
+/* زر الضبط - رمادي */
+#settingsBtn {
+    background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+    color: white;
+    border-color: #4a5568;
+}
+
+#settingsBtn:hover {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    filter: brightness(1.05);
+    box-shadow: 0 3px 8px rgba(74, 85, 104, 0.3);
+}
+
+#settingsBtn:active {
+    filter: brightness(0.9);
+}
+
+.small-btn-icon {
+    font-size: 10px;
+    color: white;
+    transition: none;
+}
+
+.small-btn .small-btn-text {
+    font-size: 8px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.1;
+    white-space: nowrap;
+    transition: none;
+}
+
+/* المجموعة الثانية: الأزرار الكبيرة */
+.main-buttons-bar {
+    position: fixed;
+    top: 93px; /* أسفل الأزرار الصغيرة */
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 240;
+    background: linear-gradient(135deg, #f8fdfa 0%, #f0f9f6 100%);
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 3px 10px rgba(4, 74, 53, 0.1);
+    border-bottom: 1px solid #d4ebe2;
+    box-sizing: border-box;
+}
+
+.main-buttons-grid {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+}
+
+/* تصميم الأزرار الرئيسية */
+.main-btn {
+    border: 2px solid;
+    padding: 12px 8px;
+    font-size: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 60px;
+    min-width: 120px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* إزالة تأثيرات الحركة والاهتزاز */
+.main-btn:active,
+.main-btn:focus,
+.main-btn:hover {
+    transform: none !important;
+    line-height: inherit !important;
+    font-weight: 700 !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+/* تأثير الضغط الخفيف */
+.main-btn:active {
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.5), inset 0 4px 6px rgba(0,0,0,0.1) !important;
+    filter: brightness(0.95);
+}
+
+/* زر تنزيل PDF - أحمر */
+#pdfBtn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border-color: #ee5a52;
+}
+
+#pdfBtn:hover {
+    background: linear-gradient(135deg, #ee5a52 0%, #d64545 100%);
+    filter: brightness(1.05);
+    box-shadow: 0 5px 15px rgba(238, 90, 82, 0.4);
+}
+
+#pdfBtn:active {
+    filter: brightness(0.9);
+}
+
+/* زر مشاركة واتساب - أخضر */
+#whatsappBtn {
+    background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
+    color: white;
+    border-color: #1da851;
+}
+
+#whatsappBtn:hover {
+    background: linear-gradient(135deg, #1da851 0%, #179244 100%);
+    filter: brightness(1.05);
+    box-shadow: 0 5px 15px rgba(29, 168, 81, 0.4);
+}
+
+#whatsappBtn:active {
+    filter: brightness(0.9);
+}
+
+.main-btn-icon {
+    font-size: 16px;
+    color: white;
+    transition: none;
+}
+
+.main-btn .main-btn-text {
+    font-size: 11px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: none;
+}
+
+/* ========== زر التعبئة الذكية العائم - متكامل مع الثيمات ========== */
+#aiFillFloatingBtn {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 100px;
+    height: 100px;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 4px solid rgba(255, 255, 255, 0.7);
+    z-index: 1000;
+    overflow: hidden;
+    transform: translateY(0);
+    animation: floatButton 3s ease-in-out infinite;
+}
+
+/* الثيم الافتراضي */
+#aiFillFloatingBtn {
+    background: linear-gradient(135deg, #9D50BB 0%, #6E48AA 25%, #533D8B 50%, #3A2569 100%);
+    box-shadow: 
+        0 12px 35px rgba(157, 80, 187, 0.6),
+        0 0 0 3px rgba(255, 255, 255, 0.3),
+        0 0 25px rgba(157, 80, 187, 0.5);
+}
+
+#aiFillFloatingBtn .floating-ai-icon {
+    font-size: 38px;
+    animation: magicalPulse 2s infinite;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+    margin-bottom: 2px;
+    color: #FFFFFF;
+    transition: none;
+}
+
+#aiFillFloatingBtn .floating-ai-text {
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: #FFFFFF;
+    background: linear-gradient(45deg, #FFFFFF, #F0F0F0, #FFFFFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: textShine 2s ease-in-out infinite;
+    white-space: nowrap;
+    transition: none;
+}
+
+/* إزالة تأثيرات الحركة والاهتزاز */
+#aiFillFloatingBtn:active,
+#aiFillFloatingBtn:focus {
+    transform: none !important;
+    animation-play-state: running !important;
+}
+
+/* تأثير الطفو */
+@keyframes floatButton {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-12px) rotate(3deg); }
+    50% { transform: translateY(0) rotate(0deg); }
+    75% { transform: translateY(-8px) rotate(-3deg); }
+}
+
+#aiFillFloatingBtn:hover {
+    filter: brightness(1.15);
+    box-shadow: 
+        0 25px 60px rgba(0,0,0,0.4),
+        0 0 0 5px rgba(255, 255, 255, 0.5),
+        0 0 50px rgba(0,0,0,0.3),
+        0 0 0 10px rgba(255, 255, 255, 0.15);
+}
+
+#aiFillFloatingBtn:active {
+    filter: brightness(0.85);
+    box-shadow: 
+        0 15px 40px rgba(0,0,0,0.3),
+        0 0 0 4px rgba(255, 255, 255, 0.4),
+        0 0 30px rgba(0,0,0,0.2);
+}
+
+/* تأثير النبض السحري للأيقونة */
+@keyframes magicalPulse {
+    0%, 100% { 
+        transform: scale(1) rotate(0deg);
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5)) brightness(1);
+    }
+    25% { 
+        transform: scale(1.15) rotate(10deg);
+        filter: drop-shadow(0 5px 10px rgba(255, 255, 255, 0.6)) brightness(1.2);
+    }
+    50% { 
+        transform: scale(1.1) rotate(-5deg);
+        filter: drop-shadow(0 4px 8px rgba(255, 255, 255, 0.5)) brightness(1.1);
+    }
+    75% { 
+        transform: scale(1.18) rotate(5deg);
+        filter: drop-shadow(0 6px 12px rgba(255, 255, 255, 0.7)) brightness(1.3);
+    }
+}
+
+/* تأثير تلميع النص */
+@keyframes textShine {
+    0%, 100% { 
+        background-position: 0% 50%;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    50% { 
+        background-position: 100% 50%;
+        text-shadow: 0 3px 6px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* حالة التحميل للزر العائم */
+#aiFillFloatingBtn.loading {
+    animation: loadingMagicalGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes loadingMagicalGlow {
+    0%, 100% { 
+        box-shadow: 
+            0 12px 35px rgba(0,0,0,0.4),
+            0 0 0 4px rgba(255, 255, 255, 0.4),
+            0 0 30px rgba(0,0,0,0.3);
+    }
+    50% { 
+        box-shadow: 
+            0 18px 45px rgba(0,0,0,0.6),
+            0 0 0 5px rgba(255, 255, 255, 0.7),
+            0 0 40px rgba(0,0,0,0.5);
+    }
+}
+
+#aiFillFloatingBtn.loading .floating-ai-icon {
+    animation: magicalSpin 1.2s linear infinite;
+}
+
+@keyframes magicalSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* شاشة التفعيل */
+#activationScreen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, #022e22, #044a35);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cairo', sans-serif;
+}
+
+#activationScreen .activation-box {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    border: 3px solid #ffd166;
+}
+
+#activationScreen h3 {
+    color: #044a35; 
+    margin-bottom: 20px; 
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#activationScreen p {
+    color: #666; 
+    font-size: 14px; 
+    margin-bottom: 20px;
+}
+
+#activationCodeInput {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #d4ebe2;
+    border-radius: 10px;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Cairo', sans-serif;
+    transition: all 0.3s;
+}
+
+#activationCodeInput:focus {
+    outline: none;
+    border-color: #066d4d;
+    box-shadow: 0 0 0 3px rgba(6, 109, 77, 0.15);
+}
+
+#activationScreen button {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #066d4d 0%, #05553d 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    font-family: 'Cairo', sans-serif;
+}
+
+#activationScreen button:hover {
+    background: linear-gradient(135deg, #05553d 0%, #044a35 100%);
+    filter: brightness(1.05);
+}
+
+/* زر التواصل في شاشة التفعيل */
+#contactForTrialBtn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    font-family: 'Cairo', sans-serif;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#contactForTrialBtn:hover {
+    background: linear-gradient(135deg, #4c51bf 0%, #434190 100%);
+    filter: brightness(1.05);
+}
+
+#activationError {
+    color: #d9534f;
+    font-size: 13px;
+    margin-top: 15px;
+    padding: 10px;
+    background: #fee;
+    border-radius: 8px;
+    border-right: 4px solid #d9534f;
+    display: none;
+}
+
+/* ========== تحسين واجهة الإدخال ========== */
+.input-section{
+    background:#ffffff;
+    padding:25px;
+    border-radius:20px;
+    margin-top:170px; /* زيادة الهامش بسبب الأزرار الإضافية */
+    border:2px solid #e0f0ea;
+    box-shadow:0 10px 30px rgba(4, 74, 53, 0.12);
+    position:relative;
+    overflow:hidden;
+}
+.input-section::before{
+    content:'';
+    position:absolute;
+    top:0;
+    right:0;
+    width:100%;
+    height:5px;
+    background:linear-gradient(to left, #066d4d, #ffd166, #25D366);
+}
+
+.input-section h2{
+    color:#044a35;
+    font-size:24px;
+    margin-bottom:30px;
+    padding-bottom:15px;
+    border-bottom:3px solid #e0f0ea;
+    text-align:center;
+    font-weight:900;
+    position:relative;
+}
+.input-section h2::after{
+    content:'';
+    position:absolute;
+    bottom:-3px;
+    right:50%;
+    transform:translateX(50%);
+    width:120px;
+    height:3px;
+    background:linear-gradient(to left, #066d4d, #ffd166);
+    border-radius:2px;
+}
+
+/* تصميم عصري للحقول */
+.form-group{margin-bottom:25px;position:relative;}
+.form-group label{
+    font-size:16px;
+    font-weight:800;
+    margin-bottom:10px;
+    display:block;
+    color:#083024;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding-right:8px;
+    position:relative;
+}
+.form-group label i{
+    color:#066d4d;
+    font-size:16px;
+    background:#f0f9f6;
+    padding:7px;
+    border-radius:10px;
+    border:1px solid #d4ebe2;
+    box-shadow:0 2px 5px rgba(0,0,0,0.05);
+}
+
+.form-group label::before{
+    content:'';
+    width:8px;
+    height:8px;
+    background:#ffd166;
+    border-radius:50%;
+    display:inline-block;
+    margin-left:6px;
+    box-shadow:0 0 6px #ffd166;
+}
+
+input,select,textarea{
+    width:100%;
+    padding:16px;
+    margin-top:8px;
+    border:2px solid #d4ebe2;
+    border-radius:12px;
+    font-size:18px;
+    background:#f9fcfb;
+    transition:all 0.3s;
+    font-family:'Cairo', sans-serif;
+    color:#083024;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,0.05);
+    -webkit-appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+    outline:none;
+    border-color:#066d4d;
+    box-shadow:0 0 0 4px rgba(6,109,77,0.15), inset 0 2px 8px rgba(0,0,0,0.05);
+    background:#ffffff;
+}
+textarea{height:120px;resize:none;overflow:hidden;line-height:1.7;font-size:17px;}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+/* تلميحات للأزرار */
+button[title] {
+    position: relative;
+}
+button[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 50%;
+    transform: translateX(50%);
+    background: rgba(4, 58, 42, 0.95);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: pre-line;
+    z-index: 1000;
+    border: 1px solid #044a35;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    max-width: 300px;
+    min-width: 200px;
+}
+button[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    right: 50%;
+    transform: translateX(50%);
+    border: 6px solid transparent;
+    border-top-color: rgba(4, 58, 42, 0.95);
+    z-index: 1000;
+}
+
+/* إشعارات */
+.notification {
+    position: fixed;
+    top: 150px;
+    right: 10px;
+    left: 10px;
+    background: linear-gradient(135deg, #066d4d 0%, #044a35 100%);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(4, 74, 53, 0.3);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    transform: translateX(150%);
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    border-right: 5px solid #ffd166;
+    text-align:center;
+    justify-content:center;
+}
+.notification.show {
+    transform: translateX(0);
+}
+.notification i {
+    font-size: 18px;
+}
+
+/* ========== أنماط القوائم الجديدة للمعايير والتصنيفات ========== */
+
+/* حاوية القوائم المتتالية */
+.levels-container {
+    background: #f8fdfa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 2px solid #d4ebe2;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.level-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 8px;
+    background: linear-gradient(135deg, #066d4d 0%, #044a35 100%);
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.level-indicator span {
+    background: rgba(255,255,255,0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.level-select {
+    margin-bottom: 10px;
+}
+
+.level-select select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #d4ebe2;
+    border-radius: 8px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.level-select select:focus {
+    border-color: #066d4d;
+    outline: none;
+}
+
+.level-select label {
+    font-size: 12px;
+    color: #044a35;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.level-select label i {
+    color: #066d4d;
+    font-size: 12px;
+}
+
+/* معلومات المعيار المحدد */
+.criterion-info {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 15px 0;
+    border-right: 4px solid #ffd166;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.criterion-name {
+    font-weight: 800;
+    color: #044a35;
+    font-size: 14px;
+}
+
+.criterion-weight {
+    background: #ffd166;
+    color: #5a3e00;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* أنماط البحث والتصنيف */
+#reportSearchContainer {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+#searchResults {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#searchResults div {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+#searchResults div:hover {
+    background-color: #f0f9f6 !important;
+    color: #066d4d;
+}
+
+#searchResults div:last-child {
+    border-bottom: none;
+}
+
+#reportSearch:focus {
+    outline: none;
+    border-color: #066d4d;
+    box-shadow: 0 0 0 2px rgba(6, 109, 77, 0.2);
+}
+
+/* خانة عنوان التقرير اليدوية */
+.manual-title-container {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8fdfa;
+    border-radius: 12px;
+    border: 2px solid #d4ebe2;
+}
+
+.manual-title-container label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #044a35;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.manual-title-container input {
+    background: white;
+    border: 2px solid #d4ebe2;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* ========== قسم الأدوات والوسائل التعليمية - معدل باستخدام Grid ========== */
+.tools-section {
+    background: #f8fdfa;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid #d4ebe2;
+    margin-top: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    counter-reset: tool-counter;
+}
+
+.tools-grid {
+    display: grid;
+    gap: 12px;
+}
+
+/* الجوال: عمودين */
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* التابلت: ثلاثة أعمدة */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .tools-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* الكمبيوتر: أربعة أعمدة */
+@media (min-width: 1025px) {
+    .tools-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.tool-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px 10px 30px;
+    background: white;
+    border-radius: 10px;
+    border: 2px solid #d4ebe2;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+    min-height: 50px;
+}
+
+/* ترقيم الأدوات */
+.tool-checkbox::before {
+    counter-increment: tool-counter;
+    content: counter(tool-counter);
+    position: absolute;
+    right: 8px;
+    background: #066d4d;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.tool-checkbox:hover {
+    border-color: #066d4d;
+    background: #f0f9f6;
+    box-shadow: 0 4px 8px rgba(6, 109, 77, 0.1);
+    transform: translateY(-2px);
+}
+
+.tool-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    z-index: 1;
+}
+
+.tool-checkbox span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #083024;
+    margin-right: 25px;
+    flex: 1;
+}
+
+.tool-checkbox.checked {
+    border-color: #066d4d;
+    background: #e8f4f0;
+    box-shadow: 0 4px 10px rgba(6, 109, 77, 0.15);
+}
+
+/* علامة ✅ */
+.checkmark {
+    color: #066d4d;
+    font-size: 16px;
+    margin-right: 5px;
+    display: none;
+}
+
+.tool-checkbox.checked .checkmark {
+    display: inline-block;
+}
+
+/* ==================== تحسينات للهواتف المحمولة ==================== */
+
+/* تحسينات للأجهزة المحمولة العامة */
+@media (max-width: 768px) {
+    .top-small-buttons {
+        padding: 6px 15px;
+    }
+    
+    .small-buttons-grid {
+        gap: 6px;
+    }
+    
+    .small-btn {
+        min-height: 35px;
+        min-width: 70px;
+        padding: 4px 3px;
+    }
+    
+    .small-btn-icon {
+        font-size: 9px;
+    }
+    
+    .small-btn .small-btn-text {
+        font-size: 7px;
+    }
+    
+    .main-buttons-bar {
+        padding: 8px 15px;
+    }
+    
+    .main-buttons-grid {
+        gap: 10px;
+        max-width: 250px;
+    }
+    
+    .main-btn {
+        min-height: 50px;
+        min-width: 100px;
+        padding: 8px 6px;
+    }
+    
+    .main-btn-icon {
+        font-size: 14px;
+    }
+    
+    .main-btn .main-btn-text {
+        font-size: 10px;
+    }
+    
+    #aiFillFloatingBtn {
+        width: 85px;
+        height: 85px;
+        bottom: 20px;
+        left: 20px;
+    }
+    
+    #aiFillFloatingBtn .floating-ai-icon {
+        font-size: 32px;
+    }
+    
+    #aiFillFloatingBtn .floating-ai-text {
+        font-size: 12px;
+    }
+    
+    .input-section {
+        margin-top: 160px;
+        padding: 15px;
+    }
+    
+    .input-section h2 {
+        font-size: 20px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .notification {
+        top: 140px;
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}
+
+/* تحسينات للشاشات الصغيرة جداً */
+@media (max-width: 480px) {
+    .top-marquee {
+        font-size: 11px;
+        height: 40px;
+    }
+    
+    .marquee-inner {
+        animation-duration: 35s;
+    }
+    
+    .small-btn {
+        min-height: 30px;
+        min-width: 60px;
+        padding: 3px 2px;
+    }
+    
+    .small-btn-icon {
+        font-size: 8px;
+    }
+    
+    .small-btn .small-btn-text {
+        font-size: 6px;
+    }
+    
+    .main-btn {
+        min-height: 45px;
+        min-width: 90px;
+    }
+    
+    .main-btn-icon {
+        font-size: 12px;
+    }
+    
+    .main-btn .main-btn-text {
+        font-size: 9px;
+    }
+    
+    #aiFillFloatingBtn {
+        width: 80px;
+        height: 80px;
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    #aiFillFloatingBtn .floating-ai-icon {
+        font-size: 28px;
+    }
+    
+    #aiFillFloatingBtn .floating-ai-text {
+        font-size: 11px;
+    }
+    
+    .input-section {
+        margin-top: 155px;
+        padding: 12px;
+    }
+    
+    input, select, textarea {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+    }
+    
+    .tool-checkbox {
+        padding: 6px 6px 6px 26px;
+    }
+    
+    .tool-checkbox span {
+        font-size: 12px;
+    }
+}
+
+/* ==================== قسم PDF ==================== */
+@page{
+    size:A4;
+    margin:10mm;
+}
+
+:root{
+    --main:#062f25;
+    --border:#2f9e8f;
+    --bg:#ffffff;
+}
+
+#report-content{
+    width:100%;
+    max-width:210mm;
+    margin:4mm auto 0 auto;
+    padding:0 6mm;
+    box-sizing:border-box;
+    display:none;
+    font-family:'Cairo',sans-serif;
+    background:var(--bg);
+}
+
+.header{
+    background:var(--main);
+    height:150px;
+    border-radius:8px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    margin-bottom:8px;
+}
+.header img{
+    width:260px;
+    filter: brightness(0) invert(1); /* جعل الصورة بيضاء */
+    transition: filter 0.3s ease;
+}
+.header-school-title{
+    position:absolute;
+    right:12px;
+    top:20px;
+    font-size:14px;
+    font-weight:800;
+}
+.header-school{
+    position:absolute;
+    right:12px;
+    top:45px;
+    font-size:16px; /* تم تخفيضه من 18px */
+    font-weight:700; /* تم تخفيضه من 900 */
+    max-width:70%; /* لمنع تجاوز الحدود */
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-align:right;
+}
+.header-education{
+    position:absolute;
+    left:50%;
+    bottom:18px;
+    transform:translateX(-50%);
+    font-size:16px;
+    font-weight:800;
+    text-align:center;
+    width:100%;
+}
+.header-date{
+    position:absolute;
+    left:12px;
+    top:10px;
+    font-size:12px;
+    text-align:right;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin-bottom:6px;
+}
+.info-grid2{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    margin-bottom:6px;
+}
+
+.info-box{
+    border:1px solid var(--border);
+    border-radius:7px;
+    padding:14px 4px 6px;
+    position:relative;
+    text-align:center;
+    font-size:11px;
+    min-height:34px;
+    overflow:hidden;
+    background:var(--bg);
+}
+.info-title{
+    position:absolute;
+    top:4px;
+    right:50%;
+    transform:translateX(50%);
+    font-size:8px;
+    font-weight:800;
+    color:var(--main);
+    white-space:nowrap;
+}
+.info-value{
+    font-size:11px;
+    font-weight:600;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+#reportTypeBox{
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.subject-lesson-box{
+    border:1px solid var(--border);
+    border-radius:7px;
+    position:relative;
+    padding:14px 4px 6px;
+    overflow:hidden;
+    height: 48px;
+    min-height: 48px;
+    max-height: 48px;
+    background:var(--bg);
+}
+.subject-lesson-title{
+    position:absolute;
+    top:4px;
+    right:50%;
+    transform:translateX(50%);
+    font-size:8px;
+    font-weight:800;
+    color:var(--main);
+}
+.subject-lesson{
+    display:grid;
+    grid-template-columns:1fr 1px 1fr;
+    align-items:center;
+    text-align:center;
+    font-size:11px;
+    height: 100%;
+}
+.subject-divider{
+    background:var(--border);
+    height:60%;
+    margin:auto;
+}
+
+.box-objective{
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:8px;
+    margin-bottom:6px;
+    height:95px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    background:var(--bg);
+}
+.box-objective .box-title{
+    text-align:center;
+    color:var(--main);
+    font-weight:800;
+    font-size:8px;
+    margin-bottom:4px;
+}
+.box-objective .box-content{
+    font-size:14px;
+    line-height:1.5;
+    text-align:center;
+    overflow:hidden;
+}
+
+.box-objective .box-title{
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.box{
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:8px;
+    margin-bottom:6px;
+    height:137px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    background:var(--bg);
+}
+.box-title{
+    text-align:center;
+    color:var(--main);
+    font-weight:800;
+    font-size:14px;
+    margin-bottom:4px;
+}
+.box-content{
+    font-size:14px;
+    line-height:1.5;
+    text-align:center;
+    overflow:hidden;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+}
+
+.tools-box{
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:6px;
+    margin-bottom:6px;
+    overflow:hidden;
+    background:var(--bg);
+}
+.tools-title{
+    text-align:center;
+    font-weight:800;
+    color:var(--main);
+    font-size:13px;
+    margin-bottom:4px;
+}
+.tools-list{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:6px;
+    font-size:12px;
+}
+.tool{
+    background:#eef7f4;
+    border:1px solid #cfe8df;
+    border-radius:16px;
+    padding:3px 8px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    white-space:nowrap;
+}
+.tool span{
+    background:var(--border);
+    color:#fff;
+    border-radius:50%;
+    width:12px;
+    height:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:8px;
+}
+
+.images{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+    margin-bottom:6px;
+}
+.image-box{
+    border:1px dashed var(--border);
+    height:160px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#f9fdfb;
+    position:relative;
+}
+.image-box::before{
+    content:'صورة توثيقية';
+    position:absolute;
+    top:4px;
+    right:4px;
+    font-size:12px;
+    background:rgba(255,255,255,.9);
+    padding:1px 5px;
+    border-radius:3px;
+    z-index:1;
+}
+
+.image-box img{
+    width: 65%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.signatures{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    text-align:center;
+    font-size:13px;
+    margin-bottom:6px;
+}
+.signature-box{
+    padding-top:4px;
+}
+.signature-role{
+    font-size:12px;
+    color:var(--main);
+    font-weight:700;
+    margin-bottom:2px;
+}
+.signature-name{
+    font-size:14px;
+    font-weight:900;
+    color:#000;
+}
+.sign-line{
+    border-top:1px solid #000;
+    margin:6px auto 0;
+    width:70%;
+}
+
+.footer-box{
+    background:var(--main);
+    color:#fff;
+    text-align:center;
+    font-size:11px;
+    padding:3px 4px;
+    border-radius:6px;
+}
+
+.pdf-export * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+}
+
+#subjectBox,
+#lessonBox{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 5px;
+    transition: all 0.3s ease;
+}
+
+/* ==================== نافذة الإعدادات ==================== */
+#settingsModal {
+    display:none;
+    position:fixed;
+    top:0; left:0; right:0; bottom:0;
+    background:rgba(0,0,0,0.5);
+    z-index:5000;
+    align-items:center;
+    justify-content:center;
+    font-family: 'Cairo', sans-serif;
+}
+
+#settingsModal > div {
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    width:90%;
+    max-width:400px;
+    max-height:80vh;
+    overflow-y:auto;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    border:3px solid #ffd166;
+}
+
+#settingsModal h3 {
+    color:#044a35;
+    text-align:center;
+    margin-bottom:15px;
+    font-size:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+#settingsModal #subInfo {
+    font-size:14px;
+    line-height:2;
+    color:#333;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+#settingsModal label {
+    font-weight:700;
+    color:#044a35;
+    display:block;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+#settingsModal input[type="date"] {
+    width:100%;
+    margin-top:8px;
+    padding:10px;
+    border-radius:8px;
+    border:2px solid #d4ebe2;
+    font-family:'Cairo', sans-serif;
+    font-size:16px;
+}
+
+#settingsModal input[type="date"]:focus {
+    outline:none;
+    border-color:#066d4d;
+    box-shadow:0 0 0 3px rgba(6,109,77,0.15);
+}
+
+#settingsModal button {
+    width:100%;
+    padding:12px;
+    background:#066d4d;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:'Cairo', sans-serif;
+    transition:all 0.3s;
+    margin-top:10px;
+}
+
+#settingsModal button:hover {
+    background:#05553d;
+    filter: brightness(1.05);
+}
+
+#settingsModal .btn-secondary {
+    background:#4f7bff;
+    margin-top:5px;
+}
+
+#settingsModal .btn-secondary:hover {
+    background:#3b5bdb;
+    filter: brightness(1.05);
+}
+
+#settingsModal hr {
+    margin:15px 0;
+    border:none;
+    border-top:1px solid #d4ebe2;
+}
+
+/* ==================== أنماط الثيمات الإضافية ==================== */
+
+/* ثيم الواجهة: الأزرق الفاتح */
+.theme-light-blue body {
+    background: linear-gradient(135deg, #e8f0ff 0%, #d6e4ff 50%, #c2d4ff 100%) !important;
+}
+
+.theme-light-blue .input-section {
+    background: #ffffff;
+    border: 2px solid #c2d4ff;
+    box-shadow: 0 10px 30px rgba(66, 133, 244, 0.15);
+}
+
+.theme-light-blue .input-section::before {
+    background: linear-gradient(to left, #4285f4, #34a853, #fbbc05);
+}
+
+.theme-light-blue .input-section h2 {
+    color: #4285f4;
+}
+
+.theme-light-blue .input-section h2::after {
+    background: linear-gradient(to left, #4285f4, #34a853);
+}
+
+.theme-light-blue .form-group label {
+    color: #1a73e8;
+}
+
+.theme-light-blue .form-group label i {
+    color: #4285f4;
+    background: #e8f0ff;
+    border: 1px solid #c2d4ff;
+}
+
+.theme-light-blue .top-marquee {
+    background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+    border-bottom: 3px solid #fbbc05;
+}
+
+.theme-light-blue .top-small-buttons {
+    background: linear-gradient(135deg, #ffffff 0%, #edf2ff 100%);
+}
+
+.theme-light-blue .main-buttons-bar {
+    background: linear-gradient(135deg, #f0f5ff 0%, #e8f0ff 100%);
+}
+
+.theme-light-blue .tools-section {
+    background: #f0f5ff;
+    border: 1px solid #c2d4ff;
+}
+
+.theme-light-blue .tool-checkbox {
+    background: white;
+    border: 2px solid #c2d4ff;
+}
+
+.theme-light-blue .tool-checkbox:hover {
+    border-color: #4285f4;
+    background: #e8f0ff;
+}
+
+.theme-light-blue .tool-checkbox.checked {
+    border-color: #4285f4;
+    background: #d6e4ff;
+}
+
+.theme-light-blue .tool-checkbox::before {
+    background: #4285f4;
+}
+
+/* زر التعبئة الذكية في ثيم الأزرق الفاتح */
+.theme-light-blue #aiFillFloatingBtn {
+    background: linear-gradient(135deg, #4285f4 0%, #34a853 25%, #fbbc05 50%, #ea4335 100%) !important;
+    box-shadow: 
+        0 12px 35px rgba(66, 133, 244, 0.6),
+        0 0 0 3px rgba(255, 255, 255, 0.3),
+        0 0 25px rgba(66, 133, 244, 0.5) !important;
+}
+
+.theme-light-blue #aiFillFloatingBtn .floating-ai-icon {
+    color: #FFFFFF !important;
+}
+
+.theme-light-blue #aiFillFloatingBtn .floating-ai-text {
+    background: linear-gradient(45deg, #FFFFFF, #E8F0FF, #FFFFFF) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* ثيم الواجهة: الوضع المظلم */
+.theme-dark body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+    color: #e0e0e0;
+}
+
+.theme-dark .input-section {
+    background: #1e293b;
+    border: 2px solid #334155;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: #e0e0e0;
+}
+
+.theme-dark .input-section::before {
+    background: linear-gradient(to left, #3b82f6, #10b981, #f59e0b);
+}
+
+.theme-dark .input-section h2 {
+    color: #60a5fa;
+}
+
+.theme-dark .input-section h2::after {
+    background: linear-gradient(to left, #3b82f6, #10b981);
+}
+
+.theme-dark .form-group label {
+    color: #cbd5e1;
+}
+
+.theme-dark .form-group label i {
+    color: #60a5fa;
+    background: #1e293b;
+    border: 1px solid #475569;
+}
+
+.theme-dark input,
+.theme-dark select,
+.theme-dark textarea {
+    background: #1e293b;
+    border-color: #475569;
+    color: #e0e0e0;
+}
+
+.theme-dark input:focus,
+.theme-dark select:focus,
+.theme-dark textarea:focus {
+    border-color: #3b82f6;
+    background: #0f172a;
+    color: #e0e0e0;
+}
+
+.theme-dark .top-marquee {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-bottom: 3px solid #f59e0b;
+}
+
+.theme-dark .top-small-buttons {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom: 1px solid #334155;
+}
+
+.theme-dark .main-buttons-bar {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom: 1px solid #334155;
+}
+
+.theme-dark .tools-section {
+    background: #1e293b;
+    border: 1px solid #334155;
+}
+
+.theme-dark .tool-checkbox {
+    background: #0f172a;
+    border: 2px solid #334155;
+    color: #cbd5e1;
+}
+
+.theme-dark .tool-checkbox:hover {
+    border-color: #3b82f6;
+    background: #1e293b;
+}
+
+.theme-dark .tool-checkbox.checked {
+    border-color: #3b82f6;
+    background: #1e293b;
+}
+
+.theme-dark .tool-checkbox::before {
+    background: #3b82f6;
+}
+
+.theme-dark .manual-title-container {
+    background: #1e293b;
+    border: 2px solid #334155;
+}
+
+.theme-dark .manual-title-container input {
+    background: #0f172a;
+    border-color: #475569;
+    color: #e0e0e0;
+}
+
+/* زر التعبئة الذكية في الوضع المظلم */
+.theme-dark #aiFillFloatingBtn {
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 25%, #8b5cf6 50%, #a78bfa 100%) !important;
+    box-shadow: 
+        0 12px 35px rgba(109, 40, 217, 0.6),
+        0 0 0 3px rgba(255, 255, 255, 0.3),
+        0 0 25px rgba(109, 40, 217, 0.5) !important;
+}
+
+.theme-dark #aiFillFloatingBtn .floating-ai-icon {
+    color: #FFFFFF !important;
+}
+
+.theme-dark #aiFillFloatingBtn .floating-ai-text {
+    background: linear-gradient(45deg, #FFFFFF, #F3F4F6, #FFFFFF) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* ثيم الواجهة: الأخضر التربوي */
+.theme-green body {
+    background: linear-gradient(135deg, #e6f7ef 0%, #d4f0e4 50%, #c2e8d9 100%) !important;
+}
+
+.theme-green .input-section {
+    background: #ffffff;
+    border: 2px solid #2ecc71;
+    box-shadow: 0 10px 30px rgba(46, 204, 113, 0.15);
+}
+
+.theme-green .input-section::before {
+    background: linear-gradient(to left, #27ae60, #2ecc71, #3498db);
+}
+
+.theme-green .input-section h2 {
+    color: #27ae60;
+}
+
+.theme-green .input-section h2::after {
+    background: linear-gradient(to left, #27ae60, #2ecc71);
+}
+
+.theme-green .form-group label {
+    color: #229954;
+}
+
+.theme-green .form-group label i {
+    color: #27ae60;
+    background: #e6f7ef;
+    border: 1px solid #a3e4c2;
+}
+
+.theme-green .top-marquee {
+    background: linear-gradient(135deg, #1e8449 0%, #27ae60 100%);
+    border-bottom: 3px solid #3498db;
+}
+
+.theme-green .top-small-buttons {
+    background: linear-gradient(135deg, #ffffff 0%, #e6f7ef 100%);
+}
+
+.theme-green .main-buttons-bar {
+    background: linear-gradient(135deg, #e6f7ef 0%, #d4f0e4 100%);
+}
+
+.theme-green .tools-section {
+    background: #e6f7ef;
+    border: 1px solid #a3e4c2;
+}
+
+.theme-green .tool-checkbox {
+    background: white;
+    border: 2px solid #a3e4c2;
+}
+
+.theme-green .tool-checkbox:hover {
+    border-color: #27ae60;
+    background: #d4f0e4;
+}
+
+.theme-green .tool-checkbox.checked {
+    border-color: #27ae60;
+    background: #c2e8d9;
+}
+
+.theme-green .tool-checkbox::before {
+    background: #27ae60;
+}
+
+/* زر التعبئة الذكية في الثيم الأخضر */
+.theme-green #aiFillFloatingBtn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 25%, #3498db 50%, #9b59b6 100%) !important;
+    box-shadow: 
+        0 12px 35px rgba(46, 204, 113, 0.6),
+        0 0 0 3px rgba(255, 255, 255, 0.3),
+        0 0 25px rgba(46, 204, 113, 0.5) !important;
+}
+
+.theme-green #aiFillFloatingBtn .floating-ai-icon {
+    color: #FFFFFF !important;
+}
+
+.theme-green #aiFillFloatingBtn .floating-ai-text {
+    background: linear-gradient(45deg, #FFFFFF, #E6F7EF, #FFFFFF) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* الثيم الافتراضي - تدعيم */
+.theme-default #aiFillFloatingBtn .floating-ai-icon {
+    color: #FFFFFF !important;
+}
+
+.theme-default #aiFillFloatingBtn .floating-ai-text {
+    background: linear-gradient(45deg, #FFFFFF, #F0F9F6, #FFFFFF) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* ثيمات PDF */
+
+/* ثيم PDF: كلاسيكي (الافتراضي) */
+.pdf-theme-classic {
+    --main: #062f25;
+    --border: #2f9e8f;
+    --bg: #ffffff;
+}
+
+/* ثيم PDF: احترافي */
+.pdf-theme-professional {
+    --main: #1a365d;
+    --border: #4299e1;
+    --bg: #ffffff;
+}
+
+.pdf-theme-professional .header {
+    background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+}
+
+.pdf-theme-professional .tools-box .tool {
+    background: #ebf8ff;
+    border-color: #bee3f8;
+}
+
+/* إصلاح لون الشعار في الثيمات المختلفة */
+.pdf-theme-professional .header img,
+.pdf-theme-minimal .header img,
+.pdf-theme-tech .header img,
+.pdf-theme-educational .header img {
+    filter: brightness(0) invert(1);
+}
+
+/* ثيم PDF: ميني (بسيط) */
+.pdf-theme-minimal {
+    --main: #4a5568;
+    --border: #cbd5e0;
+    --bg: #ffffff;
+}
+
+.pdf-theme-minimal .header {
+    background: #4a5568;
+}
+
+.pdf-theme-minimal .box,
+.pdf-theme-minimal .info-box,
+.pdf-theme-minimal .subject-lesson-box,
+.pdf-theme-minimal .tools-box {
+    border: 1px solid #e2e8f0;
+}
+
+/* ثيم PDF: تقني */
+.pdf-theme-tech {
+    --main: #2d3748;
+    --border: #4fd1c7;
+    --bg: #ffffff;
+}
+
+.pdf-theme-tech .header {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+}
+
+.pdf-theme-tech .tools-box .tool {
+    background: #e6fffa;
+    border-color: #81e6d9;
+}
+
+/* ثيم PDF: تعليمي */
+.pdf-theme-educational {
+    --main: #2b6cb0;
+    --border: #4299e1;
+    --bg: #ffffff;
+}
+
+.pdf-theme-educational .header {
+    background: linear-gradient(135deg, #2b6cb0 0%, #3182ce 100%);
+}
+
+.pdf-theme-educational .tools-box .tool {
+    background: #ebf8ff;
+    border-color: #bee3f8;
+}
+
+/* الشعار في كلاسيكي يجب أن يبقى باللون الأصلي (أبيض على خلفية خضراء) */
+.pdf-theme-classic .header img {
+    filter: brightness(0) invert(1);
+}
+</style>
 </head>
-<body>
-    <div class="app-wrapper">
-        <!-- الهيدر -->
-        <header class="app-header">
-            <div class="header-title">
-                <i class="fas fa-user-shield"></i>
-                <h1>لوحة تحكم الإدارة</h1>
-            </div>
-            <p>إدارة النظام وتوليد أكواد التفعيل والتحكم بالمستخدمين</p>
-            
-            <div class="header-stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalCodes">0</div>
-                    <div class="stat-label">الأكواد النشطة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="expiringCodes">0</div>
-                    <div class="stat-label">الأكواد ستنتهي قريباً</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="expiredCodes">0</div>
-                    <div class="stat-label">الأكواد المنتهية</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalRevenue">0 ر.س</div>
-                    <div class="stat-label">إجمالي الإيرادات</div>
-                </div>
-            </div>
-        </header>
 
-        <!-- التنقل -->
-        <nav class="nav-tabs">
-            <button class="nav-tab active" data-tab="generate">
-                <i class="fas fa-key tab-icon"></i>
-                <span>توليد أكواد</span>
-            </button>
-            <button class="nav-tab" data-tab="activeCodes">
-                <i class="fas fa-check-circle tab-icon"></i>
-                <span>الأكواد النشطة</span>
-            </button>
-            <button class="nav-tab" data-tab="expiredCodes">
-                <i class="fas fa-times-circle tab-icon"></i>
-                <span>الأكواد المنتهية</span>
-            </button>
-            <button class="nav-tab" data-tab="reports">
-                <i class="fas fa-chart-bar tab-icon"></i>
-                <span>التقارير</span>
-            </button>
-            <button class="nav-tab" data-tab="settings">
-                <i class="fas fa-cog tab-icon"></i>
-                <span>الإعدادات</span>
-            </button>
-        </nav>
+<body class="theme-default">
 
-        <!-- المحتوى -->
-        <main>
-            <!-- تبويب توليد الأكواد -->
-            <section id="generate" class="tab-content active">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>توليد كود تفعيل جديد</h3>
-                            <small>اختر المدة الزمنية وانقر على توليد</small>
-                        </div>
-                        <i class="fas fa-key" style="color: var(--secondary);"></i>
-                    </div>
+<!-- زر التعبئة الذكية العائم - تصميم جديد -->
+<button id="aiFillFloatingBtn" onclick="fillWithAI()" title="تعبئة الحقول تلقائياً باستخدام الذكاء الاصطناعي">
+    <i class="fas fa-wand-magic-sparkles floating-ai-icon"></i>
+    <span class="floating-ai-text">تعبئة ذكية</span>
+</button>
 
-                    <div class="form-group">
-                        <label class="form-label">مدة التفعيل</label>
-                        <div class="duration-tags" id="durationTags">
-                            <span class="duration-tag" data-duration="5m">5 دقائق</span>
-                            <span class="duration-tag" data-duration="30m">30 دقيقة</span>
-                            <span class="duration-tag" data-duration="1h">ساعة واحدة</span>
-                            <span class="duration-tag active" data-duration="1d">يوم واحد</span>
-                            <span class="duration-tag" data-duration="3d">3 أيام</span>
-                            <span class="duration-tag" data-duration="7d">أسبوع</span>
-                            <span class="duration-tag" data-duration="30d">شهر</span>
-                            <span class="duration-tag" data-duration="90d">3 أشهر</span>
-                            <span class="duration-tag" data-duration="150d">5 أشهر</span>
-                        </div>
-                    </div>
+<!-- شاشة كود التفعيل -->
+<div id="activationScreen">
+    <div class="activation-box">
+        <h3><i class="fas fa-lock"></i> تفعيل الأداة</h3>
+        <p>أدخل كود التفعيل الذي حصلت عليه من المطور</p>
+        <input id="activationCodeInput" placeholder="أدخل كود التفعيل هنا">
+        <button onclick="activateTool()">تفعيل</button>
+        <button id="contactForTrialBtn" onclick="contactForTrial()">
+            <i class="fas fa-comments"></i>
+            تواصل للتجربة أو الاشتراك
+        </button>
+        <div id="activationError">كود غير صالح. الرجاء التأكد من الكود والمحاولة مرة أخرى.</div>
+    </div>
+</div>
 
-                    <div class="form-group">
-                        <label for="codeCount" class="form-label">عدد الأكواد</label>
-                        <select id="codeCount" class="form-control">
-                            <option value="1">1 كود</option>
-                            <option value="5">5 أكواد</option>
-                            <option value="10">10 أكواد</option>
-                            <option value="20">20 كود</option>
-                            <option value="50">50 كود</option>
-                        </select>
-                    </div>
+<!-- شريط الأخبار العلوي -->
+<div class="top-marquee">
+<div class="marquee-inner">
+<i class="fas fa-bullhorn" style="margin-left:10px;"></i>
+اختر المعيار التربوي، ثم التصنيف الفرعي، ثم التقرير المناسب، ثم اضغط زر التعبئة لتوليد محتوى التقرير تلقائيًا.
+</div>
+</div>
 
-                    <!-- زر التبديل لإضافة معلومات المستخدم -->
-                    <div class="toggle-group">
-                        <span class="toggle-label">إضافة معلومات المستخدم (اختياري)</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="userInfoToggle" onchange="toggleUserInfo()">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
+<!-- ========== المجموعة الأولى: الأزرار الصغيرة (أعلى الهيدر) ========== -->
+<div class="top-small-buttons">
+    <div class="small-buttons-grid">
+        <button class="small-btn" id="saveTeacherBtn" onclick="saveTeacherData()" title="حفظ بيانات المعلم والمدرسة">
+            <i class="fas fa-save small-btn-icon"></i>
+            <span class="small-btn-text">حفظ البيانات</span>
+        </button>
+        <button class="small-btn" id="clearBtn" onclick="clearData()" title="مسح جميع البيانات المدخلة">
+            <i class="fas fa-trash-alt small-btn-icon"></i>
+            <span class="small-btn-text">مسح البيانات</span>
+        </button>
+        <button class="small-btn" id="settingsBtn" onclick="openSettings()" title="إعدادات الاشتراك">
+            <i class="fas fa-cog small-btn-icon"></i>
+            <span class="small-btn-text">الضبط</span>
+        </button>
+    </div>
+</div>
 
-                    <!-- معلومات المستخدم الاختيارية -->
-                    <div class="user-info-container" id="userInfoContainer">
-                        <div class="form-group">
-                            <label for="userName" class="form-label">اسم المستخدم</label>
-                            <input type="text" id="userName" class="form-control" placeholder="أدخل اسم المستخدم">
-                        </div>
+<!-- ========== المجموعة الثانية: الأزرار الكبيرة ========== -->
+<div class="main-buttons-bar">
+    <div class="main-buttons-grid">
+        <button class="main-btn" id="whatsappBtn" onclick="sharePDFWhatsApp()" title="مشاركة التقرير عبر واتساب">
+            <i class="fab fa-whatsapp main-btn-icon"></i>
+            <span class="main-btn-text">مشاركة واتساب</span>
+        </button>
+        <button class="main-btn" id="pdfBtn" onclick="downloadPDF()" title="تحويل التقرير إلى PDF وتنزيله">
+            <i class="fas fa-file-pdf main-btn-icon"></i>
+            <span class="main-btn-text">تنزيل PDF</span>
+        </button>
+    </div>
+</div>
 
-                        <div class="form-group">
-                            <label for="userPhone" class="form-label">رقم الجوال</label>
-                            <input type="tel" id="userPhone" class="form-control" placeholder="مثال: 05XXXXXXXX">
-                        </div>
-                    </div>
+<!-- المحتوى الرئيسي -->
+<div class="wrapper">
+<div class="input-section">
+  
+  <h2><i class="fas fa-tools" style="margin-left:10px;"></i>أداة إصدار التقارير التربوية - النظام المتكامل</h2>
+  
+  <!-- ========== نظام القوائم المتتالية الجديد ========== -->
+  <div class="levels-container">
+    <div class="level-indicator">
+      <span>المعيار التربوي ← التصنيف الفرعي ← التقرير</span>
+      <span><i class="fas fa-layer-group"></i> 3 مستويات</span>
+    </div>
+    
+    <!-- المستوى الأول: المعايير التربوية -->
+    <div class="level-select">
+      <label><i class="fas fa-star"></i> المعيار التربوي (الوزن)</label>
+      <select id="criterionSelect" onchange="loadSubcategories()">
+        <option value="">اختر المعيار التربوي</option>
+      </select>
+    </div>
+    
+    <!-- معلومات المعيار المحدد -->
+    <div id="criterionInfo" class="criterion-info" style="display: none;">
+      <span id="selectedCriterionName" class="criterion-name"></span>
+      <span id="selectedCriterionWeight" class="criterion-weight"></span>
+    </div>
+    
+    <!-- المستوى الثاني: التصنيفات الفرعية -->
+    <div class="level-select">
+      <label><i class="fas fa-list-ul"></i> التصنيف الفرعي</label>
+      <select id="subcategorySelect" onchange="loadReports()" disabled>
+        <option value="">اختر التصنيف الفرعي أولاً</option>
+      </select>
+    </div>
+    
+    <!-- المستوى الثالث: التقارير -->
+    <div class="level-select">
+      <label><i class="fas fa-file-alt"></i> التقرير</label>
+      <select id="reportSelect" onchange="updateReportFromSelection()" disabled>
+        <option value="">اختر التصنيف الفرعي أولاً</option>
+      </select>
+    </div>
+    
+    <!-- البحث المتقدم -->
+    <div id="reportSearchContainer" style="display:block; margin-top:15px; position:relative;">
+        <input type="text" id="reportSearch" placeholder="ابحث عن تقرير مباشر..." style="width:100%; padding:12px; border:1px solid #d4ebe2; border-radius:6px; font-size:14px;">
+        <div id="searchResults" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border:1px solid #ddd; border-radius:6px; max-height:200px; overflow-y:auto; z-index:1000; box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>
+    </div>
+    
+    <!-- خانة عنوان التقرير اليدوية -->
+    <div class="manual-title-container">
+        <label><i class="fas fa-heading"></i>عنوان التقرير (يدوي)</label>
+        <input type="text" id="manualReportTitle" placeholder="أدخل عنوان التقرير يدوياً..." oninput="updateReport()">
+    </div>
+  </div>
+  
+  <!-- بقية حقول الإدخال -->
+  <div class="form-group">
+    <label><i class="fas fa-university"></i>إدارة التعليم</label>
+    <select id="education" oninput="updateReport()">
+      <option>جارٍ تحميل إدارات التعليم...</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label><i class="fas fa-school"></i>اسم المدرسة</label>
+    <input id="school" value="سعيد بن العاص" placeholder="أدخل اسم المدرسة" oninput="updateReport()">
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-chalkboard-teacher"></i>صفة المعلّم</label>
+      <select id="teacherType" oninput="updateReport()">
+        <option selected>المعلم</option>
+        <option>المعلمة</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label><i class="fas fa-user"></i>اسم المعلّم</label>
+      <input id="teacher" value="فهد الخالدي" placeholder="اسم المعلم" oninput="updateReport()">
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-user-tie"></i>صفة المدير</label>
+      <select id="principalType" oninput="updateReport()">
+        <option selected>المدير</option>
+        <option>المديرة</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label><i class="fas fa-user-cog"></i>اسم المدير</label>
+      <input id="principal" value="نايف اللحياني" placeholder="اسم مدير المدرسة" oninput="updateReport()">
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-users-class"></i>الصف</label>
+      <input id="grade" placeholder="مثال: ٥/٣" oninput="updateReport()">
+    </div>
+    
+    <div class="form-group">
+      <label><i class="fas fa-calendar-alt"></i>الفصل الدراسي</label>
+      <select id="term" oninput="updateReport()">
+        <option></option><option>الأول</option><option>الثاني</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-book"></i>المادة</label>
+      <input id="subject" placeholder="مثال: لغتي – علوم – رياضيات" oninput="updateReport()">
+    </div>
+    
+    <div class="form-group">
+      <label><i class="fas fa-book-open"></i>الدرس</label>
+      <input id="lesson" placeholder="مثال: درس الضرب - درس النباتات" oninput="updateReport()">
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-bullseye"></i>المستهدفون</label>
+      <input id="target" placeholder="مثال: جميع طلاب الصف" oninput="updateReport()">
+    </div>
+    
+    <div class="form-group">
+      <label><i class="fas fa-user-check"></i>عدد الحضور</label>
+      <input id="count" placeholder="مثال: ٢٥ طالب" oninput="updateReport()">
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label><i class="fas fa-map-marker-alt"></i>مكان التنفيذ</label>
+    <input id="place" placeholder="مثال: داخل الصف – المختبر" oninput="updateReport()">
+  </div>
+  
+  <div class="form-group">
+    <label><i class="fas fa-flag"></i>الهدف التربوي</label>
+    <textarea id="goal" placeholder="أدخل الهدف التربوي" oninput="updateReport()"></textarea>
+  </div>
+  
+  <div class="form-group">
+    <label><i class="fas fa-file-signature"></i>نبذة مختصرة</label>
+    <textarea id="summary" placeholder="أدخل نبذة مختصرة" oninput="updateReport()"></textarea>
+  </div>
+  
+  <div class="form-group">
+    <label><i class="fas fa-tasks"></i>إجراءات التنفيذ</label>
+    <textarea id="steps" placeholder="كيف تم تنفيذ النشاط؟" oninput="updateReport()"></textarea>
+  </div>
+  
+  <div class="form-group">
+    <label><i class="fas fa-chess-board"></i>الاستراتيجيات</label>
+    <textarea id="strategies" placeholder="ما هي الاستراتيجيات" oninput="updateReport()"></textarea>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-thumbs-up"></i>نقاط القوة</label>
+      <textarea id="strengths" placeholder="نقاط القوة" oninput="updateReport()"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label><i class="fas fa-tools"></i>نقاط التحسين</label>
+      <textarea id="improve" placeholder="نقاط تحتاج تطوير" oninput="updateReport()"></textarea>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label><i class="fas fa-lightbulb"></i>التوصيات</label>
+    <textarea id="recomm" placeholder="توصيات مستقبلية" oninput="updateReport()"></textarea>
+  </div>
+  
+  <!-- قسم الأدوات والوسائل التعليمية -->
+  <div class="form-group">
+    <label><i class="fas fa-tools"></i>الأدوات والوسائل التعليمية</label>
+    <div class="tools-section" id="toolsSection">
+      <div class="tools-grid" id="toolsGrid">
+        <p style="text-align:center;color:#666;">جارٍ تحميل الأدوات التعليمية...</p>
+      </div>
+      <div style="text-align:center; margin-top:10px; font-size:11px; color:#666;">
+        <i class="fas fa-info-circle"></i> اضغط على الأداة لتحديدها، ستظهر علامة ✅ عند التحديد
+      </div>
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label><i class="fas fa-camera"></i>الصورة 1</label>
+      <input type="file" accept="image/*" placeholder="ارفع صورة" onchange="loadImage(this,'imgBox1')">
+    </div>
+    
+    <div class="form-group">
+      <label><i class="fas fa-camera"></i>الصورة 2</label>
+      <input type="file" accept="image/*" placeholder="ارفع صورة" onchange="loadImage(this,'imgBox2')">
+    </div>
+  </div>
 
-                    <div class="form-group">
-                        <label for="adminToken" class="form-label">كود الأمان (ADMIN_TOKEN)</label>
-                        <input type="password" id="adminToken" class="form-control" placeholder="أدخل كود الأمان">
-                    </div>
+</div>
+</div>
 
-                    <div class="form-group">
-                        <label for="price" class="form-label">السعر (اختياري)</label>
-                        <input type="number" id="price" class="form-control" placeholder="أدخل السعر بالريال">
-                    </div>
+<!-- قسم PDF -->
+<div id="report-content" class="pdf-export" style="display:none;">
+<div class="header">
+  <img src="https://i.ibb.co/zH7k1s8c/IMG-2987.png">
+  <div class="header-school-title">اسم المدرسة</div>
+  <div class="header-school" id="schoolBox"></div>
+  <div class="header-education" id="educationBox"></div>
+  <div class="header-date">
+    <span id="hDate"></span><br>
+    <span id="gDate"></span>
+  </div>
+</div>
 
-                    <button class="btn btn-success" onclick="generateCodes()">
-                        <i class="fas fa-bolt"></i>
-                        توليد الأكواد
-                    </button>
-                </div>
+<div class="info-grid">
+  <div class="info-box"><div class="info-title">الفصل الدراسي</div><div class="info-value" id="termBox"></div></div>
+  <div class="info-box"><div class="info-title">الصف</div><div class="info-value" id="gradeBox"></div></div>
+  <div class="info-box"><div class="info-title">العدد</div><div class="info-value" id="countBox"></div></div>
+  <div class="info-box"><div class="info-title">المستهدفون</div><div class="info-value" id="targetBox"></div></div>
+</div>
 
-                <div class="card" id="generatedCodesCard" style="display: none;">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>الأكواد المولدة</h3>
-                            <small>انسخ الأكواد أو أرسلها مباشرة</small>
-                        </div>
-                        <i class="fas fa-copy" style="color: var(--info);"></i>
-                    </div>
+<div class="info-grid2">
+  <div class="info-box"><div class="info-title">نوع التقرير</div><div class="info-value" id="reportTypeBox"></div></div>
 
-                    <div class="form-group">
-                        <label class="form-label">الأكواد المولدة:</label>
-                        <textarea id="generatedCodes" class="form-control" rows="6" readonly></textarea>
-                    </div>
+  <div class="subject-lesson-box">
+    <div class="subject-lesson-title">المادة | الدرس</div>
+    <div class="subject-lesson">
+      <div id="subjectBox"></div>
+      <div class="subject-divider"></div>
+      <div id="lessonBox"></div>
+    </div>
+  </div>
 
-                    <div class="btn-group">
-                        <button class="btn btn-secondary" onclick="copyCodes()">
-                            <i class="fas fa-copy"></i>
-                            نسخ الأكواد
-                        </button>
-                        <button class="btn btn-warning" onclick="shareCodes()">
-                            <i class="fas fa-share-alt"></i>
-                            مشاركة
-                        </button>
-                    </div>
-                </div>
-            </section>
+  <div class="info-box"><div class="info-title">مكان التنفيذ</div><div class="info-value" id="placeBox"></div></div>
+</div>
 
-            <!-- تبويب الأكواد النشطة -->
-            <section id="activeCodes" class="tab-content">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>الأكواد النشطة</h3>
-                            <small>يشمل الأكواد النشطة والأكواد التي ستنتهي قريباً</small>
-                        </div>
-                        <div style="position: relative; width: 100%; max-width: 300px;">
-                            <input type="text" id="searchActiveCodes" class="form-control" placeholder="ابحث في الأكواد النشطة...">
-                            <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
-                        </div>
-                    </div>
+<div class="box-objective">
+  <div class="box-title">الهدف التربوي</div>
+  <div class="box-content" id="goalBox"></div>
+</div>
 
-                    <div class="table-container">
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>الكود</th>
-                                        <th>المدة</th>
-                                        <th>اسم المستخدم</th>
-                                        <th>الجوال</th>
-                                        <th>الحالة</th>
-                                        <th>الوقت المتبقي</th>
-                                        <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="activeCodesTable">
-                                    <tr>
-                                        <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f;">
-                                            <div class="loading"></div>
-                                            <p style="margin-top: 10px; color: var(--text-secondary);">جاري تحميل البيانات...</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
+<div class="row">
+  <div class="box"><div class="box-title">النبذة</div><div class="box-content" id="summaryBox"></div></div>
+  <div class="box"><div class="box-title">إجراءات التنفيذ</div><div class="box-content" id="stepsBox"></div></div>
+</div>
 
-            <!-- تبويب الأكواد المنتهية -->
-            <section id="expiredCodes" class="tab-content">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>الأكواد المنتهية</h3>
-                            <small>جميع الأكواد المنتهية المفعول</small>
-                        </div>
-                        <div style="position: relative; width: 100%; max-width: 300px;">
-                            <input type="text" id="searchExpiredCodes" class="form-control" placeholder="ابحث في الأكواد المنتهية...">
-                            <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
-                        </div>
-                    </div>
+<div class="row">
+  <div class="box"><div class="box-title">الاستراتيجيات</div><div class="box-content" id="strategiesBox"></div></div>
+  <div class="box"><div class="box-title">نقاط القوة</div><div class="box-content" id="strengthsBox"></div></div>
+</div>
 
-                    <div class="table-container">
-                        <div class="table-responsive">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>الكود</th>
-                                        <th>المدة</th>
-                                        <th>اسم المستخدم</th>
-                                        <th>الجوال</th>
-                                        <th>الحالة</th>
-                                        <th>تاريخ الانتهاء</th>
-                                        <th>الإجراءات</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="expiredCodesTable">
-                                    <tr>
-                                        <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f;">
-                                            <div class="loading"></div>
-                                            <p style="margin-top: 10px; color: var(--text-secondary);">جاري تحميل البيانات...</p>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
+<div class="row">
+  <div class="box"><div class="box-title">نقاط التحسين</div><div class="box-content" id="improveBox"></div></div>
+  <div class="box"><div class="box-title">التوصيات</div><div class="box-content" id="recommBox"></div></div>
+</div>
 
-            <!-- تبويب التقارير -->
-            <section id="reports" class="tab-content">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>تقارير النظام</h3>
-                            <small>إحصائيات وأداء النظام</small>
-                        </div>
-                        <i class="fas fa-chart-line" style="color: var(--success);"></i>
-                    </div>
+<div class="tools-box">
+  <div class="tools-title">الأدوات والوسائل التعليمية</div>
+  <div class="tools-list" id="toolsListBox"></div>
+</div>
 
-                    <div class="header-stats">
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalGenerated">0</div>
-                            <div class="stat-label">إجمالي الأكواد المولدة</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalUsed">0</div>
-                            <div class="stat-label">الأكواد المستخدمة</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="avgDuration">0 يوم</div>
-                            <div class="stat-label">متوسط المدة</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="successRate">0%</div>
-                            <div class="stat-label">معدل النجاح</div>
-                        </div>
-                    </div>
+<div class="images">
+  <div class="image-box" id="imgBox1"></div>
+  <div class="image-box" id="imgBox2"></div>
+</div>
 
-                    <div class="form-group">
-                        <label for="reportPeriod" class="form-label">فترة التقرير</label>
-                        <select id="reportPeriod" class="form-control" onchange="loadReports()">
-                            <option value="today">اليوم</option>
-                            <option value="week">الأسبوع الحالي</option>
-                            <option value="month">الشهر الحالي</option>
-                            <option value="year">السنة الحالية</option>
-                            <option value="all">كل الفترات</option>
-                        </select>
-                    </div>
-                </div>
-            </section>
+<div class="signatures">
+  <div class="signature-box">
+    <div class="signature-role" id="teacherTypeBox"></div>
+    <div class="signature-name" id="teacherBox"></div>
+    <div class="sign-line"></div>
+  </div>
+  <div class="signature-box">
+    <div class="signature-role" id="principalTypeBox"></div>
+    <div class="signature-name" id="principalBox"></div>
+    <div class="sign-line"></div>
+  </div>
+</div>
 
-            <!-- تبويب الإعدادات -->
-            <section id="settings" class="tab-content">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h3>إعدادات النظام</h3>
-                            <small>تخصيص وتكوين النظام</small>
-                        </div>
-                        <i class="fas fa-sliders-h" style="color: #5a67d8;"></i>
-                    </div>
+<div class="footer-box">
+  وزارة التعليم – المملكة العربية السعودية
+</div>
+</div>
 
-                    <div class="form-group">
-                        <label for="apiUrl" class="form-label">عنوان الـ API</label>
-                        <input type="text" id="apiUrl" class="form-control" value="https://tarafbackend.onrender.com" readonly>
-                        <small style="display: block; margin-top: 4px; color: var(--text-secondary);">عنوان خادم الباك إند</small>
-                    </div>
+<!-- نافذة الإعدادات -->
+<div id="settingsModal">
+  <div>
+    <h3><i class="fas fa-info-circle"></i> معلومات الاشتراك</h3>
 
-                    <div class="form-group">
-                        <label for="defaultToken" class="form-label">كود الأمان الافتراضي</label>
-                        <input type="password" id="defaultToken" class="form-control" placeholder="أدخل كود الأمان الافتراضي">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="defaultPrice" class="form-label">السعر الافتراضي</label>
-                        <input type="number" id="defaultPrice" class="form-control" placeholder="السعر الافتراضي بالريال">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="autoRefresh" class="form-label">تحديث البيانات تلقائياً</label>
-                        <select id="autoRefresh" class="form-control">
-                            <option value="30">كل 30 ثانية</option>
-                            <option value="60">كل دقيقة</option>
-                            <option value="300">كل 5 دقائق</option>
-                            <option value="0">غير مفعل</option>
-                        </select>
-                    </div>
-
-                    <div class="btn-group">
-                        <button class="btn btn-success" onclick="saveSettings()">
-                            <i class="fas fa-save"></i>
-                            حفظ الإعدادات
-                        </button>
-                        <button class="btn btn-secondary" onclick="resetSettings()">
-                            <i class="fas fa-undo"></i>
-                            إعادة تعيين
-                        </button>
-                    </div>
-                </div>
-            </section>
-        </main>
+    <div id="subInfo" style="font-size:14px;line-height:2;color:#333;text-align:center;">
+      جارٍ التحميل...
     </div>
 
-    <!-- إشعارات -->
-    <div class="notification" id="notification">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <i class="fas fa-check-circle"></i>
-            <span id="notificationMessage">تمت العملية بنجاح</span>
-        </div>
-        <button class="notification-close" onclick="hideNotification()">×</button>
+    <hr style="margin:15px 0;">
+
+    <label style="font-weight:700;color:#044a35;display:block;">
+      <i class="fas fa-calendar-alt"></i> تاريخ التقرير
+    </label>
+
+    <input type="date" id="customReportDate" style="
+      width:100%;
+      margin-top:8px;
+      padding:10px;
+      border-radius:8px;
+      border:2px solid #d4ebe2;
+      font-family:'Cairo';
+    ">
+
+    <button onclick="saveReportDate()" class="btn-secondary" style="
+      margin-top:10px;
+      width:100%;
+      padding:10px;
+      background:#4f7bff;
+      color:white;
+      border:none;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    ">
+      حفظ تاريخ التقرير
+    </button>
+
+    <hr style="margin:15px 0;">
+
+    <h4 style="color:#044a35; margin-bottom:10px;">
+        <i class="fas fa-palette"></i> تغيير الثيمات
+    </h4>
+
+    <div style="background:#f8fdfa; padding:15px; border-radius:10px; border:1px solid #d4ebe2; margin-bottom:15px;">
+        <label style="display:block; font-weight:700; margin-bottom:8px; color:#044a35;">
+            <i class="fas fa-desktop"></i> ثيم واجهة الأداة
+        </label>
+        <select id="appThemeSelect" style="width:100%; padding:10px; border-radius:8px; border:2px solid #d4ebe2; font-family:'Cairo'; background:white;">
+            <option value="default">الثيم الافتراضي (فاتح)</option>
+            <option value="light-blue">الأزرق الفاتح</option>
+            <option value="dark">الوضع المظلم</option>
+            <option value="green">الأخضر التربوي</option>
+        </select>
     </div>
 
-    <script>
-        // ==================== التكوين ====================
-        const API_BASE_URL = "https://tarafbackend.onrender.com";
-        let currentDuration = "1d";
-        let autoRefreshInterval = null;
+    <div style="background:#f8fdfa; padding:15px; border-radius:10px; border:1px solid #d4ebe2; margin-bottom:15px;">
+        <label style="display:block; font-weight:700; margin-bottom:8px; color:#044a35;">
+            <i class="fas fa-file-pdf"></i> ثيم ملف PDF
+        </label>
+        <select id="pdfThemeSelect" style="width:100%; padding:10px; border-radius:8px; border:2px solid #d4ebe2; font-family:'Cairo'; background:white;">
+            <option value="classic">كلاسيكي (افتراضي)</option>
+            <option value="professional">احترافي</option>
+            <option value="minimal">ميني (بسيط)</option>
+            <option value="tech">تقني</option>
+            <option value="educational">تعليمي</option>
+        </select>
+    </div>
 
-        // ==================== تهيئة الصفحة ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            // إعداد التنقل
-            setupNavigation();
-            
-            // إعداد علامات المدة
-            setupDurationTags();
-            
-            // تحميل الإعدادات
-            loadSettings();
-            
-            // تحميل الإحصائيات
-            loadDashboardStats();
-            
-            // منع التكبير التلقائي
-            preventAutoZoom();
-            
-            // بدء التحديث التلقائي
-            startAutoRefresh();
+    <button onclick="applyThemes()" style="
+      margin-top:5px;
+      width:100%;
+      padding:10px;
+      background:#9D50BB;
+      color:white;
+      border:none;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    ">
+      <i class="fas fa-check"></i> تطبيق الثيمات
+    </button>
+
+    <button onclick="closeSettings()" style="
+      margin-top:20px;
+      width:100%;
+      padding:12px;
+      background:#066d4d;
+      color:white;
+      border:none;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+    ">
+      إغلاق
+    </button>
+  </div>
+</div>
+
+<script>
+window.__ACTIVATED__ = false;
+window.allCriteria = [];
+window.subcategoriesByCriterion = {};
+window.reportsBySubcategory = {};
+window.allReportsList = [];
+
+// ==================== متغيرات التفعيل ====================
+const ACTIVATION_KEY_NAME = "activation_code";
+const BACKEND_URL = "https://deep-qphc.onrender.com";
+
+// ==================== متغيرات الثيمات ====================
+const APP_THEME_KEY = "app_theme";
+const PDF_THEME_KEY = "pdf_theme";
+
+// ==================== متغيرات التاريخ ====================
+let currentHijriDate = '';
+let currentGregorianDate = '';
+
+// ==================== دالة تحميل التاريخ ====================
+async function loadDates() {
+    // التاريخ الميلادي
+    let g = new Date();
+    currentGregorianDate = `${g.getDate()}/${g.getMonth()+1}/${g.getFullYear()}`;
+
+    // تحقق من وجود تاريخ مخصص
+    const customDate = localStorage.getItem("custom_report_date");
+    if (customDate) {
+        g = new Date(customDate);
+        currentGregorianDate = `${g.getDate()}/${g.getMonth()+1}/${g.getFullYear()}`;
+    }
+
+    try {
+        // الحصول على التاريخ الهجري من API
+        const response = await fetch(
+            `https://api.aladhan.com/v1/gToH?date=${g.getDate()}-${g.getMonth()+1}-${g.getFullYear()}`
+        );
+        const data = await response.json();
+        const hijri = data.data.hijri;
+
+        // تحويل الأرقام إلى عربية
+        const toArabic = n =>
+            n.toString().replace(/[0-9]/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+
+        currentHijriDate =
+            `${toArabic(hijri.year)}/${toArabic(hijri.month.number)}/${toArabic(hijri.day)}`;
+
+        // تحديث العرض في PDF
+        document.getElementById('hDate').innerHTML = currentHijriDate + " هـ";
+        document.getElementById('gDate').innerHTML = currentGregorianDate + " م";
+
+    } catch (error) {
+        // تاريخ افتراضي في حالة الخطأ
+        console.error("خطأ في تحميل التاريخ:", error);
+        currentHijriDate = "١٤٤٦/٠٦/٠١";
+        document.getElementById('hDate').innerHTML = currentHijriDate + " هـ";
+        document.getElementById('gDate').innerHTML = currentGregorianDate + " م";
+    }
+}
+
+function hideActivationScreen() {
+    if (window.__ACTIVATED__) {
+        document.getElementById("activationScreen").style.display = "none";
+        document.body.style.overflow = "auto";
+    }
+}
+
+function showActivationError() {
+    document.getElementById("activationError").style.display = "block";
+}
+
+async function activateTool() {
+    const code = document.getElementById("activationCodeInput").value.trim();
+    if (!code) {
+        showActivationError();
+        return;
+    }
+
+    try {
+        const res = await fetch(BACKEND_URL + "/health", {
+            headers: {
+                "X-Activation-Code": code
+            }
         });
 
-        // ==================== التنقل ====================
-        function setupNavigation() {
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabId = this.dataset.tab;
-                    showTab(tabId);
-                });
-            });
-        }
+        if (!res.ok) throw new Error("Invalid");
 
-        function showTab(tabId) {
-            // إخفاء جميع المحتويات
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // إلغاء تفعيل جميع الألسنة
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // إظهار المحتوى المطلوب
-            document.getElementById(tabId).classList.add('active');
-            
-            // تفعيل اللسان المطلوب
-            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-            
-            // تحميل البيانات الخاصة بالتبويب
-            switch(tabId) {
-                case 'activeCodes':
-                    loadActiveCodes();
-                    break;
-                case 'expiredCodes':
-                    loadExpiredCodes();
-                    break;
-                case 'reports':
-                    loadReports();
-                    break;
-            }
-        }
+        localStorage.setItem(ACTIVATION_KEY_NAME, code);
+        window.__ACTIVATED__ = true;
+        hideActivationScreen();
+        showNotification("تم تفعيل الأداة بنجاح! ✓");
 
-        // ==================== تبديل معلومات المستخدم ====================
-        function toggleUserInfo() {
-            const container = document.getElementById('userInfoContainer');
-            const toggle = document.getElementById('userInfoToggle');
-            
-            if (toggle.checked) {
-                container.classList.add('show');
-            } else {
-                container.classList.remove('show');
-                // مسح القيم عند الإخفاء
-                document.getElementById('userName').value = '';
-                document.getElementById('userPhone').value = '';
-            }
-        }
+    } catch {
+        showActivationError();
+    }
+}
 
-        // ==================== إعداد المدة ====================
-        function setupDurationTags() {
-            const tags = document.querySelectorAll('.duration-tag');
-            tags.forEach(tag => {
-                tag.addEventListener('click', function() {
-                    tags.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    currentDuration = this.dataset.duration;
-                });
-            });
-        }
+// زر التواصل للتجربة أو الاشتراك
+function contactForTrial() {
+    const message = encodeURIComponent("أرغب في تجربة أداة إصدار التقارير التربوية أو الاشتراك فيها.\n\nيرجى التواصل معي للمزيد من المعلومات.");
+    window.open(`https://wa.me/966597077245?text=${message}`, '_blank');
+}
 
-        // ==================== توليد الأكواد ====================
-        async function generateCodes() {
-            const adminToken = document.getElementById('adminToken').value;
-            const codeCount = parseInt(document.getElementById('codeCount').value);
-            const price = document.getElementById('price').value;
-            const userInfoToggle = document.getElementById('userInfoToggle').checked;
-            const userName = userInfoToggle ? document.getElementById('userName').value.trim() : '';
-            const userPhone = userInfoToggle ? document.getElementById('userPhone').value.trim() : '';
+// ==================== دوال إدارة الثيمات ====================
+function loadThemeSettings() {
+    // تحميل ثيم الواجهة
+    const savedAppTheme = localStorage.getItem(APP_THEME_KEY) || 'default';
+    const appThemeSelect = document.getElementById('appThemeSelect');
+    appThemeSelect.value = savedAppTheme;
+    applyAppTheme(savedAppTheme);
+    
+    // تحميل ثيم PDF
+    const savedPdfTheme = localStorage.getItem(PDF_THEME_KEY) || 'classic';
+    const pdfThemeSelect = document.getElementById('pdfThemeSelect');
+    pdfThemeSelect.value = savedPdfTheme;
+    applyPdfTheme(savedPdfTheme);
+}
+
+function applyAppTheme(themeName) {
+    // إزالة جميع ثيمات الواجهة السابقة
+    document.body.classList.remove('theme-light-blue', 'theme-dark', 'theme-green', 'theme-default');
+    
+    // تطبيق الثيم الجديد
+    document.body.classList.add('theme-' + themeName);
+    
+    // تحديث زر التعبئة الذكية حسب الثيم
+    updateAiButtonTheme(themeName);
+    
+    // حفظ التفضيل
+    localStorage.setItem(APP_THEME_KEY, themeName);
+}
+
+function updateAiButtonTheme(themeName) {
+    const aiButton = document.getElementById('aiFillFloatingBtn');
+    const aiIcon = aiButton.querySelector('.floating-ai-icon');
+    const aiText = aiButton.querySelector('.floating-ai-text');
+    
+    switch(themeName) {
+        case 'light-blue':
+            aiButton.style.background = 'linear-gradient(135deg, #4285f4 0%, #34a853 25%, #fbbc05 50%, #ea4335 100%)';
+            aiButton.style.boxShadow = '0 12px 35px rgba(66, 133, 244, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.3), 0 0 25px rgba(66, 133, 244, 0.5)';
+            aiIcon.style.color = '#FFFFFF';
+            aiText.style.background = 'linear-gradient(45deg, #FFFFFF, #E8F0FF, #FFFFFF)';
+            break;
             
-            if (!adminToken) {
-                showNotification('يرجى إدخال كود الأمان', 'error');
-                return;
-            }
+        case 'dark':
+            aiButton.style.background = 'linear-gradient(135deg, #6d28d9 0%, #7c3aed 25%, #8b5cf6 50%, #a78bfa 100%)';
+            aiButton.style.boxShadow = '0 12px 35px rgba(109, 40, 217, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.3), 0 0 25px rgba(109, 40, 217, 0.5)';
+            aiIcon.style.color = '#FFFFFF';
+            aiText.style.background = 'linear-gradient(45deg, #FFFFFF, #F3F4F6, #FFFFFF)';
+            break;
             
-            // التحقق من صحة رقم الجوال إذا تم إدخاله
-            if (userInfoToggle && userPhone) {
-                const phoneRegex = /^(05|5)(5|0|3|6|4|9|1|8|7)([0-9]{7})$/;
-                if (!phoneRegex.test(userPhone)) {
-                    showNotification('رقم الجوال غير صحيح. يجب أن يبدأ بـ 05 ويحتوي على 10 أرقام', 'error');
-                    return;
-                }
-            }
+        case 'green':
+            aiButton.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 25%, #3498db 50%, #9b59b6 100%)';
+            aiButton.style.boxShadow = '0 12px 35px rgba(46, 204, 113, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.3), 0 0 25px rgba(46, 204, 113, 0.5)';
+            aiIcon.style.color = '#FFFFFF';
+            aiText.style.background = 'linear-gradient(45deg, #FFFFFF, #E6F7EF, #FFFFFF)';
+            break;
             
-            const btn = document.querySelector('#generate .btn-success');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التوليد...';
-            btn.disabled = true;
+        default: // الثيم الافتراضي
+            aiButton.style.background = 'linear-gradient(135deg, #9D50BB 0%, #6E48AA 25%, #533D8B 50%, #3A2569 100%)';
+            aiButton.style.boxShadow = '0 12px 35px rgba(157, 80, 187, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.3), 0 0 25px rgba(157, 80, 187, 0.5)';
+            aiIcon.style.color = '#FFFFFF';
+            aiText.style.background = 'linear-gradient(45deg, #FFFFFF, #F0F9F6, #FFFFFF)';
+    }
+    
+    // إعادة تطبيق خاصية Webkit
+    aiText.style.webkitBackgroundClip = 'text';
+    aiText.style.webkitTextFillColor = 'transparent';
+    aiText.style.backgroundClip = 'text';
+}
+
+function applyPdfTheme(themeName) {
+    const reportContent = document.getElementById('report-content');
+    
+    // إزالة جميع ثيمات PDF السابقة
+    reportContent.classList.remove(
+        'pdf-theme-classic',
+        'pdf-theme-professional', 
+        'pdf-theme-minimal',
+        'pdf-theme-tech',
+        'pdf-theme-educational'
+    );
+    
+    // تطبيق الثيم الجديد
+    reportContent.classList.add('pdf-theme-' + themeName);
+    
+    // حفظ التفضيل
+    localStorage.setItem(PDF_THEME_KEY, themeName);
+}
+
+function applyThemes() {
+    const appTheme = document.getElementById('appThemeSelect').value;
+    const pdfTheme = document.getElementById('pdfThemeSelect').value;
+    
+    applyAppTheme(appTheme);
+    applyPdfTheme(pdfTheme);
+    
+    showNotification('تم تطبيق الثيمات بنجاح! ✓');
+    closeSettings();
+}
+
+// ==================== تحميل البيانات من الباك إند الجديد ====================
+async function loadDataFromBackend() {
+    try {
+        // تحميل الهيكل الكامل للمعايير والتصنيفات والتقارير
+        const structureResponse = await fetch(BACKEND_URL + "/api/full-structure");
+        const structureData = await structureResponse.json();
+        
+        const structure = structureData.structure;
+        
+        // بناء القوائم
+        const criterionSelect = document.getElementById("criterionSelect");
+        criterionSelect.innerHTML = '<option value="">اختر المعيار التربوي</option>';
+        
+        // تخزين البيانات في المتغيرات العالمية
+        window.allCriteria = structure;
+        
+        // إضافة المعايير إلى القائمة
+        structure.forEach(criterion => {
+            const option = document.createElement("option");
+            option.value = criterion.id;
+            option.textContent = `${criterion.name} (${criterion.weight})`;
+            criterionSelect.appendChild(option);
             
-            try {
-                const codes = [];
-                
-                for (let i = 0; i < codeCount; i++) {
-                    const response = await fetch(
-                        `${API_BASE_URL}/generate-code?duration=${currentDuration}`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "X-Admin-Token": adminToken
-                            }
-                        }
-                    );
+            // تخزين التصنيفات الفرعية لكل معيار
+            window.subcategoriesByCriterion[criterion.id] = criterion.subcategories || [];
+            
+            // تخزين التقارير لكل تصنيف فرعي
+            if (criterion.subcategories) {
+                criterion.subcategories.forEach(sub => {
+                    window.reportsBySubcategory[sub.id] = sub.reports || [];
                     
-                    if (!response.ok) {
-                        throw new Error(`خطأ في توليد الكود: ${response.status}`);
+                    // إضافة التقارير إلى القائمة الكاملة للبحث
+                    if (sub.reports) {
+                        sub.reports.forEach(report => {
+                            window.allReportsList.push({
+                                id: report.id,
+                                name: report.name,
+                                subcategory_id: sub.id,
+                                subcategory_name: sub.name,
+                                criterion_id: criterion.id,
+                                criterion_name: criterion.name
+                            });
+                        });
                     }
-                    
-                    const data = await response.json();
-                    codes.push({
-                        code: data.activation_code,
-                        duration: currentDuration,
-                        expires_at: data.expires_at,
-                        price: price || 'غير محدد',
-                        user_name: userName || 'غير محدد',
-                        user_phone: userPhone || 'غير محدد',
-                        created_at: new Date().toISOString(),
-                        status: 'active'
-                    });
-                    
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                }
-                
-                // حفظ الأكواد
-                saveGeneratedCodes(codes);
-                
-                // عرض الأكواد
-                displayGeneratedCodes(codes, userName, userPhone);
-                showNotification(`تم توليد ${codes.length} كود بنجاح`, 'success');
-                
-                // إعادة تعيين الحقول
-                if (userInfoToggle) {
-                    document.getElementById('userName').value = '';
-                    document.getElementById('userPhone').value = '';
-                    document.getElementById('userInfoToggle').checked = false;
-                    document.getElementById('userInfoContainer').classList.remove('show');
-                }
-                
-                // تحديث الإحصائيات
-                loadDashboardStats();
-                
-            } catch (error) {
-                console.error('خطأ في توليد الأكواد:', error);
-                showNotification(`خطأ: ${error.message}`, 'error');
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        }
-
-        function saveGeneratedCodes(codes) {
-            const existing = JSON.parse(localStorage.getItem('admin_codes') || '[]');
-            const newCodes = codes.map(code => ({
-                ...code,
-                id: Date.now() + Math.random(),
-                user_name: code.user_name,
-                user_phone: code.user_phone,
-                status: getCodeStatus(code.expires_at).type
-            }));
-            
-            localStorage.setItem('admin_codes', JSON.stringify([...existing, ...newCodes]));
-        }
-
-        function displayGeneratedCodes(codes, userName, userPhone) {
-            let codesText = '';
-            
-            codes.forEach((code, index) => {
-                codesText += `الكود ${index + 1}: ${code.code}\n`;
-                codesText += `المدة: ${getDurationText(code.duration)}\n`;
-                codesText += `السعر: ${code.price} ر.س\n`;
-                
-                if (userName && userName !== 'غير محدد') {
-                    codesText += `اسم المستخدم: ${userName}\n`;
-                }
-                
-                if (userPhone && userPhone !== 'غير محدد') {
-                    codesText += `رقم الجوال: ${userPhone}\n`;
-                }
-                
-                codesText += `تاريخ الانتهاء: ${formatDate(code.expires_at)}\n`;
-                codesText += `────────────────────\n\n`;
-            });
-            
-            document.getElementById('generatedCodes').value = codesText;
-            document.getElementById('generatedCodesCard').style.display = 'block';
-            
-            // تمرير إلى أسفل لعرض الأكواد المولدة
-            setTimeout(() => {
-                document.getElementById('generatedCodesCard').scrollIntoView({ behavior: 'smooth' });
-            }, 300);
-        }
-
-        function copyCodes() {
-            const textarea = document.getElementById('generatedCodes');
-            textarea.select();
-            document.execCommand('copy');
-            showNotification('تم نسخ الأكواد إلى الحافظة', 'success');
-        }
-
-        function shareCodes() {
-            const codes = document.getElementById('generatedCodes').value;
-            const text = `أكواد تفعيل ناصر AI:\n\n${codes}\n\nتم إنشاؤها عبر لوحة التحكم`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'أكواد تفعيل ناصر AI',
-                    text: text
                 });
-            } else {
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
-                window.open(whatsappUrl, '_blank');
             }
-        }
+        });
+        
+        // تحميل إدارات التعليم
+        const educationResponse = await fetch(BACKEND_URL + "/api/education-offices");
+        const educationOffices = await educationResponse.json();
+        
+        const educationSelect = document.getElementById("education");
+        educationSelect.innerHTML = "";
+        
+        educationOffices.forEach(office => {
+            const option = document.createElement("option");
+            option.value = office;
+            option.textContent = office;
+            educationSelect.appendChild(option);
+        });
+        
+        // تحميل الأدوات التعليمية
+        const toolsResponse = await fetch(BACKEND_URL + "/api/educational-tools");
+        const educationalTools = await toolsResponse.json();
+        
+        const toolsGrid = document.getElementById("toolsGrid");
+        toolsGrid.innerHTML = "";
+        
+        educationalTools.forEach((tool, index) => {
+            const toolId = `tool${index + 1}`;
+            const label = document.createElement("label");
+            label.className = "tool-checkbox";
+            label.setAttribute("onclick", "toggleTool(this)");
+            label.innerHTML = `
+                <input type="checkbox" id="${toolId}" value="${tool}" style="display:none;">
+                <span>${tool}</span>
+                <span class="checkmark">✅</span>
+            `;
+            toolsGrid.appendChild(label);
+        });
+        
+        console.log("تم تحميل البيانات بنجاح من الباك إند الجديد");
+        
+    } catch (error) {
+        console.error("خطأ في تحميل البيانات من الباك:", error);
+        showNotification("حدث خطأ في تحميل البيانات. الرجاء تحديث الصفحة.");
+    }
+}
 
-        // ==================== تحميل الأكواد النشطة ====================
-        async function loadActiveCodes() {
-            const tbody = document.getElementById('activeCodesTable');
+// ==================== دوال القوائم المتتالية ====================
+function loadSubcategories() {
+    const criterionId = document.getElementById('criterionSelect').value;
+    const subcategorySelect = document.getElementById('subcategorySelect');
+    const reportSelect = document.getElementById('reportSelect');
+    const criterionInfo = document.getElementById('criterionInfo');
+    
+    if (!criterionId) {
+        subcategorySelect.innerHTML = '<option value="">اختر التصنيف الفرعي أولاً</option>';
+        subcategorySelect.disabled = true;
+        reportSelect.innerHTML = '<option value="">اختر التصنيف الفرعي أولاً</option>';
+        reportSelect.disabled = true;
+        criterionInfo.style.display = 'none';
+        return;
+    }
+    
+    // عرض معلومات المعيار
+    const criterion = window.allCriteria.find(c => c.id === criterionId);
+    if (criterion) {
+        document.getElementById('selectedCriterionName').textContent = criterion.name;
+        document.getElementById('selectedCriterionWeight').textContent = criterion.weight;
+        criterionInfo.style.display = 'flex';
+    }
+    
+    const subcategories = window.subcategoriesByCriterion[criterionId] || [];
+    
+    subcategorySelect.innerHTML = '<option value="">اختر التصنيف الفرعي</option>';
+    subcategories.forEach(sub => {
+        const option = document.createElement("option");
+        option.value = sub.id;
+        option.textContent = sub.name;
+        subcategorySelect.appendChild(option);
+    });
+    
+    subcategorySelect.disabled = false;
+    reportSelect.innerHTML = '<option value="">اختر التصنيف الفرعي أولاً</option>';
+    reportSelect.disabled = true;
+}
+
+function loadReports() {
+    const subcategoryId = document.getElementById('subcategorySelect').value;
+    const reportSelect = document.getElementById('reportSelect');
+    
+    if (!subcategoryId) {
+        reportSelect.innerHTML = '<option value="">اختر التصنيف الفرعي أولاً</option>';
+        reportSelect.disabled = true;
+        return;
+    }
+    
+    const reports = window.reportsBySubcategory[subcategoryId] || [];
+    
+    reportSelect.innerHTML = '<option value="">اختر التقرير</option>';
+    reports.forEach(report => {
+        const option = document.createElement("option");
+        option.value = report.id;
+        option.textContent = report.name;
+        reportSelect.appendChild(option);
+    });
+    
+    reportSelect.disabled = false;
+}
+
+function updateReportFromSelection() {
+    const reportSelect = document.getElementById('reportSelect');
+    const manualTitleInput = document.getElementById('manualReportTitle');
+    
+    if (reportSelect.value && reportSelect.selectedOptions[0]) {
+        // تحديث العنوان اليدوي بالتقرير المختار
+        manualTitleInput.value = reportSelect.selectedOptions[0].textContent;
+    }
+    
+    updateReport();
+}
+
+function handleReportSearch() {
+    const reportSearch = document.getElementById('reportSearch');
+    const searchResults = document.getElementById('searchResults');
+    
+    const searchTerm = reportSearch.value.trim().toLowerCase();
+    
+    if (searchTerm === '') {
+        searchResults.style.display = 'none';
+        searchResults.innerHTML = '';
+        return;
+    }
+    
+    const filteredReports = window.allReportsList.filter(report => 
+        report.name.toLowerCase().includes(searchTerm)
+    );
+    
+    if (filteredReports.length > 0) {
+        searchResults.innerHTML = '';
+        
+        filteredReports.slice(0, 15).forEach(report => {
+            const div = document.createElement('div');
+            div.textContent = `${report.name} (${report.criterion_name})`;
+            div.style.padding = '8px 12px';
+            div.style.cursor = 'pointer';
+            div.style.borderBottom = '1px solid #eee';
             
+            div.onmouseover = () => div.style.backgroundColor = '#f0f9f6';
+            div.onmouseout = () => div.style.backgroundColor = 'white';
+            div.onclick = () => {
+                // تحديد المعيار
+                const criterionSelect = document.getElementById('criterionSelect');
+                criterionSelect.value = report.criterion_id;
+                loadSubcategories();
+                
+                // تحديد التصنيف الفرعي
+                setTimeout(() => {
+                    const subcategorySelect = document.getElementById('subcategorySelect');
+                    subcategorySelect.value = report.subcategory_id;
+                    loadReports();
+                    
+                    // تحديد التقرير
+                    setTimeout(() => {
+                        const reportSelect = document.getElementById('reportSelect');
+                        reportSelect.value = report.id;
+                        document.getElementById('manualReportTitle').value = report.name;
+                        updateReport();
+                    }, 100);
+                }, 100);
+                
+                reportSearch.value = '';
+                searchResults.style.display = 'none';
+                showNotification(`تم تحديد التقرير: ${report.name}`);
+            };
+            searchResults.appendChild(div);
+        });
+        searchResults.style.display = 'block';
+    } else {
+        searchResults.innerHTML = '<div style="padding:12px; color:#666; text-align:center;">لا توجد نتائج</div>';
+        searchResults.style.display = 'block';
+    }
+}
+
+// ==================== دالة التعبئة الذكية (الزر العائم) ====================
+async function fillWithAI() {
+    // التحقق من كود التفعيل
+    const activationCode = localStorage.getItem(ACTIVATION_KEY_NAME);
+    if (!activationCode) {
+        alert('الرجاء تفعيل الأداة أولاً باستخدام كود التفعيل');
+        return;
+    }
+    
+    // التحقق من اتصال الإنترنت
+    if (!navigator.onLine) {
+        alert('لا يوجد اتصال بالإنترنت. الرجاء التأكد من الاتصال');
+        return;
+    }
+    
+    // الحصول على نوع التقرير
+    const reportName = document.getElementById('manualReportTitle').value.trim();
+    if (!reportName) {
+        alert('الرجاء اختيار أو إدخال عنوان التقرير أولاً');
+        return;
+    }
+    
+    // الحصول على معرفات المعيار والتصنيف والتقرير
+    const criterionId = document.getElementById('criterionSelect').value;
+    const subcategoryId = document.getElementById('subcategorySelect').value;
+    const reportId = document.getElementById('reportSelect').value;
+    
+    if (!criterionId || !subcategoryId || !reportId) {
+        alert('الرجاء اختيار المعيار التربوي والتصنيف الفرعي والتقرير بشكل كامل');
+        return;
+    }
+    
+    // الحصول على معلومات إضافية
+    const reportData = {
+        subject: document.getElementById('subject').value || '',
+        lesson: document.getElementById('lesson').value || '',
+        grade: document.getElementById('grade').value || '',
+        target: document.getElementById('target').value || '',
+        place: document.getElementById('place').value || '',
+        count: document.getElementById('count').value || ''
+    };
+    
+    // عرض حالة التحميل على الزر العائم
+    const aiButton = document.getElementById('aiFillFloatingBtn');
+    const originalText = aiButton.querySelector('.floating-ai-text').textContent;
+    const originalIcon = aiButton.querySelector('.floating-ai-icon').className;
+    
+    aiButton.classList.add('loading');
+    aiButton.querySelector('.floating-ai-text').textContent = 'جارٍ...';
+    aiButton.querySelector('.floating-ai-icon').className = 'fas fa-spinner fa-spin floating-ai-icon';
+    aiButton.disabled = true;
+    
+    try {
+        const response = await fetch(BACKEND_URL + "/api/generate-report-content", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Activation-Code': activationCode
+            },
+            body: JSON.stringify({
+                criterion_id: criterionId,
+                subcategory_id: subcategoryId,
+                report_id: reportId,
+                report_data: reportData
+            })
+        });
+
+        if (!response.ok) {
+            let errorMessage = "تعذر تنفيذ الطلب";
+
             try {
-                const allCodes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
-                const now = new Date();
-                
-                // تصفية الأكواد النشطة فقط (غير منتهية)
-                const activeCodes = allCodes.filter(code => {
-                    const expiry = new Date(code.expires_at);
-                    return expiry > now;
-                });
-                
-                if (activeCodes.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f; color: var(--text-secondary);">
-                                <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.5; margin-bottom: 10px;"></i>
-                                <p>لا توجد أكواد نشطة</p>
-                            </td>
-                        </tr>
-                    `;
-                    return;
+                const errData = await response.json();
+
+                if (errData.detail) {
+                    const map = {
+                        "Usage limit reached": "تم استهلاك عدد الاستخدامات المسموح بها لهذا الكود",
+                        "Activation code expired": "انتهت صلاحية كود التفعيل",
+                        "Activation code disabled": "كود التفعيل غير مفعل",
+                        "Invalid activation code": "كود التفعيل غير صحيح"
+                    };
+
+                    errorMessage = map[errData.detail] || errData.detail;
                 }
-                
-                tbody.innerHTML = '';
-                activeCodes.forEach((code, index) => {
-                    const status = getCodeStatus(code.expires_at);
-                    const statusClass = status.type === 'expiring' ? 'badge-expiring' : 'badge-active';
-                    const statusElement = `<span class="badge ${statusClass}">${status.text}</span>`;
-                    
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="${status.type}"><code>${code.code}</code></td>
-                        <td class="${status.type}">${getDurationText(code.duration)}</td>
-                        <td class="${status.type}">${code.user_name || 'غير محدد'}</td>
-                        <td class="${status.type}">${code.user_phone || 'غير محدد'}</td>
-                        <td class="${status.type}">${statusElement}</td>
-                        <td class="${status.type}">${getTimeRemaining(code.expires_at)}</td>
-                        <td>
-                            <button class="btn btn-sm btn-secondary" onclick="copyCode('${code.code}')">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCode(${index})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-                
-            } catch (error) {
-                console.error('خطأ في تحميل الأكواد:', error);
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: #d9534f; background: #0f2a3f;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <p>خطأ في تحميل البيانات</p>
-                        </td>
-                    </tr>
-                `;
-            }
+            } catch (_) {}
+
+            throw new Error(errorMessage);
         }
 
-        // ==================== تحميل الأكواد المنتهية ====================
-        async function loadExpiredCodes() {
-            const tbody = document.getElementById('expiredCodesTable');
-            
-            try {
-                const allCodes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
-                const now = new Date();
-                
-                // تصفية الأكواد المنتهية فقط
-                const expiredCodes = allCodes.filter(code => {
-                    const expiry = new Date(code.expires_at);
-                    return expiry <= now;
-                });
-                
-                if (expiredCodes.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="7" style="text-align: center; padding: 40px; background: #0f2a3f; color: var(--text-secondary);">
-                                <i class="fas fa-inbox" style="font-size: 2rem; opacity: 0.5; margin-bottom: 10px;"></i>
-                                <p>لا توجد أكواد منتهية</p>
-                            </td>
-                        </tr>
-                    `;
-                    return;
+        const data = await response.json();
+        
+        if (!data || !data.content) {
+            throw new Error('لم يتم الحصول على إجابة من الذكاء الاصطناعي');
+        }
+        
+        parseAIResponseProfessional(data.content);
+        showNotification('تم تعبئة الحقول باستخدام الذكاء الاصطناعي بنجاح! ✓');
+        
+    } catch (error) {
+        console.error('خطأ في الذكاء الاصطناعي:', error);
+        alert(
+            error.message ||
+            "تعذر تنفيذ الطلب.\n\nيرجى التأكد من صلاحية كود التفعيل وعدم استهلاك عدد الاستخدامات."
+        );
+    } finally {
+        // إزالة حالة التحميل وإعادة الزر إلى حالته الأصلية
+        aiButton.classList.remove('loading');
+        aiButton.querySelector('.floating-ai-text').textContent = originalText;
+        aiButton.querySelector('.floating-ai-icon').className = originalIcon;
+        aiButton.disabled = false;
+        
+        // تحديث لون الزر حسب الثيم الحالي
+        const currentTheme = localStorage.getItem(APP_THEME_KEY) || 'default';
+        updateAiButtonTheme(currentTheme);
+    }
+}
+
+// ==================== دوال مساعدة ====================
+function updateManualTitle() {
+    updateReport();
+}
+
+function adaptSubjectLessonFont() {
+  const elements = [
+    document.getElementById('subjectBox'),
+    document.getElementById('lessonBox')
+  ];
+
+  elements.forEach(el => {
+    if (!el || !el.parentElement) return;
+
+    const text = el.innerText.trim();
+    const textLength = text.length;
+    const container = el.parentElement;
+    const containerWidth = container.clientWidth - 30;
+    const containerHeight = container.clientHeight - 20;
+
+    el.style.whiteSpace = 'nowrap';
+    el.style.overflow = 'hidden';
+    el.style.textOverflow = 'ellipsis';
+    el.style.textAlign = 'center';
+    el.style.display = 'flex';
+    el.style.alignItems = 'center';
+    el.style.justifyContent = 'center';
+    el.style.padding = '0 5px';
+    el.style.width = '100%';
+    el.style.height = '100%';
+
+    if (!text || text === 'غير محدد' || textLength === 0) {
+      el.style.fontSize = '11px';
+      el.style.fontWeight = '600';
+      el.style.lineHeight = '1.2';
+      return;
+    }
+
+    const approxCharWidth = 7;
+    const approxTextWidth = textLength * approxCharWidth;
+    const widthRatio = approxTextWidth / containerWidth;
+    
+    let fontSize, fontWeight, lineHeight;
+    
+    if (widthRatio > 2.0) {
+      fontSize = '7px';
+      fontWeight = '600';
+      lineHeight = '1.0';
+      el.style.whiteSpace = 'normal';
+      el.style.overflow = 'hidden';
+      el.style.display = '-webkit-box';
+      el.style.WebkitLineClamp = '2';
+      el.style.WebkitBoxOrient = 'vertical';
+    } else if (widthRatio > 1.2) {
+      fontSize = '8px';
+      fontWeight = '600';
+      lineHeight = '1.1';
+    } else if (widthRatio > 0.8) {
+      fontSize = '9px';
+      fontWeight = '700';
+      lineHeight = '1.2';
+    } else if (widthRatio > 0.5) {
+      fontSize = '10px';
+      fontWeight = '800';
+      lineHeight = '1.3';
+    } else {
+      fontSize = '12px';
+      fontWeight = '900';
+      lineHeight = '1.4';
+    }
+
+    if (containerHeight < 30) {
+      fontSize = Math.min(parseInt(fontSize), 9) + 'px';
+      lineHeight = '1.1';
+    }
+
+    el.style.fontSize = fontSize;
+    el.style.fontWeight = fontWeight;
+    el.style.lineHeight = lineHeight;
+  });
+}
+
+function adaptSubjectLessonFontWithRetry() {
+    adaptSubjectLessonFont();
+    setTimeout(adaptSubjectLessonFont, 100);
+}
+
+function updateReport(){
+    document.getElementById('educationBox').innerText = document.getElementById('education').value;
+    document.getElementById('schoolBox').innerText = document.getElementById('school').value;
+    
+    const termValue = document.getElementById('term').value;
+    document.getElementById('termBox').innerText = termValue ? `الفصل الدراسي ${termValue}` : 'غير محدد';
+    document.getElementById('gradeBox').innerText = document.getElementById('grade').value || 'غير محدد';
+    document.getElementById('countBox').innerText = document.getElementById('count').value || 'غير محدد';
+    document.getElementById('reportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير';
+    document.getElementById('targetBox').innerText = document.getElementById('target').value || 'غير محدد';
+    document.getElementById('placeBox').innerText = document.getElementById('place').value || 'غير محدد';
+    document.getElementById('subjectBox').innerText = document.getElementById('subject').value || 'غير محدد';
+    document.getElementById('lessonBox').innerText = document.getElementById('lesson').value || 'غير محدد';
+    
+    document.getElementById('teacherBox').innerText = document.getElementById('teacher').value;
+    document.getElementById('principalBox').innerText = document.getElementById('principal').value;
+    document.getElementById('teacherTypeBox').innerText = document.getElementById('teacherType').value;
+    document.getElementById('principalTypeBox').innerText = document.getElementById('principalType').value;
+    
+    document.getElementById('goalBox').innerText = document.getElementById('goal').value || 'لم يتم تحديد الهدف التربوي';
+    document.getElementById('summaryBox').innerText = document.getElementById('summary').value || 'لم يتم إضافة نبذة مختصرة';
+    document.getElementById('stepsBox').innerText = document.getElementById('steps').value || 'لم يتم تحديد إجراءات التنفيذ';
+    document.getElementById('strategiesBox').innerText = document.getElementById('strategies').value || 'لم يتم تحديد الاستراتيجيات';
+    document.getElementById('strengthsBox').innerText = document.getElementById('strengths').value || 'لم يتم تحديد نقاط القوة';
+    document.getElementById('improveBox').innerText = document.getElementById('improve').value || 'لم يتم تحديد نقاط التحسين';
+    document.getElementById('recommBox').innerText = document.getElementById('recomm').value || 'لم يتم تحديد التوصيات';
+    
+    updateToolsDisplay();
+    setTimeout(adaptSubjectLessonFontWithRetry, 10);
+}
+
+function toggleTool(element) {
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    if (checkbox.checked) {
+        element.classList.add('checked');
+    } else {
+        element.classList.remove('checked');
+    }
+    updateToolsDisplay();
+}
+
+function updateToolsDisplay() {
+    const toolsListBox = document.getElementById('toolsListBox');
+    toolsListBox.innerHTML = '';
+    
+    const selectedTools = [];
+    
+    // البحث عن جميع الأدوات المختارة
+    const toolCheckboxes = document.querySelectorAll('.tool-checkbox input[type="checkbox"]');
+    toolCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedTools.push(checkbox.value);
+        }
+    });
+    
+    selectedTools.forEach(tool => {
+        const toolElement = document.createElement('div');
+        toolElement.className = 'tool';
+        toolElement.innerHTML = `<span>✓</span> ${tool}`;
+        toolsListBox.appendChild(toolElement);
+    });
+    
+    if (selectedTools.length === 0) {
+        const noToolsMessage = document.createElement('div');
+        noToolsMessage.style.textAlign = 'center';
+        noToolsMessage.style.color = '#666';
+        noToolsMessage.style.fontSize = '9px';
+        noToolsMessage.style.padding = '4px';
+        noToolsMessage.textContent = 'لم يتم اختيار أي أدوات';
+        toolsListBox.appendChild(noToolsMessage);
+    }
+}
+
+function loadImage(input, target) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imgBox = document.getElementById(target);
+            imgBox.innerHTML = '';
+
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.loading = "eager";
+            img.decoding = "sync";
+
+            imgBox.appendChild(img);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function saveTeacherData(){
+    const teacherData = {
+        education: document.getElementById('education').value,
+        school: document.getElementById('school').value,
+        grade: document.getElementById('grade').value,
+        subject: document.getElementById('subject').value,
+        target: document.getElementById('target').value,
+        place: document.getElementById('place').value,
+        lesson: document.getElementById('lesson').value,
+        teacher: document.getElementById('teacher').value,
+        principal: document.getElementById('principal').value,
+        teacherType: document.getElementById('teacherType').value,
+        principalType: document.getElementById('principalType').value,
+        term: document.getElementById('term').value,
+        count: document.getElementById('count').value,
+        manualTitle: document.getElementById('manualReportTitle').value,
+        criterion: document.getElementById('criterionSelect').value,
+        subcategory: document.getElementById('subcategorySelect').value,
+        report: document.getElementById('reportSelect').value,
+        tools: []
+    };
+    
+    // جمع الأدوات المختارة
+    const toolCheckboxes = document.querySelectorAll('.tool-checkbox input[type="checkbox"]');
+    toolCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            teacherData.tools.push(checkbox.value);
+        }
+    });
+    
+    const textFields = ['goal', 'summary', 'steps', 'strategies', 'strengths', 'improve', 'recomm'];
+    textFields.forEach(field => {
+        teacherData[field] = document.getElementById(field).value;
+    });
+    
+    localStorage.setItem('teacherData', JSON.stringify(teacherData));
+    showNotification('تم حفظ بيانات المعلم بنجاح!');
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `<i class="fas fa-check-circle"></i><span>${message}</span>`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 400);
+    }, 3000);
+}
+
+function loadTeacherData() {
+    const savedData = localStorage.getItem('teacherData');
+    
+    if (savedData) {
+        const teacherData = JSON.parse(savedData);
+        
+        document.getElementById('education').value = teacherData.education || '';
+        document.getElementById('school').value = teacherData.school || '';
+        document.getElementById('grade').value = teacherData.grade || '';
+        document.getElementById('subject').value = teacherData.subject || '';
+        document.getElementById('target').value = teacherData.target || '';
+        document.getElementById('place').value = teacherData.place || '';
+        document.getElementById('lesson').value = teacherData.lesson || '';
+        document.getElementById('teacher').value = teacherData.teacher || '';
+        document.getElementById('principal').value = teacherData.principal || '';
+        document.getElementById('teacherType').value = teacherData.teacherType || 'المعلم';
+        document.getElementById('principalType').value = teacherData.principalType || 'المدير';
+        document.getElementById('term').value = teacherData.term || '';
+        document.getElementById('count').value = teacherData.count || '';
+        document.getElementById('manualReportTitle').value = teacherData.manualTitle || '';
+        
+        const textFields = ['goal', 'summary', 'steps', 'strategies', 'strengths', 'improve', 'recomm'];
+        textFields.forEach(field => {
+            if (teacherData[field]) {
+                document.getElementById(field).value = teacherData[field];
+            }
+        });
+        
+        if (teacherData.tools && Array.isArray(teacherData.tools)) {
+            // تحديد الأدوات المحفوظة
+            const toolCheckboxes = document.querySelectorAll('.tool-checkbox');
+            toolCheckboxes.forEach(toolElement => {
+                const checkbox = toolElement.querySelector('input[type="checkbox"]');
+                if (checkbox && teacherData.tools.includes(checkbox.value)) {
+                    checkbox.checked = true;
+                    toolElement.classList.add('checked');
                 }
+            });
+        }
+        
+        updateReport();
+        updateToolsDisplay();
+    }
+}
+
+function parseAIResponseProfessional(response) {
+    const lines = response.split('\n').filter(line => line.trim());
+    
+    const fieldMapping = {
+        '1': 'goal',
+        '2': 'summary', 
+        '3': 'steps',
+        '4': 'strategies',
+        '5': 'strengths',
+        '6': 'improve',
+        '7': 'recomm'
+    };
+    
+    let foundFields = 0;
+    
+    lines.forEach(line => {
+        const match = line.match(/^(\d+)[\.\-]\s*(.+)/);
+        if (match) {
+            const fieldNumber = match[1];
+            let content = match[2].trim();
+            
+            content = removeFieldTitles(content);
+            
+            if (fieldMapping[fieldNumber]) {
+                const fieldId = fieldMapping[fieldNumber];
+                content = ensureWordCount(content, 25);
                 
-                tbody.innerHTML = '';
-                expiredCodes.forEach((code, index) => {
-                    const statusElement = `<span class="badge badge-expired">منتهي</span>`;
-                    
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="expired"><code>${code.code}</code></td>
-                        <td class="expired">${getDurationText(code.duration)}</td>
-                        <td class="expired">${code.user_name || 'غير محدد'}</td>
-                        <td class="expired">${code.user_phone || 'غير محدد'}</td>
-                        <td class="expired">${statusElement}</td>
-                        <td class="expired">${formatDate(code.expires_at)}</td>
-                        <td>
-                            <button class="btn btn-sm btn-secondary" onclick="copyCode('${code.code}')">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteExpiredCode(${index})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
+                document.getElementById(fieldId).value = content;
+                foundFields++;
+            }
+        }
+    });
+    
+    if (foundFields < 3) {
+        fallbackProfessionalAIParsing(response);
+    }
+    
+    updateReport();
+}
+
+function removeFieldTitles(content) {
+    const fieldTitles = [
+        'الهدف التربوي', 'الهدف التربوي',
+        'نبذة مختصرة', 'نبذة مختصرة',
+        'إجراءات التنفيذ', 'إجراءات التنفيذ',
+        'الاستراتيجيات', 'الاستراتيجيات',
+        'نقاط القوة', 'نقاط القوة',
+        'نقاط التحسين', 'نقاط تحسين',
+        'التوصيات', 'التوصيات',
+        'هو:', 'تشمل:', 'تشمل', 'يتضمن:', 'يتضمن',
+        'يتمثل في', 'يتمثل', 'يمثل', 'يتم',
+        'يشمل', 'تحتوي', 'تتضمن'
+    ];
+    
+    let cleanedContent = content;
+    
+    fieldTitles.forEach(title => {
+        const regex = new RegExp(`^${title}[:\\.\\-]?\\s*`, 'i');
+        cleanedContent = cleanedContent.replace(regex, '');
+        
+        const regex2 = new RegExp(`\\s*${title}[:\\.\\-]?\\s*`, 'gi');
+        cleanedContent = cleanedContent.replace(regex2, ' ');
+    });
+    
+    cleanedContent = cleanedContent.trim().replace(/\s+/g, ' ');
+    
+    return cleanedContent || content;
+}
+
+function ensureWordCount(content, targetWords) {
+    const words = content.split(' ');
+    
+    if (words.length >= targetWords - 5 && words.length <= targetWords + 5) {
+        return content;
+    }
+    
+    if (words.length < targetWords - 5) {
+        const professionalPhrases = [
+            'مع التركيز على تحقيق أهداف التعلم وتنمية المهارات الأساسية',
+            'بما يسهم في رفع مستوى التحصيل الدراسي وتحسين المخرجات التعليمية',
+            'وذلك لتحقيق التكامل بين الجوانب المعرفية والمهارية والوجدانية',
+            'مع مراعاة الفروق الفردية وتنويع أساليب التدريس لتناسب جميع الطلاب',
+            'لضمان تحقيق رؤية التعليم وتطوير العملية التعليمية بصورة شاملة',
+            'مع الاستفادة من أفضل الممارسات التربوية والتقنيات التعليمية الحديثة',
+            'بما يعزز من دور المعلم كميسر للتعلم وموجه للطالب نحو التميز'
+        ];
+    
+        let extendedContent = content;
+        while (extendedContent.split(' ').length < targetWords) {
+            const randomPhrase = professionalPhrases[Math.floor(Math.random() * professionalPhrases.length)];
+            extendedContent += ' ' + randomPhrase;
+        }
+        
+        const extendedWords = extendedContent.split(' ');
+        if (extendedWords.length > targetWords + 5) {
+            return extendedWords.slice(0, targetWords).join(' ');
+        }
+        
+        return extendedContent;
+    }
+    
+    if (words.length > targetWords + 5) {
+        return words.slice(0, targetWords).join(' ');
+    }
+    
+    return content;
+}
+
+function fallbackProfessionalAIParsing(response) {
+    const sentences = response.split(/[\.\n]/).filter(s => {
+        const trimmed = s.trim();
+        return trimmed.length > 20 && 
+               !trimmed.match(/الهدف التربوي|نبذة مختصرة|إجراءات التنفيذ|الاستراتيجيات|نقاط القوة|نقاط التحسين|التوصيات|الحقل|المطلوب|يجب|يرجى/i);
+    });
+    
+    const fields = ['goal', 'summary', 'steps', 'strategies', 'strengths', 'improve', 'recomm'];
+    
+    let sentenceIndex = 0;
+    fields.forEach((field, index) => {
+        if (sentenceIndex < sentences.length) {
+            let content = sentences[sentenceIndex].trim();
+            content = removeFieldTitles(content);
+            content = ensureWordCount(content, 25);
+            
+            document.getElementById(field).value = content;
+            sentenceIndex++;
+        } else if (sentenceIndex > 0) {
+            const previousContent = document.getElementById(fields[sentenceIndex-1]).value;
+            if (previousContent) {
+                const words = previousContent.split(' ');
+                const modifiedContent = words.slice(5).join(' ') + ' مع التركيز على تطوير الممارسات التعليمية وتحسين جودة التعلم';
+                document.getElementById(field).value = ensureWordCount(modifiedContent, 25);
+            }
+        }
+    });
+}
+
+function clearData(){
+    if(confirm("هل أنت متأكد من مسح جميع البيانات؟")){
+        localStorage.clear();
+        location.reload();
+    }
+}
+
+async function downloadPDF(){
+    // ⚠️ مهم: تحميل التاريخ أولاً
+    await loadDates();
+    
+    document.querySelector('.top-small-buttons').style.visibility = 'hidden';
+    document.querySelector('.main-buttons-bar').style.visibility = 'hidden';
+    document.querySelector('.top-marquee').style.visibility = 'hidden';
+    document.getElementById('aiFillFloatingBtn').style.visibility = 'hidden';
+    document.body.style.margin = "0";
+    document.body.style.background = "white";
+
+    const reportContent = document.getElementById('report-content');
+    reportContent.style.display = 'block';
+    reportContent.style.visibility = 'visible';
+    reportContent.style.opacity = '1';
+    reportContent.style.position = 'relative';
+    reportContent.style.top = '0';
+    reportContent.style.left = '0';
+
+    const cleanFileName = document.getElementById('manualReportTitle').value.replace(/[\/\\:*?"<>|]/g, '_') || 'تقرير';
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    html2pdf().set({
+        filename: cleanFileName + ".pdf",
+        html2canvas: {
+            scale: 3,
+            useCORS: true,
+            scrollY: 0,
+            backgroundColor: '#ffffff',
+            onclone: function(clonedDoc) {
+                clonedDoc.getElementById('report-content').style.background = '#ffffff';
+                clonedDoc.querySelectorAll('*').forEach(el => {
+                    el.style.color = '';
+                    el.style.backgroundColor = '';
                 });
-                
-            } catch (error) {
-                console.error('خطأ في تحميل الأكواد المنتهية:', error);
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px; color: #d9534f; background: #0f2a3f;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <p>خطأ في تحميل البيانات</p>
-                        </td>
-                    </tr>
-                `;
             }
-        }
+        },
+        jsPDF: {unit: "mm", format: "a4", orientation: "portrait"}
+    })
+    .from(reportContent)
+    .save()
+    .then(() => {
+        document.querySelector('.top-small-buttons').style.visibility = 'visible';
+        document.querySelector('.main-buttons-bar').style.visibility = 'visible';
+        document.querySelector('.top-marquee').style.visibility = 'visible';
+        document.getElementById('aiFillFloatingBtn').style.visibility = 'visible';
+        document.body.style.margin = "";
+        document.body.style.background = "#f9fcfb";
+        reportContent.style.display = 'none';
+        showNotification("تم تنزيل التقرير بصيغة PDF ✓");
+    });
+}
 
-        function getCodeStatus(expiresAt) {
-            const now = new Date();
-            const expiry = new Date(expiresAt);
-            
-            if (expiry <= now) {
-                return { type: 'expired', text: 'منتهي', color: '#fee2e2' };
-            }
-            
-            const diff = expiry - now;
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            
-            // إذا كان أقل من 24 ساعة متبقة
-            if (hours < 24) {
-                return { type: 'expiring', text: 'ينتهي قريباً', color: '#fef3c7' };
-            }
-            
-            // إذا كان أقل من 7 أيام متبقية
-            if (days < 7) {
-                return { type: 'expiring', text: days + ' يوم', color: '#fef3c7' };
-            }
-            
-            return { type: 'active', text: 'نشط', color: '#e0f2fe' };
-        }
+async function sharePDFWhatsApp(){
+    // ⚠️ مهم: تحميل التاريخ أولاً
+    await loadDates();
+    
+    document.querySelector('.top-small-buttons').style.visibility = 'hidden';
+    document.querySelector('.main-buttons-bar').style.visibility = 'hidden';
+    document.querySelector('.top-marquee').style.visibility = 'visible';
+    document.getElementById('aiFillFloatingBtn').style.visibility = 'hidden';
+    document.body.style.margin = "0";
+    document.body.style.background = "white";
 
-        function getTimeRemaining(expiresAt) {
-            const now = new Date();
-            const expiry = new Date(expiresAt);
-            
-            if (expiry <= now) {
-                return 'منتهي';
+    const reportContent = document.getElementById('report-content');
+    reportContent.style.display = 'block';
+    reportContent.style.visibility = 'visible';
+    reportContent.style.opacity = '1';
+    reportContent.style.position = 'relative';
+    reportContent.style.top = '0';
+    reportContent.style.left = '0';
+
+    const reportName = document.getElementById('manualReportTitle').value || 'تقرير';
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    await html2pdf().set({
+        margin: 0,
+        image: {type: "jpeg", quality: 1},
+        html2canvas: {
+            scale: 3,
+            scrollY: 0,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            onclone: function(clonedDoc) {
+                clonedDoc.getElementById('report-content').style.background = '#ffffff';
             }
+        },
+        jsPDF: {unit: "mm", format: "a4", orientation: "portrait"}
+    })
+    .from(reportContent)
+    .toPdf()
+    .output('blob')
+    .then((pdfBlob) => {
+        document.querySelector('.top-small-buttons').style.visibility = 'visible';
+        document.querySelector('.main-buttons-bar').style.visibility = 'visible';
+        document.querySelector('.top-marquee').style.visibility = 'visible';
+        document.getElementById('aiFillFloatingBtn').style.visibility = 'visible';
+        document.body.style.margin = "";
+        document.body.style.background = "#f9fcfb";
+        reportContent.style.display = 'none';
+
+        let file = new File([pdfBlob], reportName + ".pdf", {type: "application/pdf"});
+        if(navigator.canShare && navigator.canShare({files:[file]})){
+            navigator.share({
+                files:[file], 
+                title: reportName,
+                text: "تقرير: " + reportName
+            });
+        } else {
+            let url = URL.createObjectURL(pdfBlob);
+            window.open(`https://wa.me/?text=${encodeURIComponent("تقرير: " + reportName + "\n\n" + url)}`, "_blank");
+        }
+    });
+}
+
+// ==================== دوال نافذة الإعدادات ====================
+function openSettings() {
+    document.getElementById("settingsModal").style.display = "flex";
+    loadSavedReportDate();
+    loadSubscriptionStatus();
+}
+
+function closeSettings() {
+    document.getElementById("settingsModal").style.display = "none";
+}
+
+async function loadSubscriptionStatus() {
+    const code = localStorage.getItem(ACTIVATION_KEY_NAME);
+    if (!code) {
+        document.getElementById("subInfo").innerHTML = 
+            "لم يتم تفعيل الأداة بعد<br>يرجى استخدام كود التفعيل";
+        return;
+    }
+
+    try {
+        const res = await fetch(BACKEND_URL + "/subscription/status", {
+            headers: { "X-Activation-Code": code }
+        });
+
+        if (!res.ok) throw new Error();
+
+        const data = await res.json();
+
+        const expires = data.expires_at
+            ? new Date(data.expires_at).toLocaleDateString('ar-SA')
+            : "غير محدد";
+
+        document.getElementById("subInfo").innerHTML = `
+        <div>📅 <strong>تاريخ الانتهاء:</strong> ${expires}</div>
+        <div>📊 <strong>الاستخدام:</strong> ${data.usage_used} / ${data.usage_limit}</div>
+        <div>🔋 <strong>المتبقي:</strong> ${data.usage_remaining}</div>
+        `;
+    } catch {
+        document.getElementById("subInfo").innerHTML =
+            "تعذر تحميل معلومات الاشتراك<br>يرجى التأكد من اتصال الإنترنت";
+    }
+}
+
+/* حفظ تاريخ التقرير */
+function saveReportDate() {
+    const date = document.getElementById("customReportDate").value;
+    if (date) {
+        localStorage.setItem("custom_report_date", date);
+        showNotification("تم حفظ تاريخ التقرير ✓");
+        closeSettings();
+        loadDates(); // تحديث التاريخ داخل التقرير
+    } else {
+        showNotification("يرجى اختيار تاريخ صحيح");
+    }
+}
+
+/* تحميل التاريخ المحفوظ عند فتح نافذة الإعدادات */
+function loadSavedReportDate() {
+    const saved = localStorage.getItem("custom_report_date");
+    if (saved) {
+        document.getElementById("customReportDate").value = saved;
+    }
+}
+
+// ==================== تهيئة الصفحة ====================
+document.addEventListener("DOMContentLoaded", async () => {
+    const code = localStorage.getItem(ACTIVATION_KEY_NAME);
+
+    if (!code) {
+        document.getElementById("activationScreen").style.display = "flex";
+        document.body.style.overflow = "hidden";
+    } else {
+        try {
+            const res = await fetch(BACKEND_URL + "/health", {
+                headers: { "X-Activation-Code": code }
+            });
             
-            const diff = expiry - now;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            
-            if (days > 0) {
-                return `${days} يوم ${hours} ساعة`;
-            } else if (hours > 0) {
-                return `${hours} ساعة ${minutes} دقيقة`;
+            if (res.ok) {
+                window.__ACTIVATED__ = true;
+                hideActivationScreen();
             } else {
-                return `${minutes} دقيقة`;
+                throw new Error();
             }
+        } catch {
+            localStorage.removeItem(ACTIVATION_KEY_NAME);
+            document.getElementById("activationScreen").style.display = "flex";
+            document.body.style.overflow = "hidden";
         }
+    }
 
-        function copyCode(code) {
-            navigator.clipboard.writeText(code);
-            showNotification('تم نسخ الكود إلى الحافظة', 'success');
+    // تحميل التواريخ عند فتح الصفحة
+    await loadDates();
+    
+    // تحميل إعدادات الثيمات
+    loadThemeSettings();
+    
+    // تحميل البيانات من الباك
+    await loadDataFromBackend();
+    
+    // تحميل بيانات المعلم المحفوظة
+    loadTeacherData();
+    
+    // تحديث التقرير
+    updateReport();
+
+    document.getElementById('reportSearch').addEventListener('input', handleReportSearch);
+
+    document.addEventListener('click', function(event) {
+        const searchResults = document.getElementById('searchResults');
+        if (!event.target.closest('#reportSearchContainer')) {
+            searchResults.style.display = 'none';
         }
+    });
 
-        function deleteCode(index) {
-            if (confirm('هل أنت متأكد من حذف هذا الكود؟')) {
-                const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
-                
-                // تأكد أن الكود غير منتهي
-                const code = codes[index];
-                const status = getCodeStatus(code.expires_at);
-                
-                if (status.type === 'expired') {
-                    showNotification('لا يمكن حذف الأكواد المنتهية من هذا القسم، استخدم قسم الأكواد المنتهية', 'error');
-                    return;
-                }
-                
-                codes.splice(index, 1);
-                localStorage.setItem('admin_codes', JSON.stringify(codes));
-                loadActiveCodes();
-                loadDashboardStats();
-                showNotification('تم حذف الكود بنجاح', 'success');
-            }
+    window.addEventListener('resize', adaptSubjectLessonFont);
+
+    document.addEventListener('input', function(e) {
+        if (e.target.id === 'subject' || e.target.id === 'lesson') {
+            setTimeout(adaptSubjectLessonFont, 50);
         }
+    });
+});
+</script>
 
-        function deleteExpiredCode(index) {
-            if (confirm('هل أنت متأكد من حذف هذا الكود المنتهي؟')) {
-                const allCodes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
-                const now = new Date();
-                
-                // تصفية الأكواد المنتهية فقط
-                const expiredCodes = allCodes.filter(code => {
-                    const expiry = new Date(code.expires_at);
-                    return expiry <= now;
-                });
-                
-                // إزالة الكود من القائمة الكاملة
-                const codeToDelete = expiredCodes[index];
-                const codeIndex = allCodes.findIndex(c => c.code === codeToDelete.code);
-                
-                if (codeIndex !== -1) {
-                    allCodes.splice(codeIndex, 1);
-                    localStorage.setItem('admin_codes', JSON.stringify(allCodes));
-                    loadExpiredCodes();
-                    loadDashboardStats();
-                    showNotification('تم حذف الكود المنتهي بنجاح', 'success');
-                }
-            }
-        }
-
-        // ==================== التقارير ====================
-        async function loadDashboardStats() {
-            const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
-            const now = new Date();
-            
-            // حساب الأكواد النشطة
-            const activeCodes = codes.filter(code => {
-                const expiry = new Date(code.expires_at);
-                const status = getCodeStatus(code.expires_at);
-                return expiry > now && status.type !== 'expiring';
-            });
-            
-            // حساب الأكواد التي ستنتهي قريباً
-            const expiringCodes = codes.filter(code => {
-                const status = getCodeStatus(code.expires_at);
-                return status.type === 'expiring';
-            });
-            
-            // حساب الأكواد المنتهية
-            const expiredCodes = codes.filter(code => {
-                const expiry = new Date(code.expires_at);
-                return expiry <= now;
-            });
-            
-            document.getElementById('totalCodes').textContent = activeCodes.length;
-            document.getElementById('expiringCodes').textContent = expiringCodes.length;
-            document.getElementById('expiredCodes').textContent = expiredCodes.length;
-            document.getElementById('totalRevenue').textContent = calculateTotalRevenue(codes);
-        }
-
-        async function loadReports() {
-            const codes = JSON.parse(localStorage.getItem('admin_codes') || '[]');
-            const period = document.getElementById('reportPeriod').value;
-            const filteredCodes = filterCodesByPeriod(codes, period);
-            
-            document.getElementById('totalGenerated').textContent = filteredCodes.length;
-            document.getElementById('totalUsed').textContent = calculateUsedCodes(filteredCodes);
-            document.getElementById('avgDuration').textContent = calculateAverageDuration(filteredCodes);
-            document.getElementById('successRate').textContent = calculateSuccessRate(filteredCodes);
-        }
-
-        function calculateTotalRevenue(codes) {
-            const total = codes.reduce((sum, code) => {
-                return sum + (parseFloat(code.price) || 0);
-            }, 0);
-            return total.toFixed(0) + ' ر.س';
-        }
-
-        function calculateUsedCodes(codes) {
-            // يمكن تعديل هذه الدالة حسب البيانات الفعلية
-            const now = new Date();
-            const expiredCodes = codes.filter(code => {
-                const expiry = new Date(code.expires_at);
-                return expiry <= now;
-            });
-            
-            return expiredCodes.length;
-        }
-
-        function calculateAverageDuration(codes) {
-            if (codes.length === 0) return '0 يوم';
-            
-            const durationMap = {
-                '5m': 5/(60*24),
-                '30m': 30/(60*24),
-                '1h': 1/24,
-                '3h': 3/24,
-                '1d': 1,
-                '3d': 3,
-                '7d': 7,
-                '30d': 30,
-                '90d': 90,
-                '150d': 150
-            };
-            
-            const total = codes.reduce((sum, code) => {
-                return sum + (durationMap[code.duration] || 0);
-            }, 0);
-            
-            const avg = total / codes.length;
-            return avg >= 1 ? avg.toFixed(1) + ' يوم' : (avg * 24).toFixed(0) + ' ساعة';
-        }
-
-        function calculateSuccessRate(codes) {
-            if (codes.length === 0) return '0%';
-            const used = calculateUsedCodes(codes);
-            return ((used / codes.length) * 100).toFixed(1) + '%';
-        }
-
-        function filterCodesByPeriod(codes, period) {
-            const now = new Date();
-            let startDate;
-            
-            switch(period) {
-                case 'today':
-                    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                    break;
-                case 'week':
-                    startDate = new Date(now);
-                    startDate.setDate(now.getDate() - 7);
-                    break;
-                case 'month':
-                    startDate = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-                    break;
-                case 'year':
-                    startDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-                    break;
-                case 'all':
-                default:
-                    return codes;
-            }
-            
-            return codes.filter(code => {
-                const codeDate = new Date(code.created_at || new Date());
-                return codeDate >= startDate;
-            });
-        }
-
-        // ==================== الإعدادات ====================
-        function loadSettings() {
-            const settings = JSON.parse(localStorage.getItem('admin_settings') || '{}');
-            
-            if (settings.defaultToken) document.getElementById('defaultToken').value = settings.defaultToken;
-            if (settings.defaultPrice) document.getElementById('defaultPrice').value = settings.defaultPrice;
-            if (settings.autoRefresh) document.getElementById('autoRefresh').value = settings.autoRefresh;
-            
-            if (settings.defaultToken) {
-                document.getElementById('adminToken').value = settings.defaultToken;
-            }
-        }
-
-        function saveSettings() {
-            const settings = {
-                defaultToken: document.getElementById('defaultToken').value,
-                defaultPrice: document.getElementById('defaultPrice').value,
-                autoRefresh: document.getElementById('autoRefresh').value
-            };
-            
-            localStorage.setItem('admin_settings', JSON.stringify(settings));
-            showNotification('تم حفظ الإعدادات بنجاح', 'success');
-            
-            if (settings.defaultToken) {
-                document.getElementById('adminToken').value = settings.defaultToken;
-            }
-            
-            // إعادة تشغيل التحديث التلقائي
-            startAutoRefresh();
-        }
-
-        function startAutoRefresh() {
-            const settings = JSON.parse(localStorage.getItem('admin_settings') || '{}');
-            const interval = parseInt(settings.autoRefresh || '0');
-            
-            // إيقاف أي توقيت سابق
-            if (autoRefreshInterval) {
-                clearInterval(autoRefreshInterval);
-            }
-            
-            // بدء توقيت جديد إذا كان مخصصاً
-            if (interval > 0) {
-                autoRefreshInterval = setInterval(() => {
-                    const activeTab = document.querySelector('.tab-content.active').id;
-                    if (activeTab === 'activeCodes') loadActiveCodes();
-                    if (activeTab === 'expiredCodes') loadExpiredCodes();
-                    if (activeTab === 'reports') loadReports();
-                    loadDashboardStats();
-                }, interval * 1000);
-            }
-        }
-
-        function resetSettings() {
-            if (confirm('هل أنت متأكد من إعادة تعيين الإعدادات؟')) {
-                localStorage.removeItem('admin_settings');
-                loadSettings();
-                showNotification('تم إعادة تعيين الإعدادات', 'success');
-            }
-        }
-
-        // ==================== أدوات مساعدة ====================
-        function getDurationText(duration) {
-            const durations = {
-                '5m': '5 دقائق',
-                '30m': '30 دقيقة',
-                '1h': 'ساعة واحدة',
-                '3h': '3 ساعات',
-                '1d': 'يوم واحد',
-                '3d': '3 أيام',
-                '7d': 'أسبوع',
-                '30d': 'شهر',
-                '90d': '3 أشهر',
-                '150d': '5 أشهر'
-            };
-            return durations[duration] || duration;
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return 'غير محدد';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ar-SA', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const messageEl = document.getElementById('notificationMessage');
-            const icon = notification.querySelector('i');
-            
-            icon.className = type === 'success' ? 'fas fa-check-circle' :
-                            type === 'error' ? 'fas fa-exclamation-circle' :
-                            'fas fa-info-circle';
-            
-            notification.style.background = type === 'success' ? 
-                'linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%)' :
-                type === 'error' ?
-                'linear-gradient(135deg, var(--danger) 0%, #c9302c 100%)' :
-                'linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%)';
-            
-            messageEl.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                hideNotification();
-            }, 5000);
-        }
-
-        function hideNotification() {
-            document.getElementById('notification').classList.remove('show');
-        }
-
-        function preventAutoZoom() {
-            document.addEventListener('touchstart', function(event) {
-                if (event.touches.length > 1) {
-                    event.preventDefault();
-                }
-            }, { passive: false });
-
-            let lastTouchEnd = 0;
-            document.addEventListener('touchend', function(event) {
-                const now = Date.now();
-                if (now - lastTouchEnd <= 300) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, { passive: false });
-        }
-
-        // ==================== التصدير ====================
-        window.generateCodes = generateCodes;
-        window.copyCodes = copyCodes;
-        window.shareCodes = shareCodes;
-        window.copyCode = copyCode;
-        window.deleteCode = deleteCode;
-        window.deleteExpiredCode = deleteExpiredCode;
-        window.saveSettings = saveSettings;
-        window.resetSettings = resetSettings;
-        window.showTab = showTab;
-        window.hideNotification = hideNotification;
-        window.toggleUserInfo = toggleUserInfo;
-        window.loadReports = loadReports;
-    </script>
 </body>
 </html>

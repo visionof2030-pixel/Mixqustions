@@ -64,15 +64,17 @@ html, body {
     background: linear-gradient(135deg, #022e22 0%, #044a35 100%);
     color: #fff;
     padding: 10px 5px;
-    font-size: 12px;
+    font-size: 14px;
     z-index: 300;
     overflow: hidden;
-    height: 45px;
+    height: auto;
+    min-height: 45px;
     white-space: nowrap;
     border-bottom: 3px solid #ffd166;
     box-shadow: 0 4px 12px rgba(2, 46, 34, 0.25);
     display: flex;
     align-items: center;
+    line-height: 1.5;
 }
 
 .marquee-inner {
@@ -80,7 +82,8 @@ html, body {
     padding-left: 2%;
     animation: newsScroll 30s linear infinite;
     color: #e8f4f0;
-    font-weight: 500;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 @keyframes newsScroll {
@@ -275,22 +278,19 @@ html, body {
     transition: none;
 }
 
-/* شريط التقدم العلوي - مبسط */
+/* شريط التقدم - أصبح ضمن التدفق الطبيعي */
 .progress-bar-container {
-    position: fixed;
-    top: 163px;
-    left: 0;
-    right: 0;
     width: 100%;
-    z-index: 230;
     background: linear-gradient(135deg, #ffffff 0%, #f8fdfa 100%);
-    padding: 12px 20px;
-    border-bottom: 2px solid #d4ebe2;
-    box-shadow: 0 4px 15px rgba(4, 74, 53, 0.15);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border: 2px solid #d4ebe2;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(4, 74, 53, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-family: 'Cairo', sans-serif;
     box-sizing: border-box;
 }
@@ -304,7 +304,7 @@ html, body {
     margin: 0 auto;
     color: #044a35;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .progress-stats {
@@ -583,7 +583,6 @@ html, body {
     background: #ffffff;
     padding: 25px;
     border-radius: 20px;
-    margin-top: 210px;
     border: 2px solid #e0f0ea;
     box-shadow: 0 10px 30px rgba(4, 74, 53, 0.12);
     position: relative;
@@ -1056,7 +1055,7 @@ button[title]:hover::before {
 
 .reports-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 15px;
     margin-bottom: 20px;
 }
@@ -1125,12 +1124,13 @@ button[title]:hover::before {
 
 .report-actions {
     display: flex;
-    gap: 8px;
+    gap: 5px;
     justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 .report-actions button {
-    padding: 6px 12px;
+    padding: 6px 8px;
     border: none;
     border-radius: 6px;
     font-size: 11px;
@@ -1139,17 +1139,36 @@ button[title]:hover::before {
     transition: all 0.3s;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
+    flex: 1 1 auto;
+    justify-content: center;
 }
 
 .report-actions .load-btn {
     background: #066d4d;
     color: white;
-    flex: 1;
 }
 
 .report-actions .load-btn:hover {
     background: #044a35;
+}
+
+.report-actions .pdf-btn {
+    background: #ff6b6b;
+    color: white;
+}
+
+.report-actions .pdf-btn:hover {
+    background: #ee5a52;
+}
+
+.report-actions .whatsapp-btn {
+    background: #25D366;
+    color: white;
+}
+
+.report-actions .whatsapp-btn:hover {
+    background: #1da851;
 }
 
 .report-actions .delete-btn {
@@ -1799,8 +1818,7 @@ button[title]:hover::before {
     }
     
     .progress-bar-container {
-        top: 153px;
-        padding: 10px 15px;
+        padding: 12px 15px;
     }
     
     .progress-header {
@@ -1833,7 +1851,6 @@ button[title]:hover::before {
     }
     
     .input-section {
-        margin-top: 200px;
         padding: 15px;
     }
     
@@ -1853,8 +1870,8 @@ button[title]:hover::before {
 
 @media (max-width: 480px) {
     .top-marquee {
-        font-size: 11px;
-        height: 40px;
+        font-size: 12px;
+        min-height: 40px;
     }
     
     .marquee-inner {
@@ -1889,11 +1906,6 @@ button[title]:hover::before {
         font-size: 10px;
     }
     
-    .progress-bar-container {
-        top: 148px;
-        padding: 8px 10px;
-    }
-    
     #aiFillFloatingBtn {
         width: 75px;
         height: 75px;
@@ -1910,7 +1922,6 @@ button[title]:hover::before {
     }
     
     .input-section {
-        margin-top: 185px;
         padding: 12px;
     }
     
@@ -2008,11 +2019,12 @@ button[title]:hover::before {
     </div>
 </div>
 
-<!-- شريط الأخبار العلوي -->
+<!-- شريط الأخبار العلوي (مطوّر) -->
 <div class="top-marquee">
 <div class="marquee-inner">
-<i class="fas fa-bullhorn" style="margin-left:10px;"></i>
-مرحباً بك في نظام تقاريرك - يمكنك إدخال البيانات يدوياً أو استخدام التعبئة الذكية
+<i class="fas fa-star" style="margin-left:8px;"></i> 
+✨ نظام تقاريرك المتكامل: أنشئ تقارير تربوية احترافية بسهولة - حفظ تلقائي - تعبئة ذكية بالذكاء الاصطناعي - معايير أداء محدثة - مشاركة PDF وواتساب - دعم كامل للهواتف - تقارير غير محدودة للمشتركين ✨
+<i class="fas fa-gem" style="margin-right:8px;"></i>
 </div>
 </div>
 
@@ -2052,22 +2064,22 @@ button[title]:hover::before {
     </div>
 </div>
 
-<!-- ========== شريط التقدم العلوي - مبسط ========== -->
-<div class="progress-bar-container" id="progressBarContainer">
-    <div class="progress-header">
-        <div><i class="fas fa-chart-line"></i> تقدم إنجاز التقارير</div>
-        <div class="progress-stats">
-            <span class="progress-percentage" id="progressPercentage">0%</span>
-            <span class="progress-message" id="progressMessage">0 من 0 معايير مكتملة</span>
-        </div>
-    </div>
-    <div class="progress-track">
-        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-    </div>
-</div>
-
 <!-- المحتوى الرئيسي -->
 <div class="wrapper">
+    <!-- ========== شريط التقدم (أصبح داخل التدفق) ========== -->
+    <div class="progress-bar-container" id="progressBarContainer">
+        <div class="progress-header">
+            <div><i class="fas fa-chart-line"></i> تقدم إنجاز التقارير</div>
+            <div class="progress-stats">
+                <span class="progress-percentage" id="progressPercentage">0%</span>
+                <span class="progress-message" id="progressMessage">0 من 0 معايير مكتملة</span>
+            </div>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+    </div>
+
 <div class="input-section">
   
   <h2><i class="fas fa-tools" style="margin-left:10px;"></i>تقاريرك - النظام المتكامل</h2>
@@ -2079,11 +2091,11 @@ button[title]:hover::before {
       <span><i class="fas fa-layer-group"></i> للمساعدة</span>
     </div>
     
-    <!-- المستوى الأول: المعايير التربوية -->
+    <!-- المستوى الأول: المعايير التربوية (أزلنا كلمة اختياري) -->
     <div class="level-select">
       <label><i class="fas fa-star"></i> معيار الاداء الوظيفي</label>
       <select id="criterionSelect" onchange="loadSubcategories()">
-        <option value="">اختر معيار الاداء الوظيفي (اختياري)</option>
+        <option value="">اختر معيار الاداء الوظيفي</option>
       </select>
     </div>
     
@@ -2093,19 +2105,19 @@ button[title]:hover::before {
       <span id="selectedCriterionWeight" class="criterion-weight"></span>
     </div>
     
-    <!-- المستوى الثاني: التصنيفات الفرعية -->
+    <!-- المستوى الثاني: التصنيفات الفرعية (أزلنا كلمة اختياري) -->
     <div class="level-select">
       <label><i class="fas fa-list-ul"></i> التصنيف الفرعي</label>
       <select id="subcategorySelect" onchange="loadReports()" disabled>
-        <option value="">اختر التصنيف الفرعي (اختياري)</option>
+        <option value="">اختر التصنيف الفرعي</option>
       </select>
     </div>
     
-    <!-- المستوى الثالث: التقارير -->
+    <!-- المستوى الثالث: التقارير (أزلنا كلمة اختياري) -->
     <div class="level-select">
       <label><i class="fas fa-file-alt"></i> التقرير</label>
       <select id="reportSelect" onchange="updateReportFromSelection()" disabled>
-        <option value="">اختر التقرير (اختياري)</option>
+        <option value="">اختر التقرير</option>
       </select>
     </div>
     
@@ -2495,6 +2507,14 @@ let currentHijriDate = '';
 let currentGregorianDate = '';
 let educationalCriteria = [];
 
+// دالة مساعدة لتنسيق الوزن مع % واحدة فقط
+function formatWeight(weight) {
+    if (weight === undefined || weight === null) return '0%';
+    // إزالة أي رموز % موجودة والحصول على الرقم
+    let num = parseFloat(String(weight).replace(/%/g, '')) || 0;
+    return num + '%';
+}
+
 // ==================== دوال التفعيل ====================
 function hideActivationScreen() {
     if (window.__ACTIVATED__) {
@@ -2780,6 +2800,22 @@ function loadSavedReport(criterionId) {
     return true;
 }
 
+// دوال جديدة لتنزيل ومشاركة تقرير محفوظ مباشرة
+async function downloadSavedReport(criterionId) {
+    if (loadSavedReport(criterionId)) {
+        // تأخير بسيط لضمان تحديث النموذج
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await downloadPDF();
+    }
+}
+
+async function shareSavedReportWhatsApp(criterionId) {
+    if (loadSavedReport(criterionId)) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await sharePDFWhatsApp();
+    }
+}
+
 function deleteSavedReport(criterionId) {
     if (!confirm('هل أنت متأكد من حذف هذا التقرير؟')) return;
     
@@ -2820,11 +2856,13 @@ function openSavedReports() {
             card.innerHTML = `
                 <div class="report-title">${report.title}</div>
                 <div class="report-criterion"><i class="fas fa-star"></i> ${report.criterionName}</div>
-                <div class="report-weight">الوزن: ${report.weight}</div>
+                <div class="report-weight">الوزن: ${formatWeight(report.weight)}</div>
                 <div class="report-date"><i class="fas fa-calendar"></i> ${report.date} | ${report.hijriDate} هـ</div>
                 <div class="report-actions">
-                    <button class="load-btn" onclick="loadSavedReport('${report.criterionId}'); closeSavedReports();"><i class="fas fa-download"></i> تحميل</button>
-                    <button class="delete-btn" onclick="deleteSavedReport('${report.criterionId}')"><i class="fas fa-trash"></i></button>
+                    <button class="load-btn" onclick="loadSavedReport('${report.criterionId}'); closeSavedReports();" title="فتح في النموذج"><i class="fas fa-download"></i> فتح</button>
+                    <button class="pdf-btn" onclick="downloadSavedReport('${report.criterionId}')" title="تنزيل PDF"><i class="fas fa-file-pdf"></i> PDF</button>
+                    <button class="whatsapp-btn" onclick="shareSavedReportWhatsApp('${report.criterionId}')" title="مشاركة عبر واتساب"><i class="fab fa-whatsapp"></i></button>
+                    <button class="delete-btn" onclick="deleteSavedReport('${report.criterionId}')" title="حذف"><i class="fas fa-trash"></i></button>
                 </div>
             `;
             reportsList.appendChild(card);
@@ -2850,12 +2888,12 @@ async function loadDataFromBackend() {
         educationalCriteria = structure;
         
         const criterionSelect = document.getElementById("criterionSelect");
-        criterionSelect.innerHTML = '<option value="">اختر معيار الاداء الوظيفي (اختياري)</option>';
+        criterionSelect.innerHTML = '<option value="">اختر معيار الاداء الوظيفي</option>'; // أزلنا (اختياري)
         
         structure.forEach(criterion => {
             const option = document.createElement("option");
             option.value = criterion.id;
-            option.textContent = `${criterion.name} (${criterion.weight}%)`;
+            option.textContent = `${criterion.name} (${formatWeight(criterion.weight)})`; // استخدام formatWeight
             criterionSelect.appendChild(option);
             
             window.subcategoriesByCriterion[criterion.id] = criterion.subcategories || [];
@@ -2929,9 +2967,9 @@ function loadSubcategories() {
     const criterionInfo = document.getElementById('criterionInfo');
     
     if (!criterionId) {
-        subcategorySelect.innerHTML = '<option value="">اختر التصنيف الفرعي (اختياري)</option>';
+        subcategorySelect.innerHTML = '<option value="">اختر التصنيف الفرعي</option>'; // أزلنا (اختياري)
         subcategorySelect.disabled = true;
-        reportSelect.innerHTML = '<option value="">اختر التقرير (اختياري)</option>';
+        reportSelect.innerHTML = '<option value="">اختر التقرير</option>'; // أزلنا (اختياري)
         reportSelect.disabled = true;
         criterionInfo.style.display = 'none';
         return;
@@ -2940,13 +2978,13 @@ function loadSubcategories() {
     const criterion = window.allCriteria.find(c => c.id === criterionId);
     if (criterion) {
         document.getElementById('selectedCriterionName').textContent = criterion.name;
-        document.getElementById('selectedCriterionWeight').textContent = criterion.weight + '%';
+        document.getElementById('selectedCriterionWeight').textContent = formatWeight(criterion.weight); // استخدام formatWeight
         criterionInfo.style.display = 'flex';
     }
     
     const subcategories = window.subcategoriesByCriterion[criterionId] || [];
     
-    subcategorySelect.innerHTML = '<option value="">اختر التصنيف الفرعي (اختياري)</option>';
+    subcategorySelect.innerHTML = '<option value="">اختر التصنيف الفرعي</option>'; // أزلنا (اختياري)
     subcategories.forEach(sub => {
         const option = document.createElement("option");
         option.value = sub.id;
@@ -2955,7 +2993,7 @@ function loadSubcategories() {
     });
     
     subcategorySelect.disabled = false;
-    reportSelect.innerHTML = '<option value="">اختر التقرير (اختياري)</option>';
+    reportSelect.innerHTML = '<option value="">اختر التقرير</option>'; // أزلنا (اختياري)
     reportSelect.disabled = true;
 }
 
@@ -2964,14 +3002,14 @@ function loadReports() {
     const reportSelect = document.getElementById('reportSelect');
     
     if (!subcategoryId) {
-        reportSelect.innerHTML = '<option value="">اختر التقرير (اختياري)</option>';
+        reportSelect.innerHTML = '<option value="">اختر التقرير</option>'; // أزلنا (اختياري)
         reportSelect.disabled = true;
         return;
     }
     
     const reports = window.reportsBySubcategory[subcategoryId] || [];
     
-    reportSelect.innerHTML = '<option value="">اختر التقرير (اختياري)</option>';
+    reportSelect.innerHTML = '<option value="">اختر التقرير</option>'; // أزلنا (اختياري)
     reports.forEach(report => {
         const option = document.createElement("option");
         option.value = report.id;

@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ========== نفس الأنماط السابقة ========== */
+/* ========== جميع الأنماط السابقة مع إضافة تعديلات ========== */
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -278,82 +278,7 @@ html, body {
     transition: none;
 }
 
-/* شريط التقدم - أصبح ضمن التدفق الطبيعي */
-.progress-bar-container {
-    width: 100%;
-    background: linear-gradient(135deg, #ffffff 0%, #f8fdfa 100%);
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    border: 2px solid #d4ebe2;
-    border-radius: 20px;
-    box-shadow: 0 4px 15px rgba(4, 74, 53, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Cairo', sans-serif;
-    box-sizing: border-box;
-}
-
-.progress-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    color: #044a35;
-    font-weight: 700;
-    font-size: 15px;
-}
-
-.progress-stats {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-}
-
-.progress-percentage {
-    background: linear-gradient(135deg, #ffd166, #ffc233);
-    color: #5a3e00;
-    padding: 4px 12px;
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 800;
-    box-shadow: 0 2px 8px rgba(255, 209, 102, 0.3);
-    border: 1px solid #ffb830;
-}
-
-.progress-message {
-    color: #066d4d;
-    font-size: 12px;
-    font-weight: 600;
-    background: #e8f4f0;
-    padding: 4px 12px;
-    border-radius: 30px;
-    border: 1px solid #c0e0d6;
-}
-
-.progress-track {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    height: 16px;
-    background: #e0f0ea;
-    border-radius: 30px;
-    overflow: hidden;
-    border: 1px solid #c0e0d6;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
-    position: relative;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #066d4d, #0a9d72);
-    border-radius: 30px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
+/* تم نقل شريط التقدم إلى داخل نافذة التقارير المحفوظة */
 
 /* زر التعبئة الذكية العائم */
 #aiFillFloatingBtn {
@@ -587,6 +512,7 @@ html, body {
     box-shadow: 0 10px 30px rgba(4, 74, 53, 0.12);
     position: relative;
     overflow: hidden;
+    margin-top: 170px; /* لتعويض الأزرار الثابتة */
 }
 
 .input-section::before {
@@ -1092,7 +1018,7 @@ button[title]:hover::before {
     font-size: 12px;
 }
 
-/* نافذة التقارير المحفوظة */
+/* نافذة التقارير المحفوظة (بها شريط التقدم) */
 #savedReportsModal {
     display: none;
     position: fixed;
@@ -1130,6 +1056,83 @@ button[title]:hover::before {
     background: white;
     padding-bottom: 10px;
     border-bottom: 2px solid #d4ebe2;
+}
+
+/* شريط التقدم داخل نافذة التقارير المحفوظة */
+.progress-bar-container {
+    width: 100%;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fdfa 100%);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border: 2px solid #d4ebe2;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(4, 74, 53, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Cairo', sans-serif;
+    box-sizing: border-box;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #044a35;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.progress-stats {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.progress-percentage {
+    background: linear-gradient(135deg, #ffd166, #ffc233);
+    color: #5a3e00;
+    padding: 4px 12px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(255, 209, 102, 0.3);
+    border: 1px solid #ffb830;
+}
+
+.progress-message {
+    color: #066d4d;
+    font-size: 12px;
+    font-weight: 600;
+    background: #e8f4f0;
+    padding: 4px 12px;
+    border-radius: 30px;
+    border: 1px solid #c0e0d6;
+}
+
+.progress-track {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    height: 16px;
+    background: #e0f0ea;
+    border-radius: 30px;
+    overflow: hidden;
+    border: 1px solid #c0e0d6;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #066d4d, #0a9d72);
+    border-radius: 30px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
 
 .reports-grid {
@@ -1916,22 +1919,22 @@ button[title]:hover::before {
         font-size: 11px;
     }
     
-    .progress-bar-container {
-        padding: 12px 15px;
+    .input-section {
+        padding: 15px;
+        margin-top: 160px;
     }
     
-    .progress-header {
-        font-size: 13px;
+    .input-section h2 {
+        font-size: 20px;
     }
     
-    .progress-percentage {
-        padding: 3px 10px;
-        font-size: 12px;
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
     
-    .progress-message {
-        padding: 3px 10px;
-        font-size: 11px;
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
     
     #aiFillFloatingBtn {
@@ -1947,23 +1950,6 @@ button[title]:hover::before {
     
     #aiFillFloatingBtn .floating-ai-text {
         font-size: 12px;
-    }
-    
-    .input-section {
-        padding: 15px;
-    }
-    
-    .input-section h2 {
-        font-size: 20px;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .tools-grid {
-        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -2022,6 +2008,7 @@ button[title]:hover::before {
     
     .input-section {
         padding: 12px;
+        margin-top: 150px;
     }
     
     input, select, textarea {
@@ -2093,6 +2080,89 @@ button[title]:hover::before {
 .pdf-theme-educational .header {
     background: linear-gradient(135deg, #2b6cb0 0%, #3182ce 100%);
 }
+
+/* صندوق التوجيه بعد التوليد */
+.ai-guide-box {
+    position: fixed;
+    bottom: 150px;
+    left: 30px;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    border: 3px solid #ff6b6b;
+    z-index: 2000;
+    max-width: 280px;
+    text-align: center;
+    animation: slideIn 0.5s ease;
+    direction: rtl;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.ai-guide-arrow {
+    font-size: 50px;
+    color: #ff6b6b;
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    transform: rotate(45deg);
+    animation: bounceArrow 1s infinite;
+}
+
+@keyframes bounceArrow {
+    0%, 100% { transform: rotate(45deg) translateX(0); }
+    50% { transform: rotate(45deg) translateX(-10px); }
+}
+
+.ai-guide-content h4 {
+    color: #044a35;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.ai-guide-timer {
+    font-size: 24px;
+    font-weight: 900;
+    color: #ff6b6b;
+    margin: 10px 0;
+}
+
+.ai-guide-btn {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    margin: 10px 0;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.ai-guide-btn:hover {
+    background: #ee5a52;
+    transform: scale(1.05);
+}
+
+.ai-guide-close {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 5px;
+}
 </style>
 </head>
 
@@ -2119,7 +2189,7 @@ button[title]:hover::before {
     </div>
 </div>
 
-<!-- شريط الأخبار العلوي (مطوّر) -->
+<!-- شريط الأخبار العلوي -->
 <div class="top-marquee">
 <div class="marquee-inner">
 <i class="fas fa-star" style="margin-left:8px;"></i> 
@@ -2166,20 +2236,6 @@ button[title]:hover::before {
 
 <!-- المحتوى الرئيسي -->
 <div class="wrapper">
-    <!-- ========== شريط التقدم ========== -->
-    <div class="progress-bar-container" id="progressBarContainer">
-        <div class="progress-header">
-            <div><i class="fas fa-chart-line"></i> تقدم إنجاز التقارير</div>
-            <div class="progress-stats">
-                <span class="progress-percentage" id="progressPercentage">0%</span>
-                <span class="progress-message" id="progressMessage">0 من 0 معايير مكتملة</span>
-            </div>
-        </div>
-        <div class="progress-track">
-            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-        </div>
-    </div>
-
 <div class="input-section">
   
   <h2><i class="fas fa-tools" style="margin-left:10px;"></i>تقاريرك - النظام المتكامل</h2>
@@ -2256,30 +2312,27 @@ button[title]:hover::before {
     <input id="school" placeholder="اسم المدرسة" oninput="updateReport()">
   </div>
   
+  <!-- صف مقدم التقرير (ديناميكي) -->
   <div class="form-row">
     <div class="form-group">
-      <label><i class="fas fa-chalkboard-teacher"></i>صفة المعلّم</label>
-      <select id="teacherType" oninput="updateReport()">
-        <option value="المعلم">المعلم</option>
-        <option value="المعلمة">المعلمة</option>
+      <label><i class="fas fa-chalkboard-teacher"></i><span id="reporterTypeLabel">صفة المعلّم</span></label>
+      <select id="reporterType" oninput="updateReporterGender()">
+        <!-- سيتم تعبئتها حسب الدور -->
       </select>
     </div>
     
     <div class="form-group">
-      <label><i class="fas fa-user"></i>اسم المعلّم</label>
-      <input id="teacher" placeholder="اسم المعلم" oninput="updateReport()">
+      <label><i class="fas fa-user"></i><span id="reporterNameLabel">اسم المعلّم</span></label>
+      <input id="reporterName" placeholder="اسم مقدم التقرير" oninput="updateReport()">
     </div>
   </div>
   
+  <!-- صف المدير (بدون اختيار صفة، تُشتق تلقائياً) -->
   <div class="form-row">
     <div class="form-group">
-      <label><i class="fas fa-user-tie"></i>صفة المدير</label>
-      <select id="principalType" oninput="updateReport()">
-        <option value="المدير">المدير</option>
-        <option value="المديرة">المديرة</option>
-      </select>
+      <label><i class="fas fa-user-cog"></i>صفة المدير (تلقائي)</label>
+      <input type="text" id="principalTypeDisplay" readonly style="background:#f0f0f0;" value="المدير">
     </div>
-    
     <div class="form-group">
       <label><i class="fas fa-user-cog"></i>اسم المدير</label>
       <input id="principal" placeholder="اسم المدير" oninput="updateReport()">
@@ -2307,8 +2360,8 @@ button[title]:hover::before {
     </div>
   </div>
 
-  <!-- تفاصيل المكان (تظهر فقط عند اختيار خارج الصف) -->
-  <div id="detailedPlaceContainer" class="form-group" style="display: none;">
+  <!-- تفاصيل المكان -->
+  <div id="detailedPlaceContainer" class="form-group">
     <label><i class="fas fa-location-dot"></i>حدد المكان بالضبط</label>
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
       <select id="detailedPlaceSelect" style="flex: 2;" onchange="toggleDetailedPlaceInput()">
@@ -2439,7 +2492,7 @@ button[title]:hover::before {
 </div>
 </div>
 
-<!-- قسم PDF للتقارير داخل الصف (القالب المحدّث) -->
+<!-- قسم PDF للتقارير داخل الصف -->
 <div id="report-content" class="pdf-export" style="display:none;">
 <div class="header">
   <img src="https://i.ibb.co/zH7k1s8c/IMG-2987.png" alt="شعار وزارة التعليم">
@@ -2452,7 +2505,7 @@ button[title]:hover::before {
   </div>
 </div>
 
-<!-- الصف العلوي بخمس خانات حسب الطلب -->
+<!-- الصف العلوي بخمس خانات -->
 <div class="info-grid">
   <div class="info-box"><div class="info-title">الفصل الدراسي</div><div class="info-value" id="termBox"></div></div>
   <div class="info-box"><div class="info-title">مكان التنفيذ</div><div class="info-value" id="placeBox"></div></div>
@@ -2463,7 +2516,6 @@ button[title]:hover::before {
 
 <div class="info-grid2">
   <div class="info-box"><div class="info-title">نوع التقرير</div><div class="info-value" id="reportTypeBox"></div></div>
-
   <div class="subject-lesson-box">
     <div class="subject-lesson-title">المادة | الدرس</div>
     <div class="subject-lesson">
@@ -2506,8 +2558,8 @@ button[title]:hover::before {
 
 <div class="signatures">
   <div class="signature-box">
-    <div class="signature-role" id="teacherTypeBox"></div>
-    <div class="signature-name" id="teacherBox"></div>
+    <div class="signature-role" id="reporterTypeBox"></div>
+    <div class="signature-name" id="reporterNameBox"></div>
     <div class="sign-line"></div>
   </div>
   <div class="signature-box">
@@ -2522,7 +2574,7 @@ button[title]:hover::before {
 </div>
 </div>
 
-<!-- قسم PDF للتقارير خارج الصف (القالب محدّث) -->
+<!-- قسم PDF للتقارير خارج الصف -->
 <div id="report-content-outside" class="pdf-export" style="display:none;">
 <div class="header">
   <img src="https://i.ibb.co/zH7k1s8c/IMG-2987.png" alt="شعار وزارة التعليم">
@@ -2580,8 +2632,8 @@ button[title]:hover::before {
 
 <div class="signatures">
   <div>
-    <div class="signature-role" id="outsideTeacherTypeBox"></div>
-    <div class="signature-name" id="outsideTeacherBox"></div>
+    <div class="signature-role" id="outsideReporterTypeBox"></div>
+    <div class="signature-name" id="outsideReporterNameBox"></div>
     <div class="sign-line"></div>
   </div>
   <div>
@@ -2596,10 +2648,24 @@ button[title]:hover::before {
 </div>
 </div>
 
-<!-- نافذة التقارير المحفوظة -->
+<!-- نافذة التقارير المحفوظة (بها شريط التقدم) -->
 <div id="savedReportsModal">
   <div>
     <h3><i class="fas fa-folder-open"></i> التقارير المحفوظة</h3>
+    
+    <!-- شريط التقدم - يظهر فقط للمعلمين -->
+    <div id="progressBarContainer" class="progress-bar-container" style="display: none;">
+        <div class="progress-header">
+            <div><i class="fas fa-chart-line"></i> تقدم إنجاز التقارير</div>
+            <div class="progress-stats">
+                <span class="progress-percentage" id="progressPercentage">0%</span>
+                <span class="progress-message" id="progressMessage">0 من 0 معايير مكتملة</span>
+            </div>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        </div>
+    </div>
     
     <div id="savedReportsList" class="reports-grid">
       <!-- سيتم تعبئتها ديناميكياً -->
@@ -2714,6 +2780,22 @@ button[title]:hover::before {
   </div>
 </div>
 
+<!-- صندوق التوجيه بعد التوليد (يظهر مؤقتاً) -->
+<div id="aiGuideBox" class="ai-guide-box" style="display: none;">
+  <div class="ai-guide-arrow">
+    <i class="fas fa-arrow-left"></i>
+  </div>
+  <div class="ai-guide-content">
+    <h4>✅ تم توليد التقرير بنجاح</h4>
+    <p>التقرير متاح الآن في <strong>التقارير المحفوظة</strong></p>
+    <div class="ai-guide-timer" id="guideTimer">20</div>
+    <button class="ai-guide-btn" id="guideDownloadBtn">
+      <i class="fas fa-file-pdf"></i> ⬇️ تنزيل التقرير PDF
+    </button>
+    <button class="ai-guide-close" id="guideCloseBtn">تجاهل</button>
+  </div>
+</div>
+
 <script>
 // ==================== متغيرات عامة ====================
 window.__ACTIVATED__ = false;
@@ -2723,6 +2805,8 @@ window.reportsBySubcategory = {};     // تجميع التقارير حسب تص
 window.allReportsList = [];          // قائمة مسطحة لجميع التقارير للبحث
 window.roles = [];                   // قائمة الأدوار من الخادم
 window.otherTools = [];              // الأدوات الإضافية (خارج الصف)
+window.currentRole = 'teacher';      // الدور الحالي
+window.guideTimerInterval = null;    // مؤقت العداد
 
 const ACTIVATION_KEY_NAME = "activation_code";
 const BACKEND_URL = "https://deep-qphc.onrender.com";
@@ -2733,7 +2817,10 @@ const REPORTS_STORAGE_KEY = "saved_educational_reports";
 let currentHijriDate = '';
 let currentGregorianDate = '';
 
-// دالة مساعدة لتنسيق الوزن مع % واحدة فقط
+// الأدوار التي تخفي النسب المئوية وتفرض خارج الصف وتغيير التسميات
+const specialRoles = ['deputy', 'student_guide', 'health_guide', 'activity_leader'];
+
+// دالة مساعدة لتنسيق الوزن مع % واحدة فقط (تستخدم فقط للمعلم)
 function formatWeight(weight) {
     if (weight === undefined || weight === null) return '0%';
     let num = parseFloat(String(weight).replace(/%/g, '')) || 0;
@@ -2898,20 +2985,17 @@ function togglePlaceFields() {
     const subjectLessonRow = document.getElementById('subjectLessonRow');
     const insideTools = document.getElementById('insideToolsSection');
     const outsideTools = document.getElementById('outsideToolsSection');
-    const detailedPlaceContainer = document.getElementById('detailedPlaceContainer');
     
     if (place === 'خارج الصف') {
         gradeRow.style.display = 'none';
         subjectLessonRow.style.display = 'none';
         insideTools.style.display = 'none';
         outsideTools.style.display = 'block';
-        detailedPlaceContainer.style.display = 'block';
     } else {
         gradeRow.style.display = 'flex';
         subjectLessonRow.style.display = 'flex';
         insideTools.style.display = 'block';
         outsideTools.style.display = 'none';
-        detailedPlaceContainer.style.display = 'none';
     }
     updateReport();
 }
@@ -2937,6 +3021,96 @@ function getDetailedPlaceValue() {
     } else {
         return '';
     }
+}
+
+// ==================== دوال تحديث واجهة مقدم التقرير ====================
+function updateReporterFields(role) {
+    const isSpecial = specialRoles.includes(role);
+    
+    // تحديث تسميات الحقول
+    const reporterTypeLabel = document.getElementById('reporterTypeLabel');
+    const reporterNameLabel = document.getElementById('reporterNameLabel');
+    
+    let typeOptions = [];
+    let defaultType = '';
+    
+    if (role === 'teacher') {
+        reporterTypeLabel.textContent = 'صفة المعلّم';
+        reporterNameLabel.textContent = 'اسم المعلّم';
+        typeOptions = ['المعلم', 'المعلمة'];
+        defaultType = 'المعلم';
+    } else if (role === 'deputy') {
+        reporterTypeLabel.textContent = 'صفة الوكيل';
+        reporterNameLabel.textContent = 'اسم الوكيل';
+        typeOptions = ['وكيل المدرسة', 'وكيلة المدرسة'];
+        defaultType = 'وكيل المدرسة';
+    } else if (role === 'student_guide') {
+        reporterTypeLabel.textContent = 'صفة الموجه الطلابي';
+        reporterNameLabel.textContent = 'اسم الموجه الطلابي';
+        typeOptions = ['موجه طلابي', 'موجهة طلابية'];
+        defaultType = 'موجه طلابي';
+    } else if (role === 'health_guide') {
+        reporterTypeLabel.textContent = 'صفة الموجه الصحي';
+        reporterNameLabel.textContent = 'اسم الموجه الصحي';
+        typeOptions = ['موجه صحي', 'موجهة صحية'];
+        defaultType = 'موجه صحي';
+    } else if (role === 'activity_leader') {
+        reporterTypeLabel.textContent = 'صفة رائد النشاط';
+        reporterNameLabel.textContent = 'اسم رائد النشاط';
+        typeOptions = ['رائد نشاط', 'رائدة نشاط'];
+        defaultType = 'رائد نشاط';
+    } else {
+        // أدوار أخرى (قد تضاف لاحقاً)
+        reporterTypeLabel.textContent = 'صفة مقدم التقرير';
+        reporterNameLabel.textContent = 'اسم مقدم التقرير';
+        typeOptions = ['مقدم التقرير', 'مقدمة التقرير'];
+        defaultType = 'مقدم التقرير';
+    }
+    
+    // تعبئة قائمة الصفات
+    const typeSelect = document.getElementById('reporterType');
+    typeSelect.innerHTML = '';
+    typeOptions.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt;
+        option.textContent = opt;
+        typeSelect.appendChild(option);
+    });
+    typeSelect.value = defaultType;
+    
+    // تحديث صفة المدير بناءً على جنس مقدم التقرير
+    updatePrincipalType();
+    
+    // إذا كان الدور من الأدوار الخاصة، نخفي النسب المئوية في القوائم، ونفرض خارج الصف
+    if (isSpecial) {
+        // إخفاء الوزن في معلومات المعيار
+        document.getElementById('selectedCriterionWeight').style.display = 'none';
+        
+        // إزالة الأوزان من خيارات المعايير عند تحميلها لاحقاً (سيتم في loadDataFromBackend)
+        
+        // فرض مكان التنفيذ إلى خارج الصف
+        document.getElementById('place').value = 'خارج الصف';
+        togglePlaceFields();
+    } else {
+        // إظهار الوزن
+        document.getElementById('selectedCriterionWeight').style.display = 'inline-block';
+        // لا نفرض مكان التنفيذ
+    }
+    
+    // تحديث حقل صفة المدير المعروض
+    updateReport();
+}
+
+function updatePrincipalType() {
+    const reporterType = document.getElementById('reporterType').value;
+    const isFemale = reporterType.includes('ة') || reporterType.includes('معلمة') || reporterType.includes('وكيلة') || reporterType.includes('موجهة') || reporterType.includes('رائدة');
+    const principalTypeDisplay = document.getElementById('principalTypeDisplay');
+    principalTypeDisplay.value = isFemale ? 'المديرة' : 'المدير';
+}
+
+function updateReporterGender() {
+    updatePrincipalType();
+    updateReport();
 }
 
 // ==================== دوال الأدوات الخارجية ====================
@@ -3040,6 +3214,12 @@ function updateOutsideToolsList() {
 
 // ==================== دوال حفظ واستعراض التقارير ====================
 function calculateProgress() {
+    // نحسب فقط إذا كان الدور الحالي هو معلم
+    if (window.currentRole !== 'teacher') {
+        document.getElementById('progressBarContainer').style.display = 'none';
+        return;
+    }
+    
     const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
     const criteria = window.allCriteria.length > 0 ? window.allCriteria : [];
     
@@ -3114,9 +3294,8 @@ function saveCurrentReport() {
         data: {
             education: document.getElementById('education').value,
             school: document.getElementById('school').value,
-            teacherType: document.getElementById('teacherType').value,
-            teacher: document.getElementById('teacher').value,
-            principalType: document.getElementById('principalType').value,
+            reporterType: document.getElementById('reporterType').value,
+            reporterName: document.getElementById('reporterName').value,
             principal: document.getElementById('principal').value,
             grade: document.getElementById('grade').value,
             term: document.getElementById('term').value,
@@ -3142,7 +3321,6 @@ function saveCurrentReport() {
     localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(savedReports));
     
     calculateProgress();
-    showNotification('تم حفظ التقرير بنجاح!');
     return true;
 }
 
@@ -3154,9 +3332,8 @@ function loadSavedReport(criterionId) {
     
     document.getElementById('education').value = report.data.education || '';
     document.getElementById('school').value = report.data.school || '';
-    document.getElementById('teacherType').value = report.data.teacherType || 'المعلم';
-    document.getElementById('teacher').value = report.data.teacher || '';
-    document.getElementById('principalType').value = report.data.principalType || 'المدير';
+    document.getElementById('reporterType').value = report.data.reporterType || 'المعلم';
+    document.getElementById('reporterName').value = report.data.reporterName || '';
     document.getElementById('principal').value = report.data.principal || '';
     document.getElementById('grade').value = report.data.grade || '';
     document.getElementById('term').value = report.data.term || '';
@@ -3190,7 +3367,7 @@ function loadSavedReport(criterionId) {
     
     if (report.role) {
         document.getElementById('roleSelect').value = report.role;
-        // إعادة تحميل المعايير حسب الدور (اختياري، يمكن الانتظار حتى يتم التحميل)
+        handleRoleChange(); // نعيد تحميل البيانات حسب الدور
     }
     
     window.otherTools = report.data.otherTools || [];
@@ -3224,6 +3401,7 @@ function loadSavedReport(criterionId) {
         });
     }
     
+    updateReporterGender(); // تحديث صفة المدير
     updateReport();
     showNotification('تم تحميل التقرير بنجاح!');
     return true;
@@ -3263,6 +3441,9 @@ function deleteSavedReport(criterionId) {
 function openSavedReports() {
     const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
     const reportsList = document.getElementById('savedReportsList');
+    
+    // تحديث شريط التقدم
+    calculateProgress();
     
     if (Object.keys(savedReports).length === 0) {
         reportsList.innerHTML = `
@@ -3305,6 +3486,8 @@ function closeSavedReports() {
 
 // ==================== دوال تحميل البيانات ====================
 async function loadDataFromBackend(role = 'teacher') {
+    window.currentRole = role;
+    
     try {
         const structureResponse = await fetch(BACKEND_URL + "/api/full-structure?role=" + encodeURIComponent(role));
         const structureData = await structureResponse.json();
@@ -3321,10 +3504,17 @@ async function loadDataFromBackend(role = 'teacher') {
         window.reportsBySubcategory = {};
         window.allReportsList = [];
         
+        const isSpecial = specialRoles.includes(role);
+        
         structure.forEach(criterion => {
+            let optionText = criterion.name;
+            // إذا لم يكن دور خاص نضيف الوزن
+            if (!isSpecial) {
+                optionText += ` (${formatWeight(criterion.weight)})`;
+            }
             const option = document.createElement("option");
             option.value = criterion.id;
-            option.textContent = `${criterion.name} (${formatWeight(criterion.weight)})`;
+            option.textContent = optionText;
             criterionSelect.appendChild(option);
             
             window.subcategoriesByCriterion[criterion.id] = criterion.subcategories || [];
@@ -3382,6 +3572,9 @@ async function loadDataFromBackend(role = 'teacher') {
         });
         
         initOutsideTools();
+        
+        // تحديث حقول مقدم التقرير
+        updateReporterFields(role);
         
         calculateProgress();
         console.log("تم تحميل البيانات بنجاح للدور:", role);
@@ -3441,7 +3634,13 @@ function loadSubcategories() {
     const criterion = window.allCriteria.find(c => c.id === criterionId);
     if (criterion) {
         document.getElementById('selectedCriterionName').textContent = criterion.name;
-        document.getElementById('selectedCriterionWeight').textContent = formatWeight(criterion.weight);
+        // إذا كان الدور خاص، نخفي الوزن
+        if (specialRoles.includes(window.currentRole)) {
+            document.getElementById('selectedCriterionWeight').style.display = 'none';
+        } else {
+            document.getElementById('selectedCriterionWeight').style.display = 'inline-block';
+            document.getElementById('selectedCriterionWeight').textContent = formatWeight(criterion.weight);
+        }
         criterionInfo.style.display = 'flex';
     }
     
@@ -3587,6 +3786,7 @@ async function fillWithAI() {
     aiButton.disabled = true;
     
     try {
+        // إرسال البيانات إلى الخادم
         const response = await fetch(BACKEND_URL + "/api/generate-report-content", {
             method: 'POST',
             headers: {
@@ -3604,7 +3804,8 @@ async function fillWithAI() {
                     grade: document.getElementById('grade').value || 'الصف',
                     target: document.getElementById('target').value || 'الطلاب',
                     place: document.getElementById('place').value || 'المدرسة',
-                    count: document.getElementById('count').value || 'عدد الطلاب'
+                    count: document.getElementById('count').value || 'عدد الطلاب',
+                    title: reportTitle // إرسال العنوان اليدوي أيضاً
                 }
             })
         });
@@ -3618,8 +3819,12 @@ async function fillWithAI() {
         }
         
         parseAIResponseProfessional(data.content);
-        showNotification('تم تعبئة الحقول باستخدام الذكاء الاصطناعي بنجاح! ✓');
+        
+        // حفظ التقرير تلقائياً
         saveCurrentReport();
+        
+        // إظهار صندوق التوجيه
+        showGuideBox();
         
     } catch (error) {
         console.error('خطأ في الذكاء الاصطناعي:', error);
@@ -3631,6 +3836,44 @@ async function fillWithAI() {
         aiButton.disabled = false;
         updateAiButtonTheme(localStorage.getItem(APP_THEME_KEY) || 'default');
     }
+}
+
+// ==================== دوال صندوق التوجيه ====================
+function showGuideBox() {
+    const guideBox = document.getElementById('aiGuideBox');
+    const timerSpan = document.getElementById('guideTimer');
+    let seconds = 20;
+    
+    // إيقاف أي مؤقت سابق
+    if (window.guideTimerInterval) {
+        clearInterval(window.guideTimerInterval);
+    }
+    
+    // تعيين المؤقت الجديد
+    window.guideTimerInterval = setInterval(() => {
+        seconds--;
+        timerSpan.textContent = seconds;
+        if (seconds <= 0) {
+            clearInterval(window.guideTimerInterval);
+            guideBox.style.display = 'none';
+        }
+    }, 1000);
+    
+    // ربط زر التنزيل
+    document.getElementById('guideDownloadBtn').onclick = function() {
+        downloadPDF();
+        clearInterval(window.guideTimerInterval);
+        guideBox.style.display = 'none';
+    };
+    
+    // ربط زر الإغلاق
+    document.getElementById('guideCloseBtn').onclick = function() {
+        clearInterval(window.guideTimerInterval);
+        guideBox.style.display = 'none';
+    };
+    
+    // عرض الصندوق
+    guideBox.style.display = 'block';
 }
 
 // ==================== دوال مساعدة ====================
@@ -3728,10 +3971,10 @@ function updateOutsideReport() {
     const detailedPlace = getDetailedPlaceValue();
     document.getElementById('outsideDetailedPlaceBox').innerText = detailedPlace || 'غير محدد';
     
-    document.getElementById('outsideTeacherBox').innerText = document.getElementById('teacher').value || 'غير محدد';
+    document.getElementById('outsideReporterNameBox').innerText = document.getElementById('reporterName').value || 'غير محدد';
     document.getElementById('outsidePrincipalBox').innerText = document.getElementById('principal').value || 'غير محدد';
-    document.getElementById('outsideTeacherTypeBox').innerText = document.getElementById('teacherType').value || 'المعلم';
-    document.getElementById('outsidePrincipalTypeBox').innerText = document.getElementById('principalType').value || 'المدير';
+    document.getElementById('outsideReporterTypeBox').innerText = document.getElementById('reporterType').value || 'مقدم التقرير';
+    document.getElementById('outsidePrincipalTypeBox').innerText = document.getElementById('principalTypeDisplay').value || 'المدير';
     
     document.getElementById('outsideGoalBox').innerText = document.getElementById('goal').value || 'لم يتم تحديد الهدف التربوي';
     document.getElementById('outsideSummaryBox').innerText = document.getElementById('summary').value || 'لم يتم إضافة نبذة مختصرة';
@@ -3766,10 +4009,10 @@ function updateReport() {
     document.getElementById('subjectBox').innerText = document.getElementById('subject').value || 'غير محدد';
     document.getElementById('lessonBox').innerText = document.getElementById('lesson').value || 'غير محدد';
     
-    document.getElementById('teacherBox').innerText = document.getElementById('teacher').value || 'غير محدد';
+    document.getElementById('reporterNameBox').innerText = document.getElementById('reporterName').value || 'غير محدد';
     document.getElementById('principalBox').innerText = document.getElementById('principal').value || 'غير محدد';
-    document.getElementById('teacherTypeBox').innerText = document.getElementById('teacherType').value || 'المعلم';
-    document.getElementById('principalTypeBox').innerText = document.getElementById('principalType').value || 'المدير';
+    document.getElementById('reporterTypeBox').innerText = document.getElementById('reporterType').value || 'مقدم التقرير';
+    document.getElementById('principalTypeBox').innerText = document.getElementById('principalTypeDisplay').value || 'المدير';
     
     document.getElementById('goalBox').innerText = document.getElementById('goal').value || 'لم يتم تحديد الهدف التربوي';
     document.getElementById('summaryBox').innerText = document.getElementById('summary').value || 'لم يتم إضافة نبذة مختصرة';
@@ -3861,10 +4104,9 @@ function saveTeacherData() {
         place: document.getElementById('place').value,
         detailedPlace: getDetailedPlaceValue(),
         lesson: document.getElementById('lesson').value,
-        teacher: document.getElementById('teacher').value,
+        reporterName: document.getElementById('reporterName').value,
         principal: document.getElementById('principal').value,
-        teacherType: document.getElementById('teacherType').value,
-        principalType: document.getElementById('principalType').value,
+        reporterType: document.getElementById('reporterType').value,
         term: document.getElementById('term').value,
         count: document.getElementById('count').value,
         manualTitle: document.getElementById('manualReportTitle').value,
@@ -3895,7 +4137,7 @@ function saveTeacherData() {
     });
     
     localStorage.setItem('teacherData', JSON.stringify(teacherData));
-    showNotification('تم حفظ بيانات المعلم بنجاح!');
+    showNotification('تم حفظ بيانات مقدم التقرير بنجاح!');
 }
 
 function showNotification(message) {
@@ -3929,17 +4171,16 @@ function loadTeacherData() {
         document.getElementById('target').value = teacherData.target || '';
         document.getElementById('place').value = teacherData.place || 'داخل الصف';
         document.getElementById('lesson').value = teacherData.lesson || '';
-        document.getElementById('teacher').value = teacherData.teacher || '';
+        document.getElementById('reporterName').value = teacherData.reporterName || '';
         document.getElementById('principal').value = teacherData.principal || '';
-        document.getElementById('teacherType').value = teacherData.teacherType || 'المعلم';
-        document.getElementById('principalType').value = teacherData.principalType || 'المدير';
+        document.getElementById('reporterType').value = teacherData.reporterType || 'المعلم';
         document.getElementById('term').value = teacherData.term || '';
         document.getElementById('count').value = teacherData.count || '';
         document.getElementById('manualReportTitle').value = teacherData.manualTitle || '';
         
         if (teacherData.role) {
             document.getElementById('roleSelect').value = teacherData.role;
-            // إذا أردت تحميل المعايير فوراً، يمكنك استدعاء loadDataFromBackend مع التأخير
+            handleRoleChange(); // نحمّل البيانات حسب الدور
         }
         
         if (teacherData.detailedPlace) {
@@ -3995,6 +4236,7 @@ function loadTeacherData() {
             });
         }
         
+        updateReporterGender();
         updateReport();
     }
 }
@@ -4102,10 +4344,10 @@ function fallbackProfessionalAIParsing(response) {
 }
 
 function clearData() {
-    if (confirm("هل أنت متأكد من مسح بيانات المعلم والنصوص المولدة؟")) {
+    if (confirm("هل أنت متأكد من مسح بيانات مقدم التقرير والنصوص المولدة؟")) {
         document.getElementById('education').value = '';
         document.getElementById('school').value = '';
-        document.getElementById('teacher').value = '';
+        document.getElementById('reporterName').value = '';
         document.getElementById('principal').value = '';
         document.getElementById('grade').value = '';
         document.getElementById('term').value = '';
@@ -4148,7 +4390,7 @@ function clearData() {
         document.getElementById('criterionInfo').style.display = 'none';
 
         updateReport();
-        showNotification('تم مسح بيانات المعلم والنصوص المولدة.');
+        showNotification('تم مسح بيانات مقدم التقرير والنصوص المولدة.');
     }
 }
 
@@ -4158,7 +4400,6 @@ async function downloadPDF() {
     document.querySelector('.top-small-buttons').style.visibility = 'hidden';
     document.querySelector('.main-buttons-bar').style.visibility = 'hidden';
     document.querySelector('.top-marquee').style.visibility = 'hidden';
-    document.querySelector('.progress-bar-container').style.visibility = 'hidden';
     document.getElementById('aiFillFloatingBtn').style.visibility = 'hidden';
     document.body.style.margin = "0";
     document.body.style.background = "white";
@@ -4202,7 +4443,6 @@ async function downloadPDF() {
         document.querySelector('.top-small-buttons').style.visibility = 'visible';
         document.querySelector('.main-buttons-bar').style.visibility = 'visible';
         document.querySelector('.top-marquee').style.visibility = 'visible';
-        document.querySelector('.progress-bar-container').style.visibility = 'visible';
         document.getElementById('aiFillFloatingBtn').style.visibility = 'visible';
         document.body.style.margin = "";
         document.body.style.background = "#f9fcfb";
@@ -4217,7 +4457,6 @@ async function sharePDFWhatsApp() {
     document.querySelector('.top-small-buttons').style.visibility = 'hidden';
     document.querySelector('.main-buttons-bar').style.visibility = 'hidden';
     document.querySelector('.top-marquee').style.visibility = 'visible';
-    document.querySelector('.progress-bar-container').style.visibility = 'hidden';
     document.getElementById('aiFillFloatingBtn').style.visibility = 'hidden';
     document.body.style.margin = "0";
     document.body.style.background = "white";
@@ -4263,7 +4502,6 @@ async function sharePDFWhatsApp() {
         document.querySelector('.top-small-buttons').style.visibility = 'visible';
         document.querySelector('.main-buttons-bar').style.visibility = 'visible';
         document.querySelector('.top-marquee').style.visibility = 'visible';
-        document.querySelector('.progress-bar-container').style.visibility = 'visible';
         document.getElementById('aiFillFloatingBtn').style.visibility = 'visible';
         document.body.style.margin = "";
         document.body.style.background = "#f9fcfb";
@@ -4394,6 +4632,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             setTimeout(adaptSubjectLessonFont, 50);
         }
     });
+    
+    // إخفاء صندوق التوجيه عند بدء التشغيل
+    document.getElementById('aiGuideBox').style.display = 'none';
 });
 </script>
 

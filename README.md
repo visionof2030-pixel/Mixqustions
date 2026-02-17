@@ -7,9 +7,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
+/* ========== نفس الأنماط السابقة ========== */
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 
-/* ========== المتغيرات الأساسية ========== */
 :root {
     --primary: #066d4d;
     --primary-dark: #044a35;
@@ -1561,16 +1561,17 @@ button[title]:hover::before {
     text-align: right;
 }
 
+/* الصف العلوي بخمس خانات */
 .info-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 6px;
     margin-bottom: 6px;
 }
 
 .info-grid2 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 6px;
     margin-bottom: 6px;
 }
@@ -1829,12 +1830,16 @@ button[title]:hover::before {
     border-radius: 6px;
 }
 
-/* خارج الصف */
+/* خارج الصف - تصميم محدث */
 #report-content-outside .info-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr); /* الفصل الدراسي, مكان التنفيذ, المستهدفون, العدد */
 }
 #report-content-outside .info-grid2 {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr; /* نوع التقرير فقط */
+    max-width: 100%;
+}
+#report-content-outside .info-grid2 .info-box {
+    width: 100%;
 }
 #report-content-outside .box {
     height: 130px;
@@ -2179,6 +2184,15 @@ button[title]:hover::before {
   
   <h2><i class="fas fa-tools" style="margin-left:10px;"></i>تقاريرك - النظام المتكامل</h2>
   
+  <!-- ========== اختيار مقدم التقرير (الدور) ========== -->
+  <div class="form-group">
+    <label><i class="fas fa-user-tie"></i> مقدم التقرير</label>
+    <select id="roleSelect" onchange="handleRoleChange()">
+      <option value="teacher">معلم</option>
+      <!-- سيتم تعبئة باقي الأدوار من الخادم -->
+    </select>
+  </div>
+  
   <!-- ========== القوائم المتتالية (اختيارية) ========== -->
   <div class="levels-container">
     <div class="level-indicator">
@@ -2272,7 +2286,7 @@ button[title]:hover::before {
     </div>
   </div>
   
-  <!-- تم تعديل هذه الصف: إزالة الصف ووضع مكان التنفيذ بدلاً منه -->
+  <!-- مكان التنفيذ والفصل الدراسي -->
   <div class="form-row">
     <div class="form-group">
       <label><i class="fas fa-map-marker-alt"></i>مكان التنفيذ</label>
@@ -2293,7 +2307,23 @@ button[title]:hover::before {
     </div>
   </div>
 
-  <!-- صف جديد للصف (يظهر فقط عند اختيار داخل الصف) -->
+  <!-- تفاصيل المكان (تظهر فقط عند اختيار خارج الصف) -->
+  <div id="detailedPlaceContainer" class="form-group" style="display: none;">
+    <label><i class="fas fa-location-dot"></i>حدد المكان بالضبط</label>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <select id="detailedPlaceSelect" style="flex: 2;" onchange="toggleDetailedPlaceInput()">
+        <option value="">اختر موقعاً محدداً</option>
+        <option value="الفناء المدرسي">الفناء المدرسي</option>
+        <option value="غرفة المدير">غرفة المدير</option>
+        <option value="غرفة الاجتماعات">غرفة الاجتماعات</option>
+        <option value="رحلة خارج المدرسة">رحلة خارج المدرسة</option>
+        <option value="أخرى">أخرى (اكتب)</option>
+      </select>
+      <input type="text" id="detailedPlaceInput" placeholder="اكتب موقعاً آخر" style="flex: 3; display: none;" oninput="updateReport()">
+    </div>
+  </div>
+
+  <!-- صف الصف (يظهر فقط عند اختيار داخل الصف) -->
   <div id="gradeRow" class="form-row">
     <div class="form-group">
       <label><i class="fas fa-users-class"></i>الصف</label>
@@ -2304,7 +2334,7 @@ button[title]:hover::before {
     </div>
   </div>
 
-  <!-- صف للمادة والدرس (يظهر فقط عند اختيار داخل الصف) -->
+  <!-- صف المادة والدرس (يظهر فقط عند اختيار داخل الصف) -->
   <div id="subjectLessonRow" class="form-row">
     <div class="form-group">
       <label><i class="fas fa-book"></i>المادة</label>
@@ -2409,7 +2439,7 @@ button[title]:hover::before {
 </div>
 </div>
 
-<!-- قسم PDF للتقارير داخل الصف (القالب القديم) -->
+<!-- قسم PDF للتقارير داخل الصف (القالب المحدّث) -->
 <div id="report-content" class="pdf-export" style="display:none;">
 <div class="header">
   <img src="https://i.ibb.co/zH7k1s8c/IMG-2987.png" alt="شعار وزارة التعليم">
@@ -2422,11 +2452,13 @@ button[title]:hover::before {
   </div>
 </div>
 
+<!-- الصف العلوي بخمس خانات حسب الطلب -->
 <div class="info-grid">
   <div class="info-box"><div class="info-title">الفصل الدراسي</div><div class="info-value" id="termBox"></div></div>
+  <div class="info-box"><div class="info-title">مكان التنفيذ</div><div class="info-value" id="placeBox"></div></div>
   <div class="info-box"><div class="info-title">الصف</div><div class="info-value" id="gradeBox"></div></div>
-  <div class="info-box"><div class="info-title">العدد</div><div class="info-value" id="countBox"></div></div>
   <div class="info-box"><div class="info-title">المستهدفون</div><div class="info-value" id="targetBox"></div></div>
+  <div class="info-box"><div class="info-title">العدد</div><div class="info-value" id="countBox"></div></div>
 </div>
 
 <div class="info-grid2">
@@ -2440,8 +2472,6 @@ button[title]:hover::before {
       <div id="lessonBox"></div>
     </div>
   </div>
-
-  <div class="info-box"><div class="info-title">مكان التنفيذ</div><div class="info-value" id="placeBox"></div></div>
 </div>
 
 <div class="box-objective">
@@ -2492,7 +2522,7 @@ button[title]:hover::before {
 </div>
 </div>
 
-<!-- قسم PDF للتقارير خارج الصف (القالب الجديد) -->
+<!-- قسم PDF للتقارير خارج الصف (القالب محدّث) -->
 <div id="report-content-outside" class="pdf-export" style="display:none;">
 <div class="header">
   <img src="https://i.ibb.co/zH7k1s8c/IMG-2987.png" alt="شعار وزارة التعليم">
@@ -2505,15 +2535,17 @@ button[title]:hover::before {
   </div>
 </div>
 
+<!-- الصف العلوي: الفصل الدراسي, مكان التنفيذ (التفاصيل), المستهدفون, العدد -->
 <div class="info-grid">
   <div class="info-box"><div class="info-title">الفصل الدراسي</div><div class="info-value" id="outsideTermBox"></div></div>
-  <div class="info-box"><div class="info-title">العدد</div><div class="info-value" id="outsideCountBox"></div></div>
+  <div class="info-box"><div class="info-title">مكان التنفيذ</div><div class="info-value" id="outsideDetailedPlaceBox"></div></div>
   <div class="info-box"><div class="info-title">المستهدفون</div><div class="info-value" id="outsideTargetBox"></div></div>
+  <div class="info-box"><div class="info-title">العدد</div><div class="info-value" id="outsideCountBox"></div></div>
 </div>
 
+<!-- الصف الثاني: نوع التقرير فقط -->
 <div class="info-grid2">
   <div class="info-box"><div class="info-title">نوع التقرير</div><div class="info-value" id="outsideReportTypeBox"></div></div>
-  <div class="info-box"><div class="info-title">مكان التنفيذ</div><div class="info-value" id="outsidePlaceBox"></div></div>
 </div>
 
 <div class="box">
@@ -2683,12 +2715,14 @@ button[title]:hover::before {
 </div>
 
 <script>
-// ==================== المتغيرات العامة ====================
+// ==================== متغيرات عامة ====================
 window.__ACTIVATED__ = false;
-window.allCriteria = [];
-window.subcategoriesByCriterion = {};
-window.reportsBySubcategory = {};
-window.allReportsList = [];
+window.allCriteria = [];            // المصفوفة الكاملة للمعايير حسب الدور الحالي
+window.subcategoriesByCriterion = {}; // تجميع التصنيفات حسب معيار
+window.reportsBySubcategory = {};     // تجميع التقارير حسب تصنيف
+window.allReportsList = [];          // قائمة مسطحة لجميع التقارير للبحث
+window.roles = [];                   // قائمة الأدوار من الخادم
+window.otherTools = [];              // الأدوات الإضافية (خارج الصف)
 
 const ACTIVATION_KEY_NAME = "activation_code";
 const BACKEND_URL = "https://deep-qphc.onrender.com";
@@ -2698,15 +2732,10 @@ const REPORTS_STORAGE_KEY = "saved_educational_reports";
 
 let currentHijriDate = '';
 let currentGregorianDate = '';
-let educationalCriteria = [];
-
-// متغير لتخزين الأدوات الأخرى (خارج الصف)
-let otherTools = [];
 
 // دالة مساعدة لتنسيق الوزن مع % واحدة فقط
 function formatWeight(weight) {
     if (weight === undefined || weight === null) return '0%';
-    // إزالة أي رموز % موجودة والحصول على الرقم
     let num = parseFloat(String(weight).replace(/%/g, '')) || 0;
     return num + '%';
 }
@@ -2869,19 +2898,45 @@ function togglePlaceFields() {
     const subjectLessonRow = document.getElementById('subjectLessonRow');
     const insideTools = document.getElementById('insideToolsSection');
     const outsideTools = document.getElementById('outsideToolsSection');
+    const detailedPlaceContainer = document.getElementById('detailedPlaceContainer');
     
     if (place === 'خارج الصف') {
         gradeRow.style.display = 'none';
         subjectLessonRow.style.display = 'none';
         insideTools.style.display = 'none';
         outsideTools.style.display = 'block';
+        detailedPlaceContainer.style.display = 'block';
     } else {
         gradeRow.style.display = 'flex';
         subjectLessonRow.style.display = 'flex';
         insideTools.style.display = 'block';
         outsideTools.style.display = 'none';
+        detailedPlaceContainer.style.display = 'none';
     }
     updateReport();
+}
+
+function toggleDetailedPlaceInput() {
+    const select = document.getElementById('detailedPlaceSelect');
+    const input = document.getElementById('detailedPlaceInput');
+    if (select.value === 'أخرى') {
+        input.style.display = 'block';
+    } else {
+        input.style.display = 'none';
+    }
+    updateReport();
+}
+
+function getDetailedPlaceValue() {
+    const select = document.getElementById('detailedPlaceSelect');
+    const input = document.getElementById('detailedPlaceInput');
+    if (select.value === 'أخرى') {
+        return input.value.trim() || 'مكان آخر';
+    } else if (select.value) {
+        return select.value;
+    } else {
+        return '';
+    }
 }
 
 // ==================== دوال الأدوات الخارجية ====================
@@ -2929,14 +2984,14 @@ function addOtherTool() {
     const toolName = input.value.trim();
     if (toolName === '') return;
     
-    otherTools.push(toolName);
+    window.otherTools.push(toolName);
     input.value = '';
     updateOtherToolsList();
     updateReport();
 }
 
 function removeOtherTool(index) {
-    otherTools.splice(index, 1);
+    window.otherTools.splice(index, 1);
     updateOtherToolsList();
     updateReport();
 }
@@ -2944,7 +2999,7 @@ function removeOtherTool(index) {
 function updateOtherToolsList() {
     const listContainer = document.getElementById('otherToolsList');
     listContainer.innerHTML = '';
-    otherTools.forEach((tool, index) => {
+    window.otherTools.forEach((tool, index) => {
         const tag = document.createElement('span');
         tag.className = 'other-tag';
         tag.innerHTML = `${tool} <i class="fas fa-times" onclick="removeOtherTool(${index})"></i>`;
@@ -2953,20 +3008,17 @@ function updateOtherToolsList() {
 }
 
 function updateOutsideToolsList() {
-    // تحديث قائمة الأدوات في الـ PDF الخارجي
     const toolsListBox = document.getElementById('outsideToolsListBox');
     toolsListBox.innerHTML = '';
     
     const selectedTools = [];
-    // الأدوات المحددة من الشبكة
     const outsideCheckboxes = document.querySelectorAll('#outsideToolsGrid .tool-checkbox input[type="checkbox"]');
     outsideCheckboxes.forEach(checkbox => {
         if (checkbox.checked) {
             selectedTools.push(checkbox.value);
         }
     });
-    // الأدوات الأخرى
-    selectedTools.push(...otherTools);
+    selectedTools.push(...window.otherTools);
     
     selectedTools.forEach(tool => {
         const toolElement = document.createElement('div');
@@ -2989,7 +3041,7 @@ function updateOutsideToolsList() {
 // ==================== دوال حفظ واستعراض التقارير ====================
 function calculateProgress() {
     const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
-    const criteria = educationalCriteria.length > 0 ? educationalCriteria : window.allCriteria || [];
+    const criteria = window.allCriteria.length > 0 ? window.allCriteria : [];
     
     if (criteria.length === 0) {
         document.getElementById('progressBarContainer').style.display = 'none';
@@ -3033,7 +3085,6 @@ function saveCurrentReport() {
     
     const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
     
-    // جمع الأدوات المختارة (داخل الصف أو خارج الصف)
     let tools = [];
     const place = document.getElementById('place').value;
     if (place === 'خارج الصف') {
@@ -3041,7 +3092,7 @@ function saveCurrentReport() {
         outsideCheckboxes.forEach(checkbox => {
             if (checkbox.checked) tools.push(checkbox.value);
         });
-        tools = tools.concat(otherTools);
+        tools = tools.concat(window.otherTools);
     } else {
         const insideCheckboxes = document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]');
         insideCheckboxes.forEach(checkbox => {
@@ -3057,7 +3108,9 @@ function saveCurrentReport() {
         weight: criterionWeight,
         date: currentGregorianDate,
         hijriDate: currentHijriDate,
-        place: place, // حفظ مكان التنفيذ
+        place: place,
+        detailedPlace: getDetailedPlaceValue(),
+        role: document.getElementById('roleSelect').value,
         data: {
             education: document.getElementById('education').value,
             school: document.getElementById('school').value,
@@ -3072,6 +3125,7 @@ function saveCurrentReport() {
             target: document.getElementById('target').value,
             count: document.getElementById('count').value,
             place: place,
+            detailedPlace: getDetailedPlaceValue(),
             goal: document.getElementById('goal').value,
             summary: document.getElementById('summary').value,
             steps: document.getElementById('steps').value,
@@ -3080,7 +3134,7 @@ function saveCurrentReport() {
             improve: document.getElementById('improve').value,
             recomm: document.getElementById('recomm').value,
             tools: tools,
-            otherTools: otherTools // حفظ الأدوات الأخرى
+            otherTools: window.otherTools
         }
     };
     
@@ -3120,16 +3174,31 @@ function loadSavedReport(criterionId) {
     document.getElementById('recomm').value = report.data.recomm || '';
     document.getElementById('manualReportTitle').value = report.title || '';
     
-    // إعادة تعيين الأدوات الأخرى
-    otherTools = report.data.otherTools || [];
+    const detailedPlace = report.data.detailedPlace || '';
+    const detailedPlaceSelect = document.getElementById('detailedPlaceSelect');
+    const detailedPlaceInput = document.getElementById('detailedPlaceInput');
+    const options = Array.from(detailedPlaceSelect.options).map(opt => opt.value);
+    if (options.includes(detailedPlace)) {
+        detailedPlaceSelect.value = detailedPlace;
+        detailedPlaceInput.style.display = 'none';
+        detailedPlaceInput.value = '';
+    } else {
+        detailedPlaceSelect.value = 'أخرى';
+        detailedPlaceInput.style.display = 'block';
+        detailedPlaceInput.value = detailedPlace;
+    }
+    
+    if (report.role) {
+        document.getElementById('roleSelect').value = report.role;
+        // إعادة تحميل المعايير حسب الدور (اختياري، يمكن الانتظار حتى يتم التحميل)
+    }
+    
+    window.otherTools = report.data.otherTools || [];
     updateOtherToolsList();
     
-    // تحديث حالة الأدوات حسب مكان التنفيذ
-    togglePlaceFields(); // يظهر المجموعة المناسبة
+    togglePlaceFields();
     
-    // تحديد الأدوات
     if (report.data.place === 'خارج الصف') {
-        // تحديد أدوات خارج الصف
         const outsideCheckboxes = document.querySelectorAll('#outsideToolsGrid .tool-checkbox');
         outsideCheckboxes.forEach(toolElement => {
             const checkbox = toolElement.querySelector('input[type="checkbox"]');
@@ -3142,7 +3211,6 @@ function loadSavedReport(criterionId) {
             }
         });
     } else {
-        // تحديد أدوات داخل الصف
         const insideCheckboxes = document.querySelectorAll('#toolsGrid .tool-checkbox');
         insideCheckboxes.forEach(toolElement => {
             const checkbox = toolElement.querySelector('input[type="checkbox"]');
@@ -3161,10 +3229,8 @@ function loadSavedReport(criterionId) {
     return true;
 }
 
-// دوال جديدة لتنزيل ومشاركة تقرير محفوظ مباشرة
 async function downloadSavedReport(criterionId) {
     if (loadSavedReport(criterionId)) {
-        // تأخير بسيط لضمان تحديث النموذج
         await new Promise(resolve => setTimeout(resolve, 100));
         await downloadPDF();
     }
@@ -3238,18 +3304,22 @@ function closeSavedReports() {
 }
 
 // ==================== دوال تحميل البيانات ====================
-async function loadDataFromBackend() {
+async function loadDataFromBackend(role = 'teacher') {
     try {
-        const structureResponse = await fetch(BACKEND_URL + "/api/full-structure");
+        const structureResponse = await fetch(BACKEND_URL + "/api/full-structure?role=" + encodeURIComponent(role));
         const structureData = await structureResponse.json();
         
         const structure = structureData.structure;
         
         window.allCriteria = structure;
-        educationalCriteria = structure;
         
         const criterionSelect = document.getElementById("criterionSelect");
         criterionSelect.innerHTML = '<option value="">اختر معيار الاداء الوظيفي</option>';
+        
+        // إعادة تعيين كائنات التجميع
+        window.subcategoriesByCriterion = {};
+        window.reportsBySubcategory = {};
+        window.allReportsList = [];
         
         structure.forEach(criterion => {
             const option = document.createElement("option");
@@ -3311,16 +3381,45 @@ async function loadDataFromBackend() {
             toolsGrid.appendChild(label);
         });
         
-        // تهيئة أدوات خارج الصف
         initOutsideTools();
         
         calculateProgress();
-        console.log("تم تحميل البيانات بنجاح");
+        console.log("تم تحميل البيانات بنجاح للدور:", role);
         
     } catch (error) {
         console.error("خطأ في تحميل البيانات:", error);
         showNotification("حدث خطأ في تحميل البيانات. سيتم استخدام البيانات المحفوظة محلياً.");
     }
+}
+
+async function loadRoles() {
+    try {
+        const res = await fetch(BACKEND_URL + "/api/roles");
+        const roles = await res.json();
+        window.roles = roles;
+        const roleSelect = document.getElementById('roleSelect');
+        roleSelect.innerHTML = '';
+        roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role.id;
+            option.textContent = role.name;
+            roleSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error("خطأ في تحميل الأدوار:", error);
+    }
+}
+
+function handleRoleChange() {
+    const role = document.getElementById('roleSelect').value;
+    loadDataFromBackend(role);
+    // إعادة تعيين القوائم المنسدلة
+    document.getElementById('criterionSelect').value = '';
+    document.getElementById('subcategorySelect').innerHTML = '<option value="">اختر التصنيف الفرعي</option>';
+    document.getElementById('subcategorySelect').disabled = true;
+    document.getElementById('reportSelect').innerHTML = '<option value="">اختر التقرير</option>';
+    document.getElementById('reportSelect').disabled = true;
+    document.getElementById('criterionInfo').style.display = 'none';
 }
 
 // ==================== دوال القوائم المتتالية ====================
@@ -3476,6 +3575,7 @@ async function fillWithAI() {
     const criterionId = document.getElementById('criterionSelect').value;
     const subcategoryId = document.getElementById('subcategorySelect').value;
     const reportId = document.getElementById('reportSelect').value;
+    const role = document.getElementById('roleSelect').value;
     
     const aiButton = document.getElementById('aiFillFloatingBtn');
     const originalText = aiButton.querySelector('.floating-ai-text').textContent;
@@ -3497,6 +3597,7 @@ async function fillWithAI() {
                 criterion_id: criterionId || 'default',
                 subcategory_id: subcategoryId || 'default',
                 report_id: reportId || 'default',
+                role: role,
                 report_data: {
                     subject: document.getElementById('subject').value || 'الموضوع',
                     lesson: document.getElementById('lesson').value || 'الدرس',
@@ -3623,7 +3724,9 @@ function updateOutsideReport() {
     document.getElementById('outsideCountBox').innerText = document.getElementById('count').value || 'غير محدد';
     document.getElementById('outsideReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير';
     document.getElementById('outsideTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('outsidePlaceBox').innerText = document.getElementById('place').value || 'غير محدد';
+    
+    const detailedPlace = getDetailedPlaceValue();
+    document.getElementById('outsideDetailedPlaceBox').innerText = detailedPlace || 'غير محدد';
     
     document.getElementById('outsideTeacherBox').innerText = document.getElementById('teacher').value || 'غير محدد';
     document.getElementById('outsidePrincipalBox').innerText = document.getElementById('principal').value || 'غير محدد';
@@ -3638,7 +3741,6 @@ function updateOutsideReport() {
     document.getElementById('outsideImproveBox').innerText = document.getElementById('improve').value || 'لم يتم تحديد نقاط التحسين';
     document.getElementById('outsideRecommBox').innerText = document.getElementById('recomm').value || 'لم يتم تحديد التوصيات';
     
-    // تحديث الأدوات في الـ PDF الخارجي
     updateOutsideToolsList();
 }
 
@@ -3653,7 +3755,14 @@ function updateReport() {
     document.getElementById('countBox').innerText = document.getElementById('count').value || 'غير محدد';
     document.getElementById('reportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير';
     document.getElementById('targetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('placeBox').innerText = document.getElementById('place').value || 'غير محدد';
+    
+    const placeValue = document.getElementById('place').value;
+    if (placeValue === 'داخل الصف') {
+        document.getElementById('placeBox').innerText = 'داخل الصف';
+    } else {
+        document.getElementById('placeBox').innerText = getDetailedPlaceValue() || 'خارج الصف';
+    }
+    
     document.getElementById('subjectBox').innerText = document.getElementById('subject').value || 'غير محدد';
     document.getElementById('lessonBox').innerText = document.getElementById('lesson').value || 'غير محدد';
     
@@ -3670,11 +3779,9 @@ function updateReport() {
     document.getElementById('improveBox').innerText = document.getElementById('improve').value || 'لم يتم تحديد نقاط التحسين';
     document.getElementById('recommBox').innerText = document.getElementById('recomm').value || 'لم يتم تحديد التوصيات';
     
-    // تحديث الأدوات داخل الصف
     updateToolsDisplay();
     setTimeout(adaptSubjectLessonFontWithRetry, 10);
     
-    // تحديث القالب الخارجي
     updateOutsideReport();
 }
 
@@ -3752,6 +3859,7 @@ function saveTeacherData() {
         subject: document.getElementById('subject').value,
         target: document.getElementById('target').value,
         place: document.getElementById('place').value,
+        detailedPlace: getDetailedPlaceValue(),
         lesson: document.getElementById('lesson').value,
         teacher: document.getElementById('teacher').value,
         principal: document.getElementById('principal').value,
@@ -3763,6 +3871,7 @@ function saveTeacherData() {
         criterion: document.getElementById('criterionSelect').value,
         subcategory: document.getElementById('subcategorySelect').value,
         report: document.getElementById('reportSelect').value,
+        role: document.getElementById('roleSelect').value,
         tools: []
     };
     
@@ -3772,7 +3881,7 @@ function saveTeacherData() {
         outsideCheckboxes.forEach(checkbox => {
             if (checkbox.checked) teacherData.tools.push(checkbox.value);
         });
-        teacherData.tools = teacherData.tools.concat(otherTools);
+        teacherData.tools = teacherData.tools.concat(window.otherTools);
     } else {
         const toolCheckboxes = document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]');
         toolCheckboxes.forEach(checkbox => {
@@ -3828,6 +3937,26 @@ function loadTeacherData() {
         document.getElementById('count').value = teacherData.count || '';
         document.getElementById('manualReportTitle').value = teacherData.manualTitle || '';
         
+        if (teacherData.role) {
+            document.getElementById('roleSelect').value = teacherData.role;
+            // إذا أردت تحميل المعايير فوراً، يمكنك استدعاء loadDataFromBackend مع التأخير
+        }
+        
+        if (teacherData.detailedPlace) {
+            const detailedPlaceSelect = document.getElementById('detailedPlaceSelect');
+            const detailedPlaceInput = document.getElementById('detailedPlaceInput');
+            const options = Array.from(detailedPlaceSelect.options).map(opt => opt.value);
+            if (options.includes(teacherData.detailedPlace)) {
+                detailedPlaceSelect.value = teacherData.detailedPlace;
+                detailedPlaceInput.style.display = 'none';
+                detailedPlaceInput.value = '';
+            } else {
+                detailedPlaceSelect.value = 'أخرى';
+                detailedPlaceInput.style.display = 'block';
+                detailedPlaceInput.value = teacherData.detailedPlace;
+            }
+        }
+        
         const textFields = ['goal', 'summary', 'steps', 'strategies', 'strengths', 'improve', 'recomm'];
         textFields.forEach(field => {
             if (teacherData[field]) {
@@ -3835,14 +3964,11 @@ function loadTeacherData() {
             }
         });
         
-        // إعادة تعيين الأدوات الأخرى
-        otherTools = teacherData.tools ? teacherData.tools.filter(t => !['مكبر صوت متنقل','أقماع تنظيم','صدريات فرق','بطاقات تعريف','أدوات رسم','حقيبة إسعافات أولية','جهاز لوحي للتوثيق'].includes(t)) : [];
+        window.otherTools = teacherData.tools ? teacherData.tools.filter(t => !['مكبر صوت متنقل','أقماع تنظيم','صدريات فرق','بطاقات تعريف','أدوات رسم','حقيبة إسعافات أولية','جهاز لوحي للتوثيق'].includes(t)) : [];
         updateOtherToolsList();
         
-        // تحديث حالة الأدوات حسب مكان التنفيذ
         togglePlaceFields();
         
-        // تحديد الأدوات
         if (teacherData.place === 'خارج الصف') {
             const outsideCheckboxes = document.querySelectorAll('#outsideToolsGrid .tool-checkbox');
             outsideCheckboxes.forEach(toolElement => {
@@ -3975,10 +4101,8 @@ function fallbackProfessionalAIParsing(response) {
     });
 }
 
-// دالة مسح البيانات المعدلة (تحتفظ بالتفعيل والإعدادات)
 function clearData() {
     if (confirm("هل أنت متأكد من مسح بيانات المعلم والنصوص المولدة؟")) {
-        // الحقول الأساسية المراد مسحها
         document.getElementById('education').value = '';
         document.getElementById('school').value = '';
         document.getElementById('teacher').value = '';
@@ -3989,34 +4113,33 @@ function clearData() {
         document.getElementById('lesson').value = '';
         document.getElementById('target').value = '';
         document.getElementById('count').value = '';
-        document.getElementById('place').value = 'داخل الصف'; // قيمة افتراضية
+        document.getElementById('place').value = 'داخل الصف';
         document.getElementById('manualReportTitle').value = '';
 
-        // الحقول النصية
+        document.getElementById('detailedPlaceSelect').value = '';
+        document.getElementById('detailedPlaceInput').value = '';
+        document.getElementById('detailedPlaceInput').style.display = 'none';
+
         const textFields = ['goal', 'summary', 'steps', 'strategies', 'strengths', 'improve', 'recomm'];
         textFields.forEach(field => {
             document.getElementById(field).value = '';
         });
 
-        // إلغاء تحديد الأدوات داخل الصف
         const insideCheckboxes = document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]');
         insideCheckboxes.forEach(checkbox => {
             checkbox.checked = false;
             checkbox.closest('.tool-checkbox')?.classList.remove('checked');
         });
 
-        // إلغاء تحديد الأدوات خارج الصف
         const outsideCheckboxes = document.querySelectorAll('#outsideToolsGrid .tool-checkbox input[type="checkbox"]');
         outsideCheckboxes.forEach(checkbox => {
             checkbox.checked = false;
             checkbox.closest('.tool-checkbox')?.classList.remove('checked');
         });
 
-        // إعادة تعيين الأدوات الأخرى
-        otherTools = [];
+        window.otherTools = [];
         updateOtherToolsList();
 
-        // إعادة تعيين القوائم المنسدلة للمعايير
         document.getElementById('criterionSelect').value = '';
         document.getElementById('subcategorySelect').innerHTML = '<option value="">اختر التصنيف الفرعي</option>';
         document.getElementById('subcategorySelect').disabled = true;
@@ -4024,7 +4147,6 @@ function clearData() {
         document.getElementById('reportSelect').disabled = true;
         document.getElementById('criterionInfo').style.display = 'none';
 
-        // تحديث عرض التقرير
         updateReport();
         showNotification('تم مسح بيانات المعلم والنصوص المولدة.');
     }
@@ -4033,7 +4155,6 @@ function clearData() {
 async function downloadPDF() {
     await loadDates();
     
-    // إخفاء العناصر الواجهة
     document.querySelector('.top-small-buttons').style.visibility = 'hidden';
     document.querySelector('.main-buttons-bar').style.visibility = 'hidden';
     document.querySelector('.top-marquee').style.visibility = 'hidden';
@@ -4042,7 +4163,6 @@ async function downloadPDF() {
     document.body.style.margin = "0";
     document.body.style.background = "white";
 
-    // اختيار القالب المناسب حسب مكان التنفيذ
     const placeValue = document.getElementById('place').value;
     let reportContent;
     if (placeValue === 'خارج الصف') {
@@ -4094,7 +4214,6 @@ async function downloadPDF() {
 async function sharePDFWhatsApp() {
     await loadDates();
     
-    // إخفاء العناصر الواجهة
     document.querySelector('.top-small-buttons').style.visibility = 'hidden';
     document.querySelector('.main-buttons-bar').style.visibility = 'hidden';
     document.querySelector('.top-marquee').style.visibility = 'visible';
@@ -4103,7 +4222,6 @@ async function sharePDFWhatsApp() {
     document.body.style.margin = "0";
     document.body.style.background = "white";
 
-    // اختيار القالب المناسب حسب مكان التنفيذ
     const placeValue = document.getElementById('place').value;
     let reportContent;
     if (placeValue === 'خارج الصف') {
@@ -4250,7 +4368,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadDates();
     loadThemeSettings();
-    await loadDataFromBackend();
+    await loadRoles();
+    // تحميل البيانات للدور الافتراضي (teacher) بعد تعبئة قائمة الأدوار
+    if (window.roles.length > 0) {
+        // نضمن أن القيمة المختارة هي أول دور (عادة teacher)
+        document.getElementById('roleSelect').value = window.roles[0].id;
+    }
+    await loadDataFromBackend(document.getElementById('roleSelect').value);
     loadTeacherData();
     updateReport();
 

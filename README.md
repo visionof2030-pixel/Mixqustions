@@ -3752,7 +3752,7 @@ function handleReportSearch() {
     }
 }
 
-// ==================== دوال التعبئة الذكية ====================
+// ==================== دوال التعبئة الذكية (معدلة لدعم الوضع المرتبط والحر) ====================
 async function fillWithAI() {
     const activationCode = localStorage.getItem(ACTIVATION_KEY_NAME);
     if (!activationCode) {
@@ -3771,10 +3771,12 @@ async function fillWithAI() {
         return;
     }
     
-    const criterionId = document.getElementById('criterionSelect').value;
-    const subcategoryId = document.getElementById('subcategorySelect').value;
-    const reportId = document.getElementById('reportSelect').value;
+    const criterionId = document.getElementById('criterionSelect').value || null;
+    const subcategoryId = document.getElementById('subcategorySelect').value || null;
+    const reportId = document.getElementById('reportSelect').value || null;
     const role = document.getElementById('roleSelect').value;
+    
+    const manualMode = !criterionId; // إذا لم يتم اختيار معيار → وضع حر
     
     const aiButton = document.getElementById('aiFillFloatingBtn');
     const originalText = aiButton.querySelector('.floating-ai-text').textContent;
@@ -3794,9 +3796,10 @@ async function fillWithAI() {
                 'X-Activation-Code': activationCode
             },
             body: JSON.stringify({
-                criterion_id: criterionId || 'default',
-                subcategory_id: subcategoryId || 'default',
-                report_id: reportId || 'default',
+                criterion_id: criterionId,
+                subcategory_id: subcategoryId,
+                report_id: reportId,
+                manual_mode: manualMode,
                 role: role,
                 report_data: {
                     subject: document.getElementById('subject').value || 'الموضوع',

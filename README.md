@@ -1495,7 +1495,7 @@ button[title]:hover::before {
     --bg: #ffffff;
 }
 
-#report-content, #report-content-outside {
+#report-content, #report-content-outside, #report-content-admin {
     width: 100%;
     max-width: 210mm;
     margin: 4mm auto 0 auto;
@@ -1849,6 +1849,19 @@ button[title]:hover::before {
 }
 #report-content-outside .image-box::before {
     content: 'صورة توثيقية';
+}
+
+/* قالب التقرير الإداري */
+#report-content-admin .info-grid {
+    grid-template-columns: repeat(5, 1fr);
+}
+#report-content-admin .box {
+    height: auto;
+    min-height: 120px;
+}
+#report-content-admin .box-objective {
+    height: auto;
+    min-height: 90px;
 }
 
 .pdf-export * {
@@ -2666,6 +2679,94 @@ button[title]:hover::before {
 </div>
 </div>
 
+<!-- ===================================================== -->
+<!-- 1️⃣ قالب التقرير الإداري (جديد) -->
+<!-- ===================================================== -->
+<div id="report-content-admin" class="pdf-export" style="display:none;">
+<div class="header">
+  <img src="https://i.ibb.co/zH7k1s8c/IMG-2987.png">
+  <div class="header-school-title">اسم المدرسة</div>
+  <div class="header-school" id="adminSchoolBox"></div>
+  <div class="header-education" id="adminEducationBox"></div>
+  <div class="header-date">
+    <span id="adminHDate"></span><br>
+    <span id="adminGDate"></span>
+  </div>
+</div>
+
+<div class="info-grid">
+  <div class="info-box">
+    <div class="info-title">الفصل</div>
+    <div class="info-value" id="adminTermBox"></div>
+  </div>
+  <div class="info-box">
+    <div class="info-title">المجال</div>
+    <div class="info-value">إداري</div>
+  </div>
+  <div class="info-box">
+    <div class="info-title">المستهدفون</div>
+    <div class="info-value" id="adminTargetBox"></div>
+  </div>
+  <div class="info-box">
+    <div class="info-title">العدد</div>
+    <div class="info-value" id="adminCountBox"></div>
+  </div>
+  <div class="info-box">
+    <div class="info-title">اسم التقرير</div>
+    <div class="info-value" id="adminReportTypeBox"></div>
+  </div>
+</div>
+
+<div class="box-objective">
+  <div class="box-title">الأهداف</div>
+  <div class="box-content" id="adminGoalBox"></div>
+</div>
+
+<div class="row">
+  <div class="box">
+    <div class="box-title">الإجراءات</div>
+    <div class="box-content" id="adminStepsBox"></div>
+  </div>
+  <div class="box">
+    <div class="box-title">النتائج</div>
+    <div class="box-content" id="adminSummaryBox"></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="box">
+    <div class="box-title">نقاط القوة</div>
+    <div class="box-content" id="adminStrengthsBox"></div>
+  </div>
+  <div class="box">
+    <div class="box-title">أولويات التطوير</div>
+    <div class="box-content" id="adminImproveBox"></div>
+  </div>
+</div>
+
+<div class="box">
+  <div class="box-title">التوصيات</div>
+  <div class="box-content" id="adminRecommBox"></div>
+</div>
+
+<div class="signatures">
+  <div>
+    <div class="signature-role" id="adminReporterTypeBox"></div>
+    <div class="signature-name" id="adminReporterNameBox"></div>
+    <div class="sign-line"></div>
+  </div>
+  <div>
+    <div class="signature-role">قائد المدرسة</div>
+    <div class="signature-name" id="adminPrincipalBox"></div>
+    <div class="sign-line"></div>
+  </div>
+</div>
+
+<div class="footer-box">
+  وزارة التعليم – المملكة العربية السعودية
+</div>
+</div>
+
 <!-- نافذة التقارير المحفوظة (بها شريط التقدم) -->
 <div id="savedReportsModal">
   <div>
@@ -2838,6 +2939,7 @@ let currentGregorianDate = '';
 const roleToBackendMap = {
   'kg_teacher': 'kindergarten_teacher',
   'principal': 'school_principal',
+  'vice_principal': 'vice_principal',
   'student_counselor': 'student_guide',
   'lab_technician': 'lab_preparer',
   'supervisor': 'educational_supervisor'
@@ -2923,6 +3025,8 @@ async function loadDates() {
         document.getElementById('gDate').innerHTML = currentGregorianDate + " م";
         document.getElementById('outsideHDate').innerHTML = currentHijriDate + " هـ";
         document.getElementById('outsideGDate').innerHTML = currentGregorianDate + " م";
+        document.getElementById('adminHDate').innerHTML = currentHijriDate + " هـ";
+        document.getElementById('adminGDate').innerHTML = currentGregorianDate + " م";
 
     } catch (error) {
         console.error("خطأ في تحميل التاريخ:", error);
@@ -2931,6 +3035,8 @@ async function loadDates() {
         document.getElementById('gDate').innerHTML = currentGregorianDate + " م";
         document.getElementById('outsideHDate').innerHTML = currentHijriDate + " هـ";
         document.getElementById('outsideGDate').innerHTML = currentGregorianDate + " م";
+        document.getElementById('adminHDate').innerHTML = currentHijriDate + " هـ";
+        document.getElementById('adminGDate').innerHTML = currentGregorianDate + " م";
     }
 }
 
@@ -2987,14 +3093,19 @@ function updateAiButtonTheme(themeName) {
 function applyPdfTheme(themeName) {
     const reportContent = document.getElementById('report-content');
     const reportContentOutside = document.getElementById('report-content-outside');
+    const reportContentAdmin = document.getElementById('report-content-admin');
     reportContent.classList.remove(
         'pdf-theme-classic', 'pdf-theme-professional', 'pdf-theme-minimal', 'pdf-theme-tech', 'pdf-theme-educational'
     );
     reportContentOutside.classList.remove(
         'pdf-theme-classic', 'pdf-theme-professional', 'pdf-theme-minimal', 'pdf-theme-tech', 'pdf-theme-educational'
     );
+    reportContentAdmin.classList.remove(
+        'pdf-theme-classic', 'pdf-theme-professional', 'pdf-theme-minimal', 'pdf-theme-tech', 'pdf-theme-educational'
+    );
     reportContent.classList.add('pdf-theme-' + themeName);
     reportContentOutside.classList.add('pdf-theme-' + themeName);
+    reportContentAdmin.classList.add('pdf-theme-' + themeName);
     localStorage.setItem(PDF_THEME_KEY, themeName);
 }
 
@@ -3834,16 +3945,11 @@ async function fillWithAI() {
 
         const data = await response.json();
         
-        if (!data || !data.data) {
+        if (!data || !data.content) {
             throw new Error('لم يتم الحصول على إجابة من الذكاء الاصطناعي');
         }
-
-        // حفظ البيانات المنظمة في localStorage والتوجيه للقالب المناسب
-        if (data.data && data.template) {
-            localStorage.setItem("reportData", JSON.stringify(data.data));
-            // التوجيه إلى القالب المناسب (نافذة جديدة)
-            window.open(`/templates/${data.template}.html`, '_blank');
-        }
+        
+        parseAIResponseProfessional(data.content);
         
         // حفظ التقرير تلقائياً
         saveCurrentReport();
@@ -4012,6 +4118,40 @@ function updateOutsideReport() {
     updateOutsideToolsList();
 }
 
+// ==================== 3️⃣ دالة تحديث القالب الإداري (جديد) ====================
+function updateAdminReport() {
+    document.getElementById('adminSchoolBox').innerText =
+        document.getElementById('school').value || 'غير محدد';
+    document.getElementById('adminEducationBox').innerText =
+        document.getElementById('education').value || 'غير محدد';
+    document.getElementById('adminTermBox').innerText =
+        document.getElementById('term').value || 'غير محدد';
+    document.getElementById('adminTargetBox').innerText =
+        document.getElementById('target').value || 'غير محدد';
+    document.getElementById('adminCountBox').innerText =
+        document.getElementById('count').value || 'غير محدد';
+    document.getElementById('adminReportTypeBox').innerText =
+        document.getElementById('manualReportTitle').value || 'تقرير إداري';
+    document.getElementById('adminGoalBox').innerText =
+        document.getElementById('goal').value || '';
+    document.getElementById('adminStepsBox').innerText =
+        document.getElementById('steps').value || '';
+    document.getElementById('adminSummaryBox').innerText =
+        document.getElementById('summary').value || '';
+    document.getElementById('adminStrengthsBox').innerText =
+        document.getElementById('strengths').value || '';
+    document.getElementById('adminImproveBox').innerText =
+        document.getElementById('improve').value || '';
+    document.getElementById('adminRecommBox').innerText =
+        document.getElementById('recomm').value || '';
+    document.getElementById('adminReporterNameBox').innerText =
+        document.getElementById('reporterName').value || '';
+    document.getElementById('adminPrincipalBox').innerText =
+        document.getElementById('principal').value || '';
+    document.getElementById('adminReporterTypeBox').innerText =
+        document.getElementById('reporterType').value || '';
+}
+
 function updateReport() {
     // تحديث القالب الداخلي
     document.getElementById('educationBox').innerText = document.getElementById('education').value || 'غير محدد';
@@ -4051,6 +4191,8 @@ function updateReport() {
     setTimeout(adaptSubjectLessonFontWithRetry, 10);
     
     updateOutsideReport();
+    // 4️⃣ استدعاء تحديث القالب الإداري
+    updateAdminReport();
 }
 
 function toggleTool(element) {
@@ -4420,6 +4562,7 @@ function clearData() {
     }
 }
 
+// ==================== 2️⃣ تعديل دالة downloadPDF لاختيار القالب المناسب ====================
 async function downloadPDF() {
     await loadDates();
     
@@ -4431,10 +4574,18 @@ async function downloadPDF() {
     document.body.style.background = "white";
 
     const placeValue = document.getElementById('place').value;
+    const uiRole = document.getElementById('role').value;
+    const backendRole = getBackendRole(uiRole);
     let reportContent;
-    if (placeValue === 'خارج الصف') {
+
+    // إذا كان الدور مدير أو وكيل نستخدم القالب الإداري
+    if (backendRole === 'school_principal' || backendRole === 'vice_principal') {
+        reportContent = document.getElementById('report-content-admin');
+    }
+    else if (placeValue === 'خارج الصف') {
         reportContent = document.getElementById('report-content-outside');
-    } else {
+    }
+    else {
         reportContent = document.getElementById('report-content');
     }
     
@@ -4488,10 +4639,17 @@ async function sharePDFWhatsApp() {
     document.body.style.background = "white";
 
     const placeValue = document.getElementById('place').value;
+    const uiRole = document.getElementById('role').value;
+    const backendRole = getBackendRole(uiRole);
     let reportContent;
-    if (placeValue === 'خارج الصف') {
+
+    if (backendRole === 'school_principal' || backendRole === 'vice_principal') {
+        reportContent = document.getElementById('report-content-admin');
+    }
+    else if (placeValue === 'خارج الصف') {
         reportContent = document.getElementById('report-content-outside');
-    } else {
+    }
+    else {
         reportContent = document.getElementById('report-content');
     }
 

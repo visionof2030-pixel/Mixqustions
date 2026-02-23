@@ -278,8 +278,6 @@ html, body {
     transition: none;
 }
 
-/* تم نقل شريط التقدم إلى داخل نافذة التقارير المحفوظة */
-
 /* زر التعبئة الذكية العائم */
 #aiFillFloatingBtn {
     position: fixed;
@@ -1574,7 +1572,7 @@ button[title]:hover::before {
 
 .info-grid2 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 6px;
     margin-bottom: 6px;
 }
@@ -1652,7 +1650,7 @@ button[title]:hover::before {
     border-radius: 8px;
     padding: 8px;
     margin-bottom: 6px;
-    height: 95px;
+    height: 110px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1663,12 +1661,12 @@ button[title]:hover::before {
     text-align: center;
     color: var(--main);
     font-weight: 800;
-    font-size: 8px;
+    font-size: 11px;
     margin-bottom: 4px;
 }
 
 .box-objective .box-content {
-    font-size: 14px;
+    font-size: 11px;
     line-height: 1.5;
     text-align: center;
     overflow: hidden;
@@ -1679,7 +1677,7 @@ button[title]:hover::before {
     border-radius: 8px;
     padding: 8px;
     margin-bottom: 6px;
-    height: 137px;
+    height: 150px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1690,12 +1688,12 @@ button[title]:hover::before {
     text-align: center;
     color: var(--main);
     font-weight: 800;
-    font-size: 14px;
+    font-size: 11px;
     margin-bottom: 4px;
 }
 
 .box-content {
-    font-size: 14px;
+    font-size: 11px;
     line-height: 1.5;
     text-align: center;
     overflow: hidden;
@@ -1764,7 +1762,7 @@ button[title]:hover::before {
 
 .image-box {
     border: 1px dashed var(--border);
-    height: 160px;
+    height: 125px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1797,7 +1795,7 @@ button[title]:hover::before {
     grid-template-columns: 1fr 1fr;
     gap: 30px;
     text-align: center;
-    font-size: 13px;
+    font-size: 10px;
     margin-bottom: 6px;
 }
 
@@ -1806,16 +1804,15 @@ button[title]:hover::before {
 }
 
 .signature-role {
-    font-size: 12px;
+    font-size: 9px;
     color: var(--main);
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: 2px;
 }
 
 .signature-name {
-    font-size: 14px;
-    font-weight: 900;
-    color: #000;
+    font-size: 11px;
+    font-weight: 700;
 }
 
 .sign-line {
@@ -1828,7 +1825,7 @@ button[title]:hover::before {
     background: var(--main);
     color: #fff;
     text-align: center;
-    font-size: 11px;
+    font-size: 8px;
     padding: 3px 4px;
     border-radius: 6px;
 }
@@ -1855,13 +1852,20 @@ button[title]:hover::before {
 #report-content-admin .info-grid {
     grid-template-columns: repeat(5, 1fr);
 }
+#report-content-admin .info-grid2 {
+    grid-template-columns: repeat(3, 1fr);
+}
 #report-content-admin .box {
-    height: auto;
-    min-height: 120px;
+    height: 150px;
 }
 #report-content-admin .box-objective {
-    height: auto;
-    min-height: 90px;
+    height: 110px;
+}
+#report-content-admin .images .image-box {
+    height: 125px;
+}
+#report-content-admin .signatures {
+    font-size: 10px;
 }
 
 .pdf-export * {
@@ -2511,12 +2515,12 @@ button[title]:hover::before {
   <div class="form-row">
     <div class="form-group">
       <label><i class="fas fa-camera"></i>الصورة 1</label>
-      <input type="file" accept="image/*" onchange="loadImage(this,'imgBox1','outsideImgBox1')">
+      <input type="file" accept="image/*" onchange="loadImage(this,'imgBox1','outsideImgBox1','adminImgBox1')">
     </div>
     
     <div class="form-group">
       <label><i class="fas fa-camera"></i>الصورة 2</label>
-      <input type="file" accept="image/*" onchange="loadImage(this,'imgBox2','outsideImgBox2')">
+      <input type="file" accept="image/*" onchange="loadImage(this,'imgBox2','outsideImgBox2','adminImgBox2')">
     </div>
   </div>
 
@@ -2680,12 +2684,11 @@ button[title]:hover::before {
 </div>
 
 <!-- ===================================================== -->
-<!-- 1️⃣ قالب التقرير الإداري (جديد) -->
+<!-- قالب التقرير الإداري (مطابق للنموذج) -->
 <!-- ===================================================== -->
 <div id="report-content-admin" class="pdf-export" style="display:none;">
 <div class="header">
   <img src="https://i.ibb.co/zH7k1s8c/IMG-2987.png">
-  <div class="header-school-title">اسم المدرسة</div>
   <div class="header-school" id="adminSchoolBox"></div>
   <div class="header-education" id="adminEducationBox"></div>
   <div class="header-date">
@@ -2694,14 +2697,19 @@ button[title]:hover::before {
   </div>
 </div>
 
+<!-- الصف الأول: 5 خانات -->
 <div class="info-grid">
   <div class="info-box">
-    <div class="info-title">الفصل</div>
+    <div class="info-title">الفصل الدراسي</div>
     <div class="info-value" id="adminTermBox"></div>
   </div>
   <div class="info-box">
     <div class="info-title">المجال</div>
-    <div class="info-value">إداري</div>
+    <div class="info-value" id="adminFieldBox">تربوي</div>
+  </div>
+  <div class="info-box">
+    <div class="info-title">مكان التنفيذ</div>
+    <div class="info-value" id="adminPlaceBox"></div>
   </div>
   <div class="info-box">
     <div class="info-title">المستهدفون</div>
@@ -2711,20 +2719,34 @@ button[title]:hover::before {
     <div class="info-title">العدد</div>
     <div class="info-value" id="adminCountBox"></div>
   </div>
+</div>
+
+<!-- الصف الثاني: 3 خانات -->
+<div class="info-grid2">
+  <div class="info-box">
+    <div class="info-title">المبادرة</div>
+    <div class="info-value" id="adminInitiativeBox"></div>
+  </div>
   <div class="info-box">
     <div class="info-title">اسم التقرير</div>
     <div class="info-value" id="adminReportTypeBox"></div>
   </div>
+  <div class="info-box">
+    <div class="info-title">مدة التنفيذ</div>
+    <div class="info-value" id="adminDurationBox"></div>
+  </div>
 </div>
 
+<!-- الأهداف -->
 <div class="box-objective">
   <div class="box-title">الأهداف</div>
   <div class="box-content" id="adminGoalBox"></div>
 </div>
 
+<!-- الصفوف المزدوجة -->
 <div class="row">
   <div class="box">
-    <div class="box-title">الإجراءات</div>
+    <div class="box-title">الإجراءات المنفذة</div>
     <div class="box-content" id="adminStepsBox"></div>
   </div>
   <div class="box">
@@ -2744,14 +2766,27 @@ button[title]:hover::before {
   </div>
 </div>
 
-<div class="box">
-  <div class="box-title">التوصيات</div>
-  <div class="box-content" id="adminRecommBox"></div>
+<div class="row">
+  <div class="box">
+    <div class="box-title">التوصيات</div>
+    <div class="box-content" id="adminRecommBox"></div>
+  </div>
+  <div class="box">
+    <div class="box-title">خطة المتابعة</div>
+    <div class="box-content" id="adminFollowupBox"></div>
+  </div>
 </div>
 
+<!-- الصور -->
+<div class="images">
+  <div class="image-box" id="adminImgBox1"></div>
+  <div class="image-box" id="adminImgBox2"></div>
+</div>
+
+<!-- التوقيعات -->
 <div class="signatures">
   <div>
-    <div class="signature-role" id="adminReporterTypeBox"></div>
+    <div class="signature-role" id="adminReporterTypeBox">معد التقرير</div>
     <div class="signature-name" id="adminReporterNameBox"></div>
     <div class="sign-line"></div>
   </div>
@@ -4118,38 +4153,28 @@ function updateOutsideReport() {
     updateOutsideToolsList();
 }
 
-// ==================== 3️⃣ دالة تحديث القالب الإداري (جديد) ====================
+// ==================== دالة تحديث القالب الإداري ====================
 function updateAdminReport() {
-    document.getElementById('adminSchoolBox').innerText =
-        document.getElementById('school').value || 'غير محدد';
-    document.getElementById('adminEducationBox').innerText =
-        document.getElementById('education').value || 'غير محدد';
-    document.getElementById('adminTermBox').innerText =
-        document.getElementById('term').value || 'غير محدد';
-    document.getElementById('adminTargetBox').innerText =
-        document.getElementById('target').value || 'غير محدد';
-    document.getElementById('adminCountBox').innerText =
-        document.getElementById('count').value || 'غير محدد';
-    document.getElementById('adminReportTypeBox').innerText =
-        document.getElementById('manualReportTitle').value || 'تقرير إداري';
-    document.getElementById('adminGoalBox').innerText =
-        document.getElementById('goal').value || '';
-    document.getElementById('adminStepsBox').innerText =
-        document.getElementById('steps').value || '';
-    document.getElementById('adminSummaryBox').innerText =
-        document.getElementById('summary').value || '';
-    document.getElementById('adminStrengthsBox').innerText =
-        document.getElementById('strengths').value || '';
-    document.getElementById('adminImproveBox').innerText =
-        document.getElementById('improve').value || '';
-    document.getElementById('adminRecommBox').innerText =
-        document.getElementById('recomm').value || '';
-    document.getElementById('adminReporterNameBox').innerText =
-        document.getElementById('reporterName').value || '';
-    document.getElementById('adminPrincipalBox').innerText =
-        document.getElementById('principal').value || '';
-    document.getElementById('adminReporterTypeBox').innerText =
-        document.getElementById('reporterType').value || '';
+    document.getElementById('adminSchoolBox').innerText = document.getElementById('school').value || 'غير محدد';
+    document.getElementById('adminEducationBox').innerText = document.getElementById('education').value || 'غير محدد';
+    document.getElementById('adminTermBox').innerText = document.getElementById('term').value || 'غير محدد';
+    document.getElementById('adminPlaceBox').innerText = getDetailedPlaceValue() || 'غير محدد';
+    document.getElementById('adminTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
+    document.getElementById('adminCountBox').innerText = document.getElementById('count').value || 'غير محدد';
+    document.getElementById('adminReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير إداري';
+    document.getElementById('adminGoalBox').innerText = document.getElementById('goal').value || '';
+    document.getElementById('adminStepsBox').innerText = document.getElementById('steps').value || '';
+    document.getElementById('adminSummaryBox').innerText = document.getElementById('summary').value || '';
+    document.getElementById('adminStrengthsBox').innerText = document.getElementById('strengths').value || '';
+    document.getElementById('adminImproveBox').innerText = document.getElementById('improve').value || '';
+    document.getElementById('adminRecommBox').innerText = document.getElementById('recomm').value || '';
+    document.getElementById('adminReporterNameBox').innerText = document.getElementById('reporterName').value || '';
+    document.getElementById('adminPrincipalBox').innerText = document.getElementById('principal').value || '';
+    // حقول إضافية (يمكن تخصيصها لاحقاً)
+    document.getElementById('adminInitiativeBox').innerText = 'مبادرة ' + (document.getElementById('manualReportTitle').value || '');
+    document.getElementById('adminDurationBox').innerText = 'يوم واحد'; // قيمة افتراضية
+    document.getElementById('adminFollowupBox').innerText = 'متابعة مستمرة'; // قيمة افتراضية
+    document.getElementById('adminFieldBox').innerText = 'تربوي'; // ثابت أو يمكن تغييره
 }
 
 function updateReport() {
@@ -4191,8 +4216,7 @@ function updateReport() {
     setTimeout(adaptSubjectLessonFontWithRetry, 10);
     
     updateOutsideReport();
-    // 4️⃣ استدعاء تحديث القالب الإداري
-    updateAdminReport();
+    updateAdminReport(); // تحديث القالب الإداري
 }
 
 function toggleTool(element) {
@@ -4237,7 +4261,7 @@ function updateToolsDisplay() {
     }
 }
 
-function loadImage(input, targetInsideId, targetOutsideId) {
+function loadImage(input, targetInsideId, targetOutsideId, targetAdminId) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -4253,6 +4277,14 @@ function loadImage(input, targetInsideId, targetOutsideId) {
                 const imgOutside = document.createElement('img');
                 imgOutside.src = e.target.result;
                 imgBoxOutside.appendChild(imgOutside);
+            }
+            
+            const imgBoxAdmin = document.getElementById(targetAdminId);
+            if (imgBoxAdmin) {
+                imgBoxAdmin.innerHTML = '';
+                const imgAdmin = document.createElement('img');
+                imgAdmin.src = e.target.result;
+                imgBoxAdmin.appendChild(imgAdmin);
             }
         };
         reader.readAsDataURL(input.files[0]);
@@ -4562,7 +4594,7 @@ function clearData() {
     }
 }
 
-// ==================== 2️⃣ تعديل دالة downloadPDF لاختيار القالب المناسب ====================
+// ==================== تعديل دالة downloadPDF لاختيار القالب المناسب ====================
 async function downloadPDF() {
     await loadDates();
     

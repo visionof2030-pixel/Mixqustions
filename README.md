@@ -2240,11 +2240,30 @@ button[title]:hover::before {
   
   <h2><i class="fas fa-tools" style="margin-left:10px;"></i>تقاريرك - النظام المتكامل</h2>
   
-  <!-- ========== اختيار مقدم التقرير (الدور) ========== -->
+  <!-- ========== اختيار مقدم التقرير (الدور) بالتنسيق المطلوب ========== -->
   <div class="form-group">
-    <label><i class="fas fa-user-tie"></i> مقدم التقرير</label>
-    <select id="roleSelect" onchange="handleRoleChange()">
-      <!-- سيتم تعبئة الأدوار من الخادم -->
+    <label for="role"><i class="fas fa-user-tie"></i> مقدم التقرير</label>
+    <select id="role" name="role" required onchange="handleRoleChange()">
+      <option value="">اختر الصفة المهنية</option>
+      <optgroup label="الكادر التعليمي">
+        <option value="teacher">المعلم / المعلمة</option>
+        <option value="kg_teacher">معلمة رياض الأطفال</option>
+      </optgroup>
+      <optgroup label="الإدارة المدرسية">
+        <option value="principal">مدير المدرسة / مديرة المدرسة</option>
+        <option value="vice_principal">وكيل المدرسة / وكيلة المدرسة</option>
+      </optgroup>
+      <optgroup label="الإرشاد والخدمات الطلابية">
+        <option value="student_counselor">الموجه الطلابي / الموجهة الطلابية</option>
+        <option value="health_guide">الموجه الصحي / الموجهة الصحية</option>
+      </optgroup>
+      <optgroup label="الأنشطة والدعم">
+        <option value="activity_leader">رائد النشاط / رائدة النشاط</option>
+        <option value="lab_technician">محضر المختبر / محضرة المختبر</option>
+      </optgroup>
+      <optgroup label="الإشراف">
+        <option value="supervisor">المشرف التربوي / المشرفة التربوية</option>
+      </optgroup>
     </select>
   </div>
   
@@ -2263,7 +2282,7 @@ button[title]:hover::before {
       </select>
     </div>
     
-    <!-- معلومات المعيار المحدد -->
+    <!-- معلومات المعيار المحدد (تظهر دائماً مع الوزن) -->
     <div id="criterionInfo" class="criterion-info" style="display: none;">
       <span id="selectedCriterionName" class="criterion-name"></span>
       <span id="selectedCriterionWeight" class="criterion-weight"></span>
@@ -2652,8 +2671,8 @@ button[title]:hover::before {
   <div>
     <h3><i class="fas fa-folder-open"></i> التقارير المحفوظة</h3>
     
-    <!-- شريط التقدم - يظهر فقط للمعلمين -->
-    <div id="progressBarContainer" class="progress-bar-container" style="display: none;">
+    <!-- شريط التقدم - يظهر لجميع الأدوار -->
+    <div id="progressBarContainer" class="progress-bar-container">
         <div class="progress-header">
             <div><i class="fas fa-chart-line"></i> تقدم إنجاز التقارير</div>
             <div class="progress-stats">
@@ -2802,9 +2821,8 @@ window.allCriteria = [];            // المصفوفة الكاملة للمع�
 window.subcategoriesByCriterion = {}; // تجميع التصنيفات حسب معيار
 window.reportsBySubcategory = {};     // تجميع التقارير حسب تصنيف
 window.allReportsList = [];          // قائمة مسطحة لجميع التقارير للبحث
-window.roles = [];                   // قائمة الأدوار من الخادم
 window.otherTools = [];              // الأدوات الإضافية (خارج الصف)
-window.currentRole = 'teacher';      // الدور الحالي
+window.currentRole = 'teacher';      // الدور الحالي (القيمة المحولة للخادم)
 window.guideTimerInterval = null;    // مؤقت العداد
 
 const ACTIVATION_KEY_NAME = "activation_code";
@@ -2816,10 +2834,25 @@ const REPORTS_STORAGE_KEY = "saved_educational_reports";
 let currentHijriDate = '';
 let currentGregorianDate = '';
 
+// خريطة تحويل القيم الظاهرة إلى القيم المتوقعة من الخادم
+const roleToBackendMap = {
+  'kg_teacher': 'kindergarten_teacher',
+  'principal': 'school_principal',
+  'student_counselor': 'student_guide',
+  'lab_technician': 'lab_preparer',
+  'supervisor': 'educational_supervisor'
+};
+
+// دالة لتحويل القيمة الظاهرة إلى ما يتوقعه الخادم
+function getBackendRole(uiRole) {
+  return roleToBackendMap[uiRole] || uiRole;
+}
+
 // دالة مساعدة لتنسيق الوزن مع % واحدة فقط (تستخدم لجميع الأدوار)
 function formatWeight(weight) {
-    if (weight === undefined || weight === null) return '0%';
-    let num = parseFloat(String(weight).replace(/%/g, '')) || 0;
+    if (weight === undefined || weight === null || weight === '') return '0%';
+    let num = parseFloat(String(weight).replace(/%/g, '').trim());
+    if (isNaN(num)) return '0%';
     return num + '%';
 }
 
@@ -3020,26 +3053,38 @@ function getDetailedPlaceValue() {
 }
 
 // ==================== دوال تحديث واجهة مقدم التقرير ====================
-function updateReporterFields(role) {
-    // تحديث تسميات الحقول بناءً على الدور
+function updateReporterFields(backendRole) {
+    // تحديث تسميات الحقول بناءً على الدور القادم من الخادم
     const reporterTypeLabel = document.getElementById('reporterTypeLabel');
     const reporterNameLabel = document.getElementById('reporterNameLabel');
     
     let typeOptions = [];
     let defaultType = '';
     
-    switch (role) {
+    switch (backendRole) {
         case 'teacher':
             reporterTypeLabel.textContent = 'صفة المعلّم';
             reporterNameLabel.textContent = 'اسم المعلّم';
             typeOptions = ['المعلم', 'المعلمة'];
             defaultType = 'المعلم';
             break;
+        case 'kindergarten_teacher':
+            reporterTypeLabel.textContent = 'صفة معلمة رياض الأطفال';
+            reporterNameLabel.textContent = 'اسم معلمة رياض الأطفال';
+            typeOptions = ['معلمة رياض أطفال', 'معلم رياض أطفال'];
+            defaultType = 'معلمة رياض أطفال';
+            break;
         case 'vice_principal':
             reporterTypeLabel.textContent = 'صفة الوكيل';
             reporterNameLabel.textContent = 'اسم الوكيل';
             typeOptions = ['وكيل المدرسة', 'وكيلة المدرسة'];
             defaultType = 'وكيل المدرسة';
+            break;
+        case 'school_principal':
+            reporterTypeLabel.textContent = 'صفة مدير المدرسة';
+            reporterNameLabel.textContent = 'اسم مدير المدرسة';
+            typeOptions = ['مدير المدرسة', 'مديرة المدرسة'];
+            defaultType = 'مدير المدرسة';
             break;
         case 'student_guide':
             reporterTypeLabel.textContent = 'صفة الموجه الطلابي';
@@ -3059,23 +3104,11 @@ function updateReporterFields(role) {
             typeOptions = ['رائد نشاط', 'رائدة نشاط'];
             defaultType = 'رائد نشاط';
             break;
-        case 'kindergarten_teacher':
-            reporterTypeLabel.textContent = 'صفة معلمة رياض الأطفال';
-            reporterNameLabel.textContent = 'اسم معلمة رياض الأطفال';
-            typeOptions = ['معلمة رياض أطفال', 'معلم رياض أطفال'];
-            defaultType = 'معلمة رياض أطفال';
-            break;
         case 'lab_preparer':
             reporterTypeLabel.textContent = 'صفة محضر المختبر';
             reporterNameLabel.textContent = 'اسم محضر المختبر';
             typeOptions = ['محضر مختبر', 'محضرة مختبر'];
             defaultType = 'محضر مختبر';
-            break;
-        case 'school_principal':
-            reporterTypeLabel.textContent = 'صفة مدير المدرسة';
-            reporterNameLabel.textContent = 'اسم مدير المدرسة';
-            typeOptions = ['مدير المدرسة', 'مديرة المدرسة'];
-            defaultType = 'مدير المدرسة';
             break;
         case 'educational_supervisor':
             reporterTypeLabel.textContent = 'صفة المشرف التربوي';
@@ -3223,16 +3256,10 @@ function updateOutsideToolsList() {
 }
 
 // ==================== دوال حفظ واستعراض التقارير ====================
-// حساب التقدم: يتم عرضه فقط للمعلم
+// حساب التقدم: يتم عرضه لجميع الأدوار
 function calculateProgress() {
     const progressContainer = document.getElementById('progressBarContainer');
-
-    if (window.currentRole !== 'teacher') {
-        progressContainer.style.display = 'none';
-        return;
-    }
-
-    progressContainer.style.display = 'flex';
+    progressContainer.style.display = 'flex'; // الآن يظهر للجميع
 
     const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
     const criteria = window.allCriteria || [];
@@ -3292,6 +3319,7 @@ function saveCurrentReport() {
         });
     }
     
+    const uiRole = document.getElementById('role').value; // القيمة الظاهرة
     const reportData = {
         id: Date.now().toString(),
         title: reportTitle,
@@ -3302,7 +3330,7 @@ function saveCurrentReport() {
         hijriDate: currentHijriDate,
         place: place,
         detailedPlace: getDetailedPlaceValue(),
-        role: document.getElementById('roleSelect').value,
+        role: uiRole, // نحتفظ بالقيمة الظاهرة للحفظ
         data: {
             education: document.getElementById('education').value,
             school: document.getElementById('school').value,
@@ -3378,8 +3406,9 @@ function loadSavedReport(criterionId) {
     }
     
     if (report.role) {
-        document.getElementById('roleSelect').value = report.role;
-        handleRoleChange(); // نعيد تحميل البيانات حسب الدور
+        document.getElementById('role').value = report.role;
+        const backendRole = getBackendRole(report.role);
+        loadDataFromBackend(backendRole); // نحمّل البيانات باستخدام الدور المحول
     }
     
     window.otherTools = report.data.otherTools || [];
@@ -3498,11 +3527,11 @@ function closeSavedReports() {
 }
 
 // ==================== دوال تحميل البيانات ====================
-async function loadDataFromBackend(role = 'teacher') {
-    window.currentRole = role;
+async function loadDataFromBackend(backendRole) {
+    window.currentRole = backendRole;
     
     try {
-        const structureResponse = await fetch(BACKEND_URL + "/api/full-structure?role=" + encodeURIComponent(role));
+        const structureResponse = await fetch(BACKEND_URL + "/api/full-structure?role=" + encodeURIComponent(backendRole));
         const structureData = await structureResponse.json();
         
         const structure = structureData.structure;
@@ -3581,11 +3610,11 @@ async function loadDataFromBackend(role = 'teacher') {
         
         initOutsideTools();
         
-        // تحديث حقول مقدم التقرير
-        updateReporterFields(role);
+        // تحديث حقول مقدم التقرير باستخدام backendRole
+        updateReporterFields(backendRole);
         
         calculateProgress();
-        console.log("تم تحميل البيانات بنجاح للدور:", role);
+        console.log("تم تحميل البيانات بنجاح للدور:", backendRole);
         
     } catch (error) {
         console.error("خطأ في تحميل البيانات:", error);
@@ -3593,27 +3622,14 @@ async function loadDataFromBackend(role = 'teacher') {
     }
 }
 
-async function loadRoles() {
-    try {
-        const res = await fetch(BACKEND_URL + "/api/roles");
-        const roles = await res.json();
-        window.roles = roles;
-        const roleSelect = document.getElementById('roleSelect');
-        roleSelect.innerHTML = '';
-        roles.forEach(role => {
-            const option = document.createElement('option');
-            option.value = role.id;
-            option.textContent = role.name;
-            roleSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error("خطأ في تحميل الأدوار:", error);
-    }
-}
-
 function handleRoleChange() {
-    const role = document.getElementById('roleSelect').value;
-    loadDataFromBackend(role);
+    const uiRole = document.getElementById('role').value;
+    if (!uiRole) {
+        // إعادة تعيين إذا لم يتم اختيار دور
+        return;
+    }
+    const backendRole = getBackendRole(uiRole);
+    loadDataFromBackend(backendRole);
     // إعادة تعيين القوائم المنسدلة
     document.getElementById('criterionSelect').value = '';
     document.getElementById('subcategorySelect').innerHTML = '<option value="">اختر التصنيف الفرعي</option>';
@@ -3777,7 +3793,8 @@ async function fillWithAI() {
     const criterionId = document.getElementById('criterionSelect').value || null;
     const subcategoryId = document.getElementById('subcategorySelect').value || null;
     const reportId = document.getElementById('reportSelect').value || null;
-    const role = document.getElementById('roleSelect').value;
+    const uiRole = document.getElementById('role').value;
+    const backendRole = getBackendRole(uiRole);
     
     const aiButton = document.getElementById('aiFillFloatingBtn');
     const originalText = aiButton.querySelector('.floating-ai-text').textContent;
@@ -3789,7 +3806,7 @@ async function fillWithAI() {
     aiButton.disabled = true;
     
     try {
-        // إرسال البيانات إلى الخادم
+        // إرسال البيانات إلى الخادم باستخدام backendRole
         const response = await fetch(BACKEND_URL + "/api/generate-report-content", {
             method: 'POST',
             headers: {
@@ -3800,7 +3817,7 @@ async function fillWithAI() {
                 criterion_id: criterionId,
                 subcategory_id: subcategoryId,
                 report_id: reportId,
-                role: role,
+                role: backendRole,
                 report_data: {
                     subject: document.getElementById('subject').value || 'الموضوع',
                     lesson: document.getElementById('lesson').value || 'الدرس',
@@ -3808,7 +3825,7 @@ async function fillWithAI() {
                     target: document.getElementById('target').value || 'الطلاب',
                     place: document.getElementById('place').value || 'المدرسة',
                     count: document.getElementById('count').value || 'عدد الطلاب',
-                    title: reportTitle // إرسال العنوان اليدوي أيضاً
+                    title: reportTitle
                 }
             })
         });
@@ -3817,11 +3834,16 @@ async function fillWithAI() {
 
         const data = await response.json();
         
-        if (!data || !data.content) {
+        if (!data || !data.data) {
             throw new Error('لم يتم الحصول على إجابة من الذكاء الاصطناعي');
         }
-        
-        parseAIResponseProfessional(data.content);
+
+        // حفظ البيانات المنظمة في localStorage والتوجيه للقالب المناسب
+        if (data.data && data.template) {
+            localStorage.setItem("reportData", JSON.stringify(data.data));
+            // التوجيه إلى القالب المناسب (نافذة جديدة)
+            window.open(`/templates/${data.template}.html`, '_blank');
+        }
         
         // حفظ التقرير تلقائياً
         saveCurrentReport();
@@ -4116,7 +4138,7 @@ function saveTeacherData() {
         criterion: document.getElementById('criterionSelect').value,
         subcategory: document.getElementById('subcategorySelect').value,
         report: document.getElementById('reportSelect').value,
-        role: document.getElementById('roleSelect').value,
+        role: document.getElementById('role').value,
         tools: []
     };
     
@@ -4182,8 +4204,9 @@ function loadTeacherData() {
         document.getElementById('manualReportTitle').value = teacherData.manualTitle || '';
         
         if (teacherData.role) {
-            document.getElementById('roleSelect').value = teacherData.role;
-            handleRoleChange(); // نحمّل البيانات حسب الدور
+            document.getElementById('role').value = teacherData.role;
+            const backendRole = getBackendRole(teacherData.role);
+            loadDataFromBackend(backendRole);
         }
         
         if (teacherData.detailedPlace) {
@@ -4609,13 +4632,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadDates();
     loadThemeSettings();
-    await loadRoles();
-    // تحميل البيانات للدور الافتراضي (teacher) بعد تعبئة قائمة الأدوار
-    if (window.roles.length > 0) {
-        // نضمن أن القيمة المختارة هي أول دور (عادة teacher)
-        document.getElementById('roleSelect').value = window.roles[0].id;
-    }
-    await loadDataFromBackend(document.getElementById('roleSelect').value);
+    
+    // نحدد دوراً افتراضياً (مثلاً teacher)
+    document.getElementById('role').value = 'teacher';
+    const backendRole = getBackendRole('teacher');
+    await loadDataFromBackend(backendRole);
     loadTeacherData();
     updateReport();
 

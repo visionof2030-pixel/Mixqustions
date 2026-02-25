@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ========== جميع الأنماط السابقة مع إضافة تعديلات ========== */
+/* ========== جميع الأنماط السابقة ========== */
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -1016,6 +1016,37 @@ button[title]:hover::before {
     font-size: 12px;
 }
 
+/* الحقول الصغيرة الخاصة بالدور */
+.small-fields {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f0f9f6;
+    border-radius: 12px;
+    border: 2px solid #d4ebe2;
+}
+
+.small-fields .form-row {
+    margin-bottom: 0;
+}
+
+/* الحقول الكبيرة الإضافية (للتوجيه الطلابي) */
+.large-extra-fields {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8fdfa;
+    border-radius: 12px;
+    border: 2px solid #ffd166;
+}
+
+.large-extra-fields h4 {
+    color: #044a35;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+}
+
 /* نافذة التقارير المحفوظة (بها شريط التقدم) */
 #savedReportsModal {
     display: none;
@@ -1787,20 +1818,6 @@ button[title]:hover::before {
     color-adjust: exact !important;
 }
 
-#subjectBox, #lessonBox {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    padding: 0 5px;
-    transition: all 0.3s ease;
-}
-
 /* تحسينات للهواتف المحمولة */
 @media (max-width: 768px) {
     .top-small-buttons {
@@ -2170,7 +2187,7 @@ button[title]:hover::before {
   
   <h2><i class="fas fa-tools" style="margin-left:10px;"></i>تقاريرك - النظام المتكامل</h2>
   
-  <!-- ========== اختيار مقدم التقرير (الدور) بالتنسيق المطلوب ========== -->
+  <!-- ========== اختيار مقدم التقرير (الدور) ========== -->
   <div class="form-group">
     <label for="role"><i class="fas fa-user-tie"></i> مقدم التقرير</label>
     <select id="role" name="role" required onchange="handleRoleChange()">
@@ -2235,7 +2252,7 @@ button[title]:hover::before {
     </div>
   </div>
   
-  <!-- حقول الإدخال الأساسية -->
+  <!-- حقول أساسية مشتركة -->
   <div class="form-group">
     <label for="education"><i class="fas fa-university"></i> إدارة التعليم</label>
     <select id="education" oninput="updateReport()">
@@ -2248,22 +2265,17 @@ button[title]:hover::before {
     <input id="school" placeholder="اسم المدرسة أو المكتب" oninput="updateReport()">
   </div>
   
-  <!-- صف مقدم التقرير (ديناميكي) -->
   <div class="form-row">
     <div class="form-group">
       <label for="reporterType"><i class="fas fa-chalkboard-teacher"></i> <span id="reporterTypeLabel">صفة مقدم التقرير</span></label>
-      <select id="reporterType" oninput="updateReporterGender()">
-        <!-- سيتم تعبئتها حسب الدور -->
-      </select>
+      <select id="reporterType" oninput="updateReporterGender()"></select>
     </div>
-    
     <div class="form-group">
       <label for="reporterName"><i class="fas fa-user"></i> <span id="reporterNameLabel">اسم مقدم التقرير</span></label>
       <input id="reporterName" placeholder="اسم مقدم التقرير" oninput="updateReport()">
     </div>
   </div>
   
-  <!-- صف المدير (بدون اختيار صفة، تُشتق تلقائياً) -->
   <div class="form-row">
     <div class="form-group">
       <label for="principalTypeDisplay"><i class="fas fa-user-cog"></i> صفة المدير (تلقائي)</label>
@@ -2275,7 +2287,6 @@ button[title]:hover::before {
     </div>
   </div>
   
-  <!-- مكان التنفيذ والفصل الدراسي -->
   <div class="form-row">
     <div class="form-group">
       <label for="place"><i class="fas fa-map-marker-alt"></i> مكان التنفيذ</label>
@@ -2284,7 +2295,6 @@ button[title]:hover::before {
         <option value="خارج الصف">خارج الصف</option>
       </select>
     </div>
-    
     <div class="form-group">
       <label for="term"><i class="fas fa-calendar-alt"></i> الفصل الدراسي</label>
       <select id="term" oninput="updateReport()">
@@ -2297,7 +2307,7 @@ button[title]:hover::before {
   </div>
 
   <!-- تفاصيل المكان -->
-  <div id="detailedPlaceContainer" class="form-group">
+  <div class="form-group">
     <label><i class="fas fa-location-dot"></i> حدد المكان بالضبط</label>
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
       <select id="detailedPlaceSelect" style="flex: 2;" onchange="toggleDetailedPlaceInput()">
@@ -2312,43 +2322,42 @@ button[title]:hover::before {
     </div>
   </div>
 
-  <!-- صف الصف (يظهر فقط عند اختيار داخل الصف) -->
-  <div id="gradeRow" class="form-row">
-    <div class="form-group">
-      <label for="grade"><i class="fas fa-users-class"></i> الصف</label>
-      <input id="grade" placeholder="مثال: ٥/٣" oninput="updateReport()">
+  <!-- الحقول الخاصة بالمعلم (تظهر فقط إذا كان الدور teacher والمكان داخل الصف) -->
+  <div id="teacherFields" style="display: none;">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="grade"><i class="fas fa-users-class"></i> الصف</label>
+        <input id="grade" placeholder="مثال: ٥/٣" oninput="updateReport()">
+      </div>
     </div>
-    <div class="form-group">
-      <!-- حقل فارغ للمحافظة على التوازن في الشبكة -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="subject"><i class="fas fa-book"></i> المادة / البرنامج</label>
+        <input id="subject" placeholder="مثال: لغتي" oninput="updateReport()">
+      </div>
+      <div class="form-group">
+        <label for="lesson"><i class="fas fa-book-open"></i> الدرس / النشاط</label>
+        <input id="lesson" placeholder="مثال: درس الضرب" oninput="updateReport()">
+      </div>
     </div>
   </div>
 
-  <!-- صف المادة والدرس (يظهر فقط عند اختيار داخل الصف) -->
-  <div id="subjectLessonRow" class="form-row">
-    <div class="form-group">
-      <label for="subject"><i class="fas fa-book"></i> المادة / البرنامج</label>
-      <input id="subject" placeholder="مثال: لغتي" oninput="updateReport()">
-    </div>
-    
-    <div class="form-group">
-      <label for="lesson"><i class="fas fa-book-open"></i> الدرس / النشاط</label>
-      <input id="lesson" placeholder="مثال: درس الضرب" oninput="updateReport()">
-    </div>
-  </div>
-  
+  <!-- الحقول الصغيرة الخاصة بالدور (تظهر في الأعلى) -->
+  <div id="smallRoleFields" class="small-fields" style="display: none;"></div>
+
+  <!-- المستهدفون والعدد (حقول مشتركة) -->
   <div class="form-row">
     <div class="form-group">
       <label for="target"><i class="fas fa-bullseye"></i> المستهدفون / الفئة</label>
       <input id="target" placeholder="مثال: جميع طلاب الصف" oninput="updateReport()">
     </div>
-    
     <div class="form-group">
       <label for="count"><i class="fas fa-user-check"></i> العدد / الحضور</label>
       <input id="count" placeholder="مثال: ٢٥" oninput="updateReport()">
     </div>
   </div>
-  
-  <!-- الحقول النصية التي تتغير تسمياتها حسب الدور -->
+
+  <!-- ========== الحقول النصية الكبيرة ========== -->
   <div class="form-group">
     <label for="goal"><i class="fas fa-flag"></i> <span id="goalLabel">الهدف التربوي</span></label>
     <textarea id="goal" placeholder="أدخل الهدف" oninput="updateReport()"></textarea>
@@ -2374,16 +2383,21 @@ button[title]:hover::before {
       <label for="strengths"><i class="fas fa-thumbs-up"></i> <span id="strengthsLabel">نقاط القوة</span></label>
       <textarea id="strengths" placeholder="نقاط القوة" oninput="updateReport()"></textarea>
     </div>
-    
     <div class="form-group">
       <label for="improve"><i class="fas fa-tools"></i> <span id="improveLabel">نقاط التحسين</span></label>
       <textarea id="improve" placeholder="نقاط تحتاج تطوير" oninput="updateReport()"></textarea>
     </div>
   </div>
   
+  <!-- حقل التوصيات/خطة المتابعة -->
   <div class="form-group">
     <label for="recomm"><i class="fas fa-lightbulb"></i> <span id="recommLabel">التوصيات</span></label>
-    <textarea id="recomm" placeholder="توصيات مستقبلية" oninput="updateReport()"></textarea>
+    <textarea id="recomm" placeholder="أدخل النص" oninput="updateReport()"></textarea>
+  </div>
+
+  <!-- الحقول الكبيرة الإضافية (للتوجيه الطلابي) -->
+  <div id="largeExtraFields" class="large-extra-fields" style="display: none;">
+    <h4><i class="fas fa-list"></i> تفاصيل إضافية</h4>
   </div>
   
   <!-- قسم الأدوات والوسائل التعليمية - داخل الصف -->
@@ -2403,9 +2417,7 @@ button[title]:hover::before {
   <div id="outsideToolsSection" class="form-group" style="display: none;">
     <label><i class="fas fa-tools"></i> الأدوات والوسائل (خارج الصف)</label>
     <div class="tools-section">
-      <div class="tools-outside-grid" id="outsideToolsGrid">
-        <!-- سيتم تعبئتها بواسطة JavaScript -->
-      </div>
+      <div class="tools-outside-grid" id="outsideToolsGrid"></div>
       <div class="other-tool-container">
         <input type="text" id="otherToolInput" placeholder="أداة أخرى...">
         <button onclick="addOtherTool()">إضافة</button>
@@ -2419,7 +2431,6 @@ button[title]:hover::before {
       <label><i class="fas fa-camera"></i> الصورة 1</label>
       <input type="file" accept="image/*" onchange="loadImage(this,'imgBox1','outsideImgBox1','adminImgBox1','supervisorImgBox1','activityImgBox1','studentImgBox1','healthImgBox1')">
     </div>
-    
     <div class="form-group">
       <label><i class="fas fa-camera"></i> الصورة 2</label>
       <input type="file" accept="image/*" onchange="loadImage(this,'imgBox2','outsideImgBox2','adminImgBox2','supervisorImgBox2','activityImgBox2','studentImgBox2','healthImgBox2')">
@@ -3020,7 +3031,6 @@ const REPORTS_STORAGE_KEY = "saved_educational_reports";
 let currentHijriDate = '';
 let currentGregorianDate = '';
 
-// خريطة تحويل الأدوار (إذا لزم الأمر)
 const roleToBackendMap = {
   'teacher': 'teacher',
   'school_principal': 'school_principal',
@@ -3101,7 +3111,6 @@ async function loadDates() {
     } catch (error) {
         console.error("خطأ في تحميل التاريخ:", error);
         currentHijriDate = "١٤٤٦/٠٦/٠١";
-        // تعيين افتراضي
     }
 }
 
@@ -3126,7 +3135,6 @@ function updateAiButtonTheme(themeName) {
     const aiButton = document.getElementById('aiFillFloatingBtn');
     const aiIcon = aiButton.querySelector('.floating-ai-icon');
     const aiText = aiButton.querySelector('.floating-ai-text');
-    // الألوان حسب الثيم
     switch(themeName) {
         case 'light-blue':
             aiButton.style.background = 'linear-gradient(135deg, #4285f4 0%, #34a853 25%, #fbbc05 50%, #ea4335 100%)';
@@ -3175,20 +3183,22 @@ function applyThemes() {
 // ==================== دوال إظهار/إخفاء الحقول ====================
 function togglePlaceFields() {
     const place = document.getElementById('place').value;
-    const gradeRow = document.getElementById('gradeRow');
-    const subjectLessonRow = document.getElementById('subjectLessonRow');
+    const role = document.getElementById('role').value;
     const insideTools = document.getElementById('insideToolsSection');
     const outsideTools = document.getElementById('outsideToolsSection');
     if (place === 'خارج الصف') {
-        gradeRow.style.display = 'none';
-        subjectLessonRow.style.display = 'none';
         insideTools.style.display = 'none';
         outsideTools.style.display = 'block';
     } else {
-        gradeRow.style.display = 'flex';
-        subjectLessonRow.style.display = 'flex';
         insideTools.style.display = 'block';
         outsideTools.style.display = 'none';
+    }
+    // إظهار أو إخفاء حقول المعلم حسب المكان والدور
+    const teacherFields = document.getElementById('teacherFields');
+    if (role === 'teacher') {
+        teacherFields.style.display = place === 'داخل الصف' ? 'block' : 'none';
+    } else {
+        teacherFields.style.display = 'none';
     }
     updateReport();
 }
@@ -3216,7 +3226,155 @@ function getDetailedPlaceValue() {
     }
 }
 
-// ==================== دالة تغيير عناوين الحقول حسب الدور ====================
+// ==================== تحديث الحقول الخاصة بالدور ====================
+function updateRoleSpecificFields(role) {
+    // الحقول الصغيرة (تظهر في الأعلى)
+    const smallContainer = document.getElementById('smallRoleFields');
+    smallContainer.innerHTML = '';
+    smallContainer.style.display = 'none';
+
+    // الحقول الكبيرة الإضافية (تظهر في الأسفل)
+    const largeContainer = document.getElementById('largeExtraFields');
+    largeContainer.innerHTML = '<h4><i class="fas fa-list"></i> تفاصيل إضافية</h4>';
+    largeContainer.style.display = 'none';
+
+    let smallHtml = '';
+    let largeHtml = '';
+
+    if (role === 'school_principal' || role === 'vice_principal') {
+        smallHtml = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> المجال</label>
+                    <input type="text" id="fieldInput" placeholder="مثال: تربوي" value="تربوي" oninput="updateReport()">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lightbulb"></i> المبادرة</label>
+                    <input type="text" id="initiativeInput" placeholder="اسم المبادرة" oninput="updateReport()">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> مدة التنفيذ</label>
+                    <input type="text" id="durationInput" placeholder="مثال: أسبوع" oninput="updateReport()">
+                </div>
+            </div>
+        `;
+    } else if (role === 'educational_supervisor') {
+        smallHtml = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> المجال</label>
+                    <input type="text" id="fieldInput" placeholder="مثال: تربوي" value="تربوي" oninput="updateReport()">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lightbulb"></i> المبادرة</label>
+                    <input type="text" id="initiativeInput" placeholder="اسم المبادرة" value="دعم الأداء الصفي" oninput="updateReport()">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> مدة التنفيذ</label>
+                    <input type="text" id="durationInput" placeholder="مثال: حصة واحدة" oninput="updateReport()">
+                </div>
+            </div>
+        `;
+    } else if (role === 'activity_leader') {
+        smallHtml = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> المجال</label>
+                    <input type="text" id="fieldInput" placeholder="مثال: اجتماعي" value="اجتماعي" oninput="updateReport()">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> نوع البرنامج</label>
+                    <input type="text" id="programTypeInput" placeholder="نوع البرنامج" value="برنامج تحفيزي" oninput="updateReport()">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> مدة التنفيذ</label>
+                    <input type="text" id="durationInput" placeholder="مثال: يوم واحد" oninput="updateReport()">
+                </div>
+            </div>
+        `;
+    } else if (role === 'health_guide') {
+        smallHtml = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> المجال الصحي</label>
+                    <input type="text" id="fieldInput" placeholder="مثال: توعوي" value="توعوي" oninput="updateReport()">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> نوع البرنامج الصحي</label>
+                    <input type="text" id="programTypeInput" placeholder="نوع البرنامج" value="حملة توعوية" oninput="updateReport()">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> مدة التنفيذ</label>
+                    <input type="text" id="durationInput" placeholder="مثال: يوم واحد" oninput="updateReport()">
+                </div>
+            </div>
+        `;
+    } else if (role === 'student_guide') {
+        // التوجيه الطلابي: حقول صغيرة (مبادرة، مدة) + حقول كبيرة
+        smallHtml = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-lightbulb"></i> المبادرة</label>
+                    <input type="text" id="initiativeInput" placeholder="اسم المبادرة" oninput="updateReport()">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> مدة التنفيذ</label>
+                    <input type="text" id="durationInput" placeholder="مثال: أسبوع" oninput="updateReport()">
+                </div>
+            </div>
+        `;
+        largeHtml = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-hands-helping"></i> الرعاية الطلابية</label>
+                    <textarea id="careInput" placeholder="الرعاية الطلابية" oninput="updateReport()"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-shield-alt"></i> الوقاية والتوعية</label>
+                    <textarea id="awarenessInput" placeholder="الوقاية والتوعية" oninput="updateReport()"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-first-aid"></i> التدخل ومعالجة الحالات</label>
+                    <textarea id="interventionInput" placeholder="التدخل" oninput="updateReport()"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-chart-line"></i> التمكين والدعم</label>
+                    <textarea id="supportInput" placeholder="التمكين والدعم" oninput="updateReport()"></textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-family"></i> الشراكة الأسرية</label>
+                    <textarea id="familyInput" placeholder="الشراكة الأسرية" oninput="updateReport()"></textarea>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-school"></i> تطوير البيئة المدرسية</label>
+                    <textarea id="envInput" placeholder="تطوير البيئة" oninput="updateReport()"></textarea>
+                </div>
+            </div>
+        `;
+    }
+
+    if (smallHtml) {
+        smallContainer.innerHTML = smallHtml;
+        smallContainer.style.display = 'block';
+    }
+    if (largeHtml) {
+        largeContainer.innerHTML += largeHtml;
+        largeContainer.style.display = 'block';
+    }
+}
+
 function updateFieldLabelsByRole(role) {
     const labels = {
         goalLabel: 'الهدف التربوي',
@@ -3230,12 +3388,12 @@ function updateFieldLabelsByRole(role) {
 
     if (role === 'school_principal' || role === 'vice_principal') {
         labels.goalLabel = 'الأهداف الإدارية';
-        labels.summaryLabel = 'ملخص التقرير';
+        labels.summaryLabel = 'النتائج';
         labels.stepsLabel = 'الإجراءات المنفذة';
         labels.strategiesLabel = 'الاستراتيجيات المتبعة';
         labels.strengthsLabel = 'نقاط القوة';
         labels.improveLabel = 'أولويات التطوير';
-        labels.recommLabel = 'التوصيات';
+        labels.recommLabel = 'خطة المتابعة';
     } else if (role === 'educational_supervisor') {
         labels.goalLabel = 'الأهداف الإشرافية';
         labels.summaryLabel = 'مستوى الأداء';
@@ -3243,7 +3401,7 @@ function updateFieldLabelsByRole(role) {
         labels.strategiesLabel = 'جوانب التميز';
         labels.strengthsLabel = 'جوانب التميز';
         labels.improveLabel = 'مجالات التحسين';
-        labels.recommLabel = 'التوصيات';
+        labels.recommLabel = 'خطة الدعم والمتابعة';
     } else if (role === 'activity_leader') {
         labels.goalLabel = 'أهداف البرنامج';
         labels.summaryLabel = 'مستوى التفاعل';
@@ -3251,9 +3409,9 @@ function updateFieldLabelsByRole(role) {
         labels.strategiesLabel = 'أبرز الإنجازات';
         labels.strengthsLabel = 'أبرز الإنجازات';
         labels.improveLabel = 'التحديات';
-        labels.recommLabel = 'التوصيات التطويرية';
+        labels.recommLabel = 'خطة المتابعة';
     } else if (role === 'student_guide') {
-        labels.goalLabel = 'الأهداف التوجيهية';
+        labels.goalLabel = 'الأهداف';
         labels.summaryLabel = 'الرعاية الطلابية';
         labels.stepsLabel = 'الوقاية والتوعية';
         labels.strategiesLabel = 'التدخل ومعالجة الحالات';
@@ -3267,9 +3425,8 @@ function updateFieldLabelsByRole(role) {
         labels.strategiesLabel = 'أبرز النتائج';
         labels.strengthsLabel = 'أبرز النتائج';
         labels.improveLabel = 'التحديات الصحية';
-        labels.recommLabel = 'التوصيات الوقائية';
+        labels.recommLabel = 'خطة المتابعة الصحية';
     }
-    // معلم: تستخدم التسميات الافتراضية
 
     document.getElementById('goalLabel').textContent = labels.goalLabel;
     document.getElementById('summaryLabel').textContent = labels.summaryLabel;
@@ -3280,7 +3437,6 @@ function updateFieldLabelsByRole(role) {
     document.getElementById('recommLabel').textContent = labels.recommLabel;
 }
 
-// ==================== تحديث واجهة مقدم التقرير ====================
 function updateReporterFields(backendRole) {
     const reporterTypeLabel = document.getElementById('reporterTypeLabel');
     const reporterNameLabel = document.getElementById('reporterNameLabel');
@@ -3350,8 +3506,16 @@ function updateReporterFields(backendRole) {
     updatePrincipalType();
     document.getElementById('selectedCriterionWeight').style.display = 'inline-block';
     
-    // تغيير عناوين الحقول حسب الدور
     updateFieldLabelsByRole(backendRole);
+    updateRoleSpecificFields(backendRole);
+    
+    // إظهار أو إخفاء حقول المعلم حسب الدور
+    const teacherFields = document.getElementById('teacherFields');
+    if (backendRole === 'teacher') {
+        teacherFields.style.display = document.getElementById('place').value === 'داخل الصف' ? 'block' : 'none';
+    } else {
+        teacherFields.style.display = 'none';
+    }
     
     updateReport();
 }
@@ -3422,6 +3586,7 @@ function updateOtherToolsList() {
 
 function updateOutsideToolsList() {
     const toolsListBox = document.getElementById('outsideToolsListBox');
+    if (!toolsListBox) return;
     toolsListBox.innerHTML = '';
     const selectedTools = [];
     document.querySelectorAll('#outsideToolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) selectedTools.push(cb.value); });
@@ -3443,22 +3608,530 @@ function updateOutsideToolsList() {
     }
 }
 
-// ==================== حفظ واستعراض التقارير ====================
-function calculateProgress() {
-    const progressContainer = document.getElementById('progressBarContainer');
-    progressContainer.style.display = 'flex';
-    const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
-    const criteria = window.allCriteria || [];
-    if (criteria.length === 0) { progressContainer.style.display = 'none'; return; }
-    const totalWeight = criteria.reduce((sum, c) => sum + (parseFloat(c.weight) || 0), 0);
-    let completedWeight = 0, completedCount = 0;
-    criteria.forEach(c => { if (savedReports[c.id]) { completedWeight += (parseFloat(c.weight)||0); completedCount++; } });
-    const percentage = totalWeight > 0 ? Math.round((completedWeight / totalWeight) * 100) : 0;
-    document.getElementById('progressPercentage').textContent = percentage + '%';
-    document.getElementById('progressFill').style.width = percentage + '%';
-    document.getElementById('progressMessage').textContent = `${completedCount} من ${criteria.length} معايير مكتملة (${completedWeight} من ${totalWeight} نقطة)`;
+// ==================== تحديثات PDF (مع فحص وجود العناصر) ====================
+function updateReport() {
+    // تحديث القالب الرئيسي للمعلم (داخل الصف) - مع فحص وجود العناصر
+    const role = document.getElementById('role').value;
+    const place = document.getElementById('place').value;
+    
+    const educationBox = document.getElementById('educationBox');
+    if (educationBox) educationBox.innerText = document.getElementById('education').value || 'غير محدد';
+    
+    const schoolBox = document.getElementById('schoolBox');
+    if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'غير محدد';
+    
+    const termBox = document.getElementById('termBox');
+    if (termBox) {
+        const termValue = document.getElementById('term').value;
+        termBox.innerText = termValue ? `الفصل الدراسي ${termValue}` : 'غير محدد';
+    }
+    
+    const gradeBox = document.getElementById('gradeBox');
+    if (gradeBox) gradeBox.innerText = document.getElementById('grade')?.value || 'غير محدد';
+    
+    const countBox = document.getElementById('countBox');
+    if (countBox) countBox.innerText = document.getElementById('count').value || 'غير محدد';
+    
+    const reportTypeBox = document.getElementById('reportTypeBox');
+    if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير';
+    
+    const targetBox = document.getElementById('targetBox');
+    if (targetBox) targetBox.innerText = document.getElementById('target').value || 'غير محدد';
+    
+    const placeBox = document.getElementById('placeBox');
+    if (placeBox) {
+        const placeValue = document.getElementById('place').value;
+        placeBox.innerText = placeValue === 'داخل الصف' ? 'داخل الصف' : (getDetailedPlaceValue() || 'خارج الصف');
+    }
+    
+    const subjectBox = document.getElementById('subjectBox');
+    if (subjectBox) subjectBox.innerText = document.getElementById('subject')?.value || 'غير محدد';
+    
+    const lessonBox = document.getElementById('lessonBox');
+    if (lessonBox) lessonBox.innerText = document.getElementById('lesson')?.value || 'غير محدد';
+    
+    const reporterNameBox = document.getElementById('reporterNameBox');
+    if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || 'غير محدد';
+    
+    const principalBox = document.getElementById('principalBox');
+    if (principalBox) principalBox.innerText = document.getElementById('principal').value || 'غير محدد';
+    
+    const reporterTypeBox = document.getElementById('reporterTypeBox');
+    if (reporterTypeBox) reporterTypeBox.innerText = document.getElementById('reporterType').value || 'مقدم التقرير';
+    
+    const principalTypeBox = document.getElementById('principalTypeBox');
+    if (principalTypeBox) principalTypeBox.innerText = document.getElementById('principalTypeDisplay').value || 'المدير';
+    
+    const goalBox = document.getElementById('goalBox');
+    if (goalBox) goalBox.innerText = document.getElementById('goal').value || 'لم يتم تحديد الهدف التربوي';
+    
+    const summaryBox = document.getElementById('summaryBox');
+    if (summaryBox) summaryBox.innerText = document.getElementById('summary').value || 'لم يتم إضافة نبذة مختصرة';
+    
+    const stepsBox = document.getElementById('stepsBox');
+    if (stepsBox) stepsBox.innerText = document.getElementById('steps').value || 'لم يتم تحديد إجراءات التنفيذ';
+    
+    const strategiesBox = document.getElementById('strategiesBox');
+    if (strategiesBox) strategiesBox.innerText = document.getElementById('strategies').value || 'لم يتم تحديد الاستراتيجيات';
+    
+    const strengthsBox = document.getElementById('strengthsBox');
+    if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || 'لم يتم تحديد نقاط القوة';
+    
+    const improveBox = document.getElementById('improveBox');
+    if (improveBox) improveBox.innerText = document.getElementById('improve').value || 'لم يتم تحديد نقاط التحسين';
+    
+    const recommBox = document.getElementById('recommBox');
+    if (recommBox) recommBox.innerText = document.getElementById('recomm').value || 'لم يتم تحديد التوصيات';
+    
+    updateToolsDisplay();
+    
+    // تحديث القوالب الأخرى
+    updateOutsideReport();
+    updateAdminReport();
+    updateSupervisorReport();
+    updateActivityReport();
+    updateStudentReport();
+    updateHealthReport();
 }
 
+function updateOutsideReport() {
+    // تحديث قالب خارج الصف - مع فحص وجود العناصر
+    const place = document.getElementById('place').value;
+    if (place !== 'خارج الصف') return;
+    
+    const schoolBox = document.getElementById('outsideSchoolBox');
+    if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'غير محدد';
+    
+    const educationBox = document.getElementById('outsideEducationBox');
+    if (educationBox) educationBox.innerText = document.getElementById('education').value || 'غير محدد';
+    
+    const termBox = document.getElementById('outsideTermBox');
+    if (termBox) termBox.innerText = document.getElementById('term').value ? `الفصل الدراسي ${document.getElementById('term').value}` : 'غير محدد';
+    
+    const countBox = document.getElementById('outsideCountBox');
+    if (countBox) countBox.innerText = document.getElementById('count').value || 'غير محدد';
+    
+    const reportTypeBox = document.getElementById('outsideReportTypeBox');
+    if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير';
+    
+    const targetBox = document.getElementById('outsideTargetBox');
+    if (targetBox) targetBox.innerText = document.getElementById('target').value || 'غير محدد';
+    
+    const detailedPlaceBox = document.getElementById('outsideDetailedPlaceBox');
+    if (detailedPlaceBox) detailedPlaceBox.innerText = getDetailedPlaceValue() || 'غير محدد';
+    
+    const reporterNameBox = document.getElementById('outsideReporterNameBox');
+    if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || 'غير محدد';
+    
+    const principalBox = document.getElementById('outsidePrincipalBox');
+    if (principalBox) principalBox.innerText = document.getElementById('principal').value || 'غير محدد';
+    
+    const reporterTypeBox = document.getElementById('outsideReporterTypeBox');
+    if (reporterTypeBox) reporterTypeBox.innerText = document.getElementById('reporterType').value || 'مقدم التقرير';
+    
+    const principalTypeBox = document.getElementById('outsidePrincipalTypeBox');
+    if (principalTypeBox) principalTypeBox.innerText = document.getElementById('principalTypeDisplay').value || 'المدير';
+    
+    const goalBox = document.getElementById('outsideGoalBox');
+    if (goalBox) goalBox.innerText = document.getElementById('goal').value || 'لم يتم تحديد الهدف التربوي';
+    
+    const summaryBox = document.getElementById('outsideSummaryBox');
+    if (summaryBox) summaryBox.innerText = document.getElementById('summary').value || 'لم يتم إضافة نبذة مختصرة';
+    
+    const stepsBox = document.getElementById('outsideStepsBox');
+    if (stepsBox) stepsBox.innerText = document.getElementById('steps').value || 'لم يتم تحديد إجراءات التنفيذ';
+    
+    const strategiesBox = document.getElementById('outsideStrategiesBox');
+    if (strategiesBox) strategiesBox.innerText = document.getElementById('strategies').value || 'لم يتم تحديد الاستراتيجيات';
+    
+    const strengthsBox = document.getElementById('outsideStrengthsBox');
+    if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || 'لم يتم تحديد نقاط القوة';
+    
+    const improveBox = document.getElementById('outsideImproveBox');
+    if (improveBox) improveBox.innerText = document.getElementById('improve').value || 'لم يتم تحديد نقاط التحسين';
+    
+    const recommBox = document.getElementById('outsideRecommBox');
+    if (recommBox) recommBox.innerText = document.getElementById('recomm').value || 'لم يتم تحديد التوصيات';
+    
+    updateOutsideToolsList();
+}
+
+function updateAdminReport() {
+    const role = document.getElementById('role').value;
+    if (role !== 'school_principal' && role !== 'vice_principal') return;
+    
+    const schoolBox = document.getElementById('adminSchoolBox');
+    if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'غير محدد';
+    
+    const educationBox = document.getElementById('adminEducationBox');
+    if (educationBox) educationBox.innerText = document.getElementById('education').value || 'غير محدد';
+    
+    const termBox = document.getElementById('adminTermBox');
+    if (termBox) termBox.innerText = document.getElementById('term').value || 'غير محدد';
+    
+    const placeBox = document.getElementById('adminPlaceBox');
+    if (placeBox) placeBox.innerText = getDetailedPlaceValue() || 'غير محدد';
+    
+    const targetBox = document.getElementById('adminTargetBox');
+    if (targetBox) targetBox.innerText = document.getElementById('target').value || 'غير محدد';
+    
+    const countBox = document.getElementById('adminCountBox');
+    if (countBox) countBox.innerText = document.getElementById('count').value || 'غير محدد';
+    
+    const reportTypeBox = document.getElementById('adminReportTypeBox');
+    if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير إداري';
+    
+    const goalBox = document.getElementById('adminGoalBox');
+    if (goalBox) goalBox.innerText = document.getElementById('goal').value || '';
+    
+    const stepsBox = document.getElementById('adminStepsBox');
+    if (stepsBox) stepsBox.innerText = document.getElementById('steps').value || '';
+    
+    const summaryBox = document.getElementById('adminSummaryBox');
+    if (summaryBox) summaryBox.innerText = document.getElementById('summary').value || '';
+    
+    const strengthsBox = document.getElementById('adminStrengthsBox');
+    if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || '';
+    
+    const improveBox = document.getElementById('adminImproveBox');
+    if (improveBox) improveBox.innerText = document.getElementById('improve').value || '';
+    
+    const recommBox = document.getElementById('adminRecommBox');
+    if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    
+    const reporterNameBox = document.getElementById('adminReporterNameBox');
+    if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
+    
+    const principalBox = document.getElementById('adminPrincipalBox');
+    if (principalBox) principalBox.innerText = document.getElementById('principal').value || '';
+
+    const fieldInput = document.getElementById('fieldInput');
+    const fieldBox = document.getElementById('adminFieldBox');
+    if (fieldBox) fieldBox.innerText = fieldInput ? fieldInput.value || 'تربوي' : 'تربوي';
+    
+    const initiativeInput = document.getElementById('initiativeInput');
+    const initiativeBox = document.getElementById('adminInitiativeBox');
+    if (initiativeBox) initiativeBox.innerText = initiativeInput ? initiativeInput.value || ('مبادرة ' + (document.getElementById('manualReportTitle').value || '')) : ('مبادرة ' + (document.getElementById('manualReportTitle').value || ''));
+    
+    const durationInput = document.getElementById('durationInput');
+    const durationBox = document.getElementById('adminDurationBox');
+    if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'يوم واحد' : 'يوم واحد';
+    
+    const followupBox = document.getElementById('adminFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مستمرة';
+}
+
+function updateSupervisorReport() {
+    const role = document.getElementById('role').value;
+    if (role !== 'educational_supervisor') return;
+    
+    const schoolBox = document.getElementById('supervisorSchoolBox');
+    if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'مكتب الإشراف';
+    
+    const educationBox = document.getElementById('supervisorEducationBox');
+    if (educationBox) educationBox.innerText = document.getElementById('education').value || 'غير محدد';
+    
+    const termBox = document.getElementById('supervisorTermBox');
+    if (termBox) termBox.innerText = document.getElementById('term').value || 'غير محدد';
+    
+    const placeBox = document.getElementById('supervisorPlaceBox');
+    if (placeBox) placeBox.innerText = getDetailedPlaceValue() || 'غير محدد';
+    
+    const targetBox = document.getElementById('supervisorTargetBox');
+    if (targetBox) targetBox.innerText = document.getElementById('target').value || 'غير محدد';
+    
+    const countBox = document.getElementById('supervisorCountBox');
+    if (countBox) countBox.innerText = document.getElementById('count').value || 'غير محدد';
+    
+    const reportTypeBox = document.getElementById('supervisorReportTypeBox');
+    if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير إشرافي';
+    
+    const goalBox = document.getElementById('supervisorGoalBox');
+    if (goalBox) goalBox.innerText = document.getElementById('goal').value || '';
+    
+    const stepsBox = document.getElementById('supervisorStepsBox');
+    if (stepsBox) stepsBox.innerText = document.getElementById('steps').value || '';
+    
+    const performanceBox = document.getElementById('supervisorPerformanceBox');
+    if (performanceBox) performanceBox.innerText = document.getElementById('summary').value || '';
+    
+    const strengthsBox = document.getElementById('supervisorStrengthsBox');
+    if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || '';
+    
+    const improveBox = document.getElementById('supervisorImproveBox');
+    if (improveBox) improveBox.innerText = document.getElementById('improve').value || '';
+    
+    const recommBox = document.getElementById('supervisorRecommBox');
+    if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    
+    const reporterNameBox = document.getElementById('supervisorReporterNameBox');
+    if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
+    
+    const principalBox = document.getElementById('supervisorPrincipalBox');
+    if (principalBox) principalBox.innerText = document.getElementById('principal').value || '';
+
+    const fieldInput = document.getElementById('fieldInput');
+    const fieldBox = document.getElementById('supervisorFieldBox');
+    if (fieldBox) fieldBox.innerText = fieldInput ? fieldInput.value || 'تربوي' : 'تربوي';
+    
+    const initiativeInput = document.getElementById('initiativeInput');
+    const initiativeBox = document.getElementById('supervisorInitiativeBox');
+    if (initiativeBox) initiativeBox.innerText = initiativeInput ? initiativeInput.value || 'دعم الأداء الصفي' : 'دعم الأداء الصفي';
+    
+    const durationInput = document.getElementById('durationInput');
+    const durationBox = document.getElementById('supervisorDurationBox');
+    if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'حصة واحدة' : 'حصة واحدة';
+    
+    const followupBox = document.getElementById('supervisorFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مع المعلم';
+}
+
+function updateActivityReport() {
+    const role = document.getElementById('role').value;
+    if (role !== 'activity_leader') return;
+    
+    const schoolBox = document.getElementById('activitySchoolBox');
+    if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'مدرسة ................';
+    
+    const educationBox = document.getElementById('activityEducationBox');
+    if (educationBox) educationBox.innerText = document.getElementById('education').value || 'غير محدد';
+    
+    const termBox = document.getElementById('activityTermBox');
+    if (termBox) termBox.innerText = document.getElementById('term').value || 'غير محدد';
+    
+    const placeBox = document.getElementById('activityPlaceBox');
+    if (placeBox) placeBox.innerText = getDetailedPlaceValue() || 'غير محدد';
+    
+    const targetBox = document.getElementById('activityTargetBox');
+    if (targetBox) targetBox.innerText = document.getElementById('target').value || 'غير محدد';
+    
+    const countBox = document.getElementById('activityCountBox');
+    if (countBox) countBox.innerText = document.getElementById('count').value || 'غير محدد';
+    
+    const reportTypeBox = document.getElementById('activityReportTypeBox');
+    if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير نشاط';
+    
+    const goalBox = document.getElementById('activityGoalBox');
+    if (goalBox) goalBox.innerText = document.getElementById('goal').value || '';
+    
+    const stepsBox = document.getElementById('activityStepsBox');
+    if (stepsBox) stepsBox.innerText = document.getElementById('steps').value || '';
+    
+    const interactionBox = document.getElementById('activityInteractionBox');
+    if (interactionBox) interactionBox.innerText = document.getElementById('summary').value || '';
+    
+    const strengthsBox = document.getElementById('activityStrengthsBox');
+    if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || '';
+    
+    const improveBox = document.getElementById('activityImproveBox');
+    if (improveBox) improveBox.innerText = document.getElementById('improve').value || '';
+    
+    const recommBox = document.getElementById('activityRecommBox');
+    if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    
+    const reporterNameBox = document.getElementById('activityReporterNameBox');
+    if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
+    
+    const principalBox = document.getElementById('activityPrincipalBox');
+    if (principalBox) principalBox.innerText = document.getElementById('principal').value || '';
+
+    const fieldInput = document.getElementById('fieldInput');
+    const fieldBox = document.getElementById('activityFieldBox');
+    if (fieldBox) fieldBox.innerText = fieldInput ? fieldInput.value || 'اجتماعي' : 'اجتماعي';
+    
+    const programTypeInput = document.getElementById('programTypeInput');
+    const programTypeBox = document.getElementById('activityTypeBox');
+    if (programTypeBox) programTypeBox.innerText = programTypeInput ? programTypeInput.value || 'برنامج تحفيزي' : 'برنامج تحفيزي';
+    
+    const durationInput = document.getElementById('durationInput');
+    const durationBox = document.getElementById('activityDurationBox');
+    if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'يوم واحد' : 'يوم واحد';
+    
+    const followupBox = document.getElementById('activityFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مستمرة';
+}
+
+function updateStudentReport() {
+    const role = document.getElementById('role').value;
+    if (role !== 'student_guide') return;
+    
+    const schoolBox = document.getElementById('studentSchoolBox');
+    if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'اسم المدرسة';
+    
+    const educationBox = document.getElementById('studentEducationBox');
+    if (educationBox) educationBox.innerText = document.getElementById('education').value || 'غير محدد';
+    
+    const termBox = document.getElementById('studentTermBox');
+    if (termBox) termBox.innerText = document.getElementById('term').value || 'غير محدد';
+    
+    const placeBox = document.getElementById('studentPlaceBox');
+    if (placeBox) placeBox.innerText = getDetailedPlaceValue() || 'غير محدد';
+    
+    const targetBox = document.getElementById('studentTargetBox');
+    if (targetBox) targetBox.innerText = document.getElementById('target').value || 'غير محدد';
+    
+    const countBox = document.getElementById('studentCountBox');
+    if (countBox) countBox.innerText = document.getElementById('count').value || 'غير محدد';
+    
+    const reportTypeBox = document.getElementById('studentReportTypeBox');
+    if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير توجيه طلابي';
+    
+    const goalBox = document.getElementById('studentGoalBox');
+    if (goalBox) goalBox.innerText = document.getElementById('goal').value || '';
+
+    const careInput = document.getElementById('careInput');
+    const careBox = document.getElementById('studentCareBox');
+    if (careBox) careBox.innerText = careInput ? careInput.value || '' : '';
+    
+    const awarenessInput = document.getElementById('awarenessInput');
+    const awarenessBox = document.getElementById('studentAwarenessBox');
+    if (awarenessBox) awarenessBox.innerText = awarenessInput ? awarenessInput.value || '' : '';
+    
+    const interventionInput = document.getElementById('interventionInput');
+    const interventionBox = document.getElementById('studentInterventionBox');
+    if (interventionBox) interventionBox.innerText = interventionInput ? interventionInput.value || '' : '';
+    
+    const supportInput = document.getElementById('supportInput');
+    const supportBox = document.getElementById('studentSupportBox');
+    if (supportBox) supportBox.innerText = supportInput ? supportInput.value || '' : '';
+    
+    const familyInput = document.getElementById('familyInput');
+    const familyBox = document.getElementById('studentFamilyBox');
+    if (familyBox) familyBox.innerText = familyInput ? familyInput.value || '' : '';
+    
+    const envInput = document.getElementById('envInput');
+    const envBox = document.getElementById('studentEnvBox');
+    if (envBox) envBox.innerText = envInput ? envInput.value || '' : '';
+
+    const reporterNameBox = document.getElementById('studentReporterNameBox');
+    if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
+    
+    const principalBox = document.getElementById('studentPrincipalBox');
+    if (principalBox) principalBox.innerText = document.getElementById('principal').value || '';
+
+    const initiativeInput = document.getElementById('initiativeInput');
+    const initiativeBox = document.getElementById('studentInitiativeBox');
+    if (initiativeBox) initiativeBox.innerText = initiativeInput ? initiativeInput.value || ('مبادرة ' + (document.getElementById('manualReportTitle').value || '')) : ('مبادرة ' + (document.getElementById('manualReportTitle').value || ''));
+    
+    const durationInput = document.getElementById('durationInput');
+    const durationBox = document.getElementById('studentDurationBox');
+    if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'أسبوع' : 'أسبوع';
+}
+
+function updateHealthReport() {
+    const role = document.getElementById('role').value;
+    if (role !== 'health_guide') return;
+    
+    const schoolBox = document.getElementById('healthSchoolBox');
+    if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'اسم المدرسة';
+    
+    const educationBox = document.getElementById('healthEducationBox');
+    if (educationBox) educationBox.innerText = document.getElementById('education').value || 'غير محدد';
+    
+    const termBox = document.getElementById('healthTermBox');
+    if (termBox) termBox.innerText = document.getElementById('term').value || 'غير محدد';
+    
+    const placeBox = document.getElementById('healthPlaceBox');
+    if (placeBox) placeBox.innerText = getDetailedPlaceValue() || 'غير محدد';
+    
+    const targetBox = document.getElementById('healthTargetBox');
+    if (targetBox) targetBox.innerText = document.getElementById('target').value || 'غير محدد';
+    
+    const countBox = document.getElementById('healthCountBox');
+    if (countBox) countBox.innerText = document.getElementById('count').value || 'غير محدد';
+    
+    const reportTypeBox = document.getElementById('healthReportTypeBox');
+    if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير صحي';
+    
+    const goalBox = document.getElementById('healthGoalBox');
+    if (goalBox) goalBox.innerText = document.getElementById('goal').value || '';
+    
+    const stepsBox = document.getElementById('healthStepsBox');
+    if (stepsBox) stepsBox.innerText = document.getElementById('steps').value || '';
+    
+    const benefitBox = document.getElementById('healthBenefitBox');
+    if (benefitBox) benefitBox.innerText = document.getElementById('summary').value || '';
+    
+    const resultsBox = document.getElementById('healthResultsBox');
+    if (resultsBox) resultsBox.innerText = document.getElementById('strengths').value || '';
+    
+    const challengesBox = document.getElementById('healthChallengesBox');
+    if (challengesBox) challengesBox.innerText = document.getElementById('improve').value || '';
+    
+    const recommBox = document.getElementById('healthRecommBox');
+    if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    
+    const reporterNameBox = document.getElementById('healthReporterNameBox');
+    if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
+    
+    const principalBox = document.getElementById('healthPrincipalBox');
+    if (principalBox) principalBox.innerText = document.getElementById('principal').value || '';
+
+    const fieldInput = document.getElementById('fieldInput');
+    const fieldBox = document.getElementById('healthFieldBox');
+    if (fieldBox) fieldBox.innerText = fieldInput ? fieldInput.value || 'توعوي' : 'توعوي';
+    
+    const programTypeInput = document.getElementById('programTypeInput');
+    const programBox = document.getElementById('healthProgramBox');
+    if (programBox) programBox.innerText = programTypeInput ? programTypeInput.value || 'حملة توعوية' : 'حملة توعوية';
+    
+    const durationInput = document.getElementById('durationInput');
+    const durationBox = document.getElementById('healthDurationBox');
+    if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'يوم واحد' : 'يوم واحد';
+    
+    const followupBox = document.getElementById('healthFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة صحية';
+}
+
+function toggleTool(element) {
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    if (checkbox.checked) element.classList.add('checked'); else element.classList.remove('checked');
+    updateToolsDisplay();
+}
+
+function updateToolsDisplay() {
+    const toolsListBox = document.getElementById('toolsListBox');
+    if (!toolsListBox) return;
+    toolsListBox.innerHTML = '';
+    const selectedTools = [];
+    document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) selectedTools.push(cb.value); });
+    selectedTools.forEach(tool => {
+        const toolElement = document.createElement('div');
+        toolElement.className = 'tool';
+        toolElement.innerHTML = `<span>✓</span> ${tool}`;
+        toolsListBox.appendChild(toolElement);
+    });
+    if (selectedTools.length === 0) {
+        const noToolsMessage = document.createElement('div');
+        noToolsMessage.style.textAlign = 'center';
+        noToolsMessage.style.color = '#666';
+        noToolsMessage.style.fontSize = '9px';
+        noToolsMessage.style.padding = '4px';
+        noToolsMessage.textContent = 'لم يتم اختيار أي أدوات';
+        toolsListBox.appendChild(noToolsMessage);
+    }
+}
+
+function loadImage(input, ...targetIds) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            targetIds.forEach(id => {
+                const imgBox = document.getElementById(id);
+                if (imgBox) {
+                    imgBox.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    imgBox.appendChild(img);
+                }
+            });
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// ==================== حفظ واستعراض التقارير (مختصر) ====================
 function saveCurrentReport() {
     const reportTitle = document.getElementById('manualReportTitle').value.trim();
     if (!reportTitle) { showNotification('الرجاء إدخال عنوان التقرير'); return false; }
@@ -3475,6 +4148,7 @@ function saveCurrentReport() {
         document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) tools.push(cb.value); });
     }
     const uiRole = document.getElementById('role').value;
+
     const reportData = {
         id: Date.now().toString(),
         title: reportTitle,
@@ -3488,10 +4162,10 @@ function saveCurrentReport() {
             reporterType: document.getElementById('reporterType').value,
             reporterName: document.getElementById('reporterName').value,
             principal: document.getElementById('principal').value,
-            grade: document.getElementById('grade').value,
+            grade: document.getElementById('grade')?.value || '',
             term: document.getElementById('term').value,
-            subject: document.getElementById('subject').value,
-            lesson: document.getElementById('lesson').value,
+            subject: document.getElementById('subject')?.value || '',
+            lesson: document.getElementById('lesson')?.value || '',
             target: document.getElementById('target').value,
             count: document.getElementById('count').value,
             place, detailedPlace: getDetailedPlaceValue(),
@@ -3502,28 +4176,63 @@ function saveCurrentReport() {
             strengths: document.getElementById('strengths').value,
             improve: document.getElementById('improve').value,
             recomm: document.getElementById('recomm').value,
-            tools, otherTools: window.otherTools
+            tools, otherTools: window.otherTools,
+            // الحقول الخاصة
+            field: document.getElementById('fieldInput')?.value,
+            initiative: document.getElementById('initiativeInput')?.value,
+            duration: document.getElementById('durationInput')?.value,
+            programType: document.getElementById('programTypeInput')?.value,
+            care: document.getElementById('careInput')?.value,
+            awareness: document.getElementById('awarenessInput')?.value,
+            intervention: document.getElementById('interventionInput')?.value,
+            support: document.getElementById('supportInput')?.value,
+            family: document.getElementById('familyInput')?.value,
+            env: document.getElementById('envInput')?.value,
         }
     };
+
     savedReports[criterionId] = reportData;
     localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(savedReports));
     calculateProgress();
     return true;
 }
 
+function calculateProgress() {
+    const progressContainer = document.getElementById('progressBarContainer');
+    if (!progressContainer) return;
+    const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
+    const criteria = window.allCriteria || [];
+    if (criteria.length === 0) { progressContainer.style.display = 'none'; return; }
+    const totalWeight = criteria.reduce((sum, c) => sum + (parseFloat(c.weight) || 0), 0);
+    let completedWeight = 0, completedCount = 0;
+    criteria.forEach(c => { if (savedReports[c.id]) { completedWeight += (parseFloat(c.weight)||0); completedCount++; } });
+    const percentage = totalWeight > 0 ? Math.round((completedWeight / totalWeight) * 100) : 0;
+    document.getElementById('progressPercentage').textContent = percentage + '%';
+    document.getElementById('progressFill').style.width = percentage + '%';
+    document.getElementById('progressMessage').textContent = `${completedCount} من ${criteria.length} معايير مكتملة (${completedWeight} من ${totalWeight} نقطة)`;
+}
+
 function loadSavedReport(criterionId) {
     const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
     const report = savedReports[criterionId];
     if (!report) return false;
+
+    if (report.role) {
+        document.getElementById('role').value = report.role;
+        const backendRole = getBackendRole(report.role);
+        loadDataFromBackend(backendRole);
+    }
+
+    // تعبئة الحقول الأساسية
     document.getElementById('education').value = report.data.education || '';
     document.getElementById('school').value = report.data.school || '';
     document.getElementById('reporterType').value = report.data.reporterType || 'المعلم';
     document.getElementById('reporterName').value = report.data.reporterName || '';
     document.getElementById('principal').value = report.data.principal || '';
-    document.getElementById('grade').value = report.data.grade || '';
+    if (document.getElementById('grade')) document.getElementById('grade').value = report.data.grade || '';
     document.getElementById('term').value = report.data.term || '';
-    document.getElementById('subject').value = report.data.subject || '';
-    document.getElementById('lesson').value = report.data.lesson || '';
+    if (document.getElementById('subject')) document.getElementById('subject').value = report.data.subject || '';
+    if (document.getElementById('lesson')) document.getElementById('lesson').value = report.data.lesson || '';
     document.getElementById('target').value = report.data.target || '';
     document.getElementById('count').value = report.data.count || '';
     document.getElementById('place').value = report.data.place || 'داخل الصف';
@@ -3535,6 +4244,21 @@ function loadSavedReport(criterionId) {
     document.getElementById('improve').value = report.data.improve || '';
     document.getElementById('recomm').value = report.data.recomm || '';
     document.getElementById('manualReportTitle').value = report.title || '';
+
+    // تعبئة الحقول الخاصة
+    setTimeout(() => {
+        if (document.getElementById('fieldInput')) document.getElementById('fieldInput').value = report.data.field || '';
+        if (document.getElementById('initiativeInput')) document.getElementById('initiativeInput').value = report.data.initiative || '';
+        if (document.getElementById('durationInput')) document.getElementById('durationInput').value = report.data.duration || '';
+        if (document.getElementById('programTypeInput')) document.getElementById('programTypeInput').value = report.data.programType || '';
+        if (document.getElementById('careInput')) document.getElementById('careInput').value = report.data.care || '';
+        if (document.getElementById('awarenessInput')) document.getElementById('awarenessInput').value = report.data.awareness || '';
+        if (document.getElementById('interventionInput')) document.getElementById('interventionInput').value = report.data.intervention || '';
+        if (document.getElementById('supportInput')) document.getElementById('supportInput').value = report.data.support || '';
+        if (document.getElementById('familyInput')) document.getElementById('familyInput').value = report.data.family || '';
+        if (document.getElementById('envInput')) document.getElementById('envInput').value = report.data.env || '';
+    }, 200);
+
     const detailedPlace = report.data.detailedPlace || '';
     const detailedPlaceSelect = document.getElementById('detailedPlaceSelect');
     const detailedPlaceInput = document.getElementById('detailedPlaceInput');
@@ -3548,13 +4272,7 @@ function loadSavedReport(criterionId) {
         detailedPlaceInput.style.display = 'block';
         detailedPlaceInput.value = detailedPlace;
     }
-    if (report.role) {
-        document.getElementById('role').value = report.role;
-        const backendRole = getBackendRole(report.role);
-        loadDataFromBackend(backendRole);
-        // تحديث التسميات بعد تحميل الدور
-        updateFieldLabelsByRole(backendRole);
-    }
+
     window.otherTools = report.data.otherTools || [];
     updateOtherToolsList();
     togglePlaceFields();
@@ -3577,32 +4295,6 @@ function loadSavedReport(criterionId) {
     updateReport();
     showNotification('تم تحميل التقرير بنجاح!');
     return true;
-}
-
-async function downloadSavedReport(criterionId) {
-    if (loadSavedReport(criterionId)) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        await downloadPDF();
-    }
-}
-
-async function shareSavedReportWhatsApp(criterionId) {
-    if (loadSavedReport(criterionId)) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        await sharePDFWhatsApp();
-    }
-}
-
-function deleteSavedReport(criterionId) {
-    if (!confirm('هل أنت متأكد من حذف هذا التقرير؟')) return;
-    const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
-    delete savedReports[criterionId];
-    localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(savedReports));
-    calculateProgress();
-    if (document.getElementById('savedReportsModal').style.display === 'flex') {
-        closeSavedReports(); setTimeout(openSavedReports, 300);
-    }
-    showNotification('تم حذف التقرير بنجاح!');
 }
 
 function openSavedReports() {
@@ -3638,7 +4330,33 @@ function closeSavedReports() {
     document.getElementById('savedReportsModal').style.display = 'none';
 }
 
-// ==================== تحميل البيانات ====================
+async function downloadSavedReport(criterionId) {
+    if (loadSavedReport(criterionId)) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await downloadPDF();
+    }
+}
+
+async function shareSavedReportWhatsApp(criterionId) {
+    if (loadSavedReport(criterionId)) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await sharePDFWhatsApp();
+    }
+}
+
+function deleteSavedReport(criterionId) {
+    if (!confirm('هل أنت متأكد من حذف هذا التقرير؟')) return;
+    const savedReports = JSON.parse(localStorage.getItem(REPORTS_STORAGE_KEY)) || {};
+    delete savedReports[criterionId];
+    localStorage.setItem(REPORTS_STORAGE_KEY, JSON.stringify(savedReports));
+    calculateProgress();
+    if (document.getElementById('savedReportsModal').style.display === 'flex') {
+        closeSavedReports(); setTimeout(openSavedReports, 300);
+    }
+    showNotification('تم حذف التقرير بنجاح!');
+}
+
+// ==================== تحميل البيانات من الباك اند ====================
 async function loadDataFromBackend(backendRole) {
     window.currentRole = backendRole;
     try {
@@ -3712,7 +4430,7 @@ function handleRoleChange() {
     document.getElementById('criterionInfo').style.display = 'none';
 }
 
-// ==================== القوائم المتتالية ====================
+// ==================== القوائم المتتالية (مختصرة) ====================
 function loadSubcategories() {
     const criterionId = document.getElementById('criterionSelect').value;
     const subcategorySelect = document.getElementById('subcategorySelect');
@@ -3809,7 +4527,7 @@ function handleReportSearch() {
     }
 }
 
-// ==================== التعبئة الذكية ====================
+// ==================== التعبئة الذكية (مختصرة) ====================
 async function fillWithAI() {
     const activationCode = localStorage.getItem(ACTIVATION_KEY_NAME);
     if (!activationCode) { alert('الرجاء تفعيل الأداة أولاً باستخدام كود التفعيل'); return; }
@@ -3832,7 +4550,7 @@ async function fillWithAI() {
         const response = await fetch(BACKEND_URL + "/api/generate-report-content", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-Activation-Code': activationCode },
-            body: JSON.stringify({ criterion_id: criterionId, subcategory_id: subcategoryId, report_id: reportId, role: backendRole, report_data: { subject: document.getElementById('subject').value || 'الموضوع', lesson: document.getElementById('lesson').value || 'الدرس', grade: document.getElementById('grade').value || 'الصف', target: document.getElementById('target').value || 'الطلاب', place: document.getElementById('place').value || 'المدرسة', count: document.getElementById('count').value || 'عدد الطلاب', title: reportTitle } })
+            body: JSON.stringify({ criterion_id: criterionId, subcategory_id: subcategoryId, report_id: reportId, role: backendRole, report_data: { subject: document.getElementById('subject')?.value || 'الموضوع', lesson: document.getElementById('lesson')?.value || 'الدرس', grade: document.getElementById('grade')?.value || 'الصف', target: document.getElementById('target').value || 'الطلاب', place: document.getElementById('place').value || 'المدرسة', count: document.getElementById('count').value || 'عدد الطلاب', title: reportTitle } })
         });
         if (!response.ok) throw new Error("تعذر تنفيذ الطلب");
         const data = await response.json();
@@ -3861,326 +4579,6 @@ function showGuideBox() {
     document.getElementById('guideDownloadBtn').onclick = function() { downloadPDF(); clearInterval(window.guideTimerInterval); guideBox.style.display = 'none'; };
     document.getElementById('guideCloseBtn').onclick = function() { clearInterval(window.guideTimerInterval); guideBox.style.display = 'none'; };
     guideBox.style.display = 'block';
-}
-
-// ==================== تحديثات القوالب ====================
-function adaptSubjectLessonFont() { /* يمكن تنفيذها لاحقاً */ }
-function adaptSubjectLessonFontWithRetry() { adaptSubjectLessonFont(); setTimeout(adaptSubjectLessonFont, 100); }
-
-function updateOutsideReport() {
-    document.getElementById('outsideSchoolBox').innerText = document.getElementById('school').value || 'غير محدد';
-    document.getElementById('outsideEducationBox').innerText = document.getElementById('education').value || 'غير محدد';
-    const termValue = document.getElementById('term').value;
-    document.getElementById('outsideTermBox').innerText = termValue ? `الفصل الدراسي ${termValue}` : 'غير محدد';
-    document.getElementById('outsideCountBox').innerText = document.getElementById('count').value || 'غير محدد';
-    document.getElementById('outsideReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير';
-    document.getElementById('outsideTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('outsideDetailedPlaceBox').innerText = getDetailedPlaceValue() || 'غير محدد';
-    document.getElementById('outsideReporterNameBox').innerText = document.getElementById('reporterName').value || 'غير محدد';
-    document.getElementById('outsidePrincipalBox').innerText = document.getElementById('principal').value || 'غير محدد';
-    document.getElementById('outsideReporterTypeBox').innerText = document.getElementById('reporterType').value || 'مقدم التقرير';
-    document.getElementById('outsidePrincipalTypeBox').innerText = document.getElementById('principalTypeDisplay').value || 'المدير';
-    document.getElementById('outsideGoalBox').innerText = document.getElementById('goal').value || 'لم يتم تحديد الهدف التربوي';
-    document.getElementById('outsideSummaryBox').innerText = document.getElementById('summary').value || 'لم يتم إضافة نبذة مختصرة';
-    document.getElementById('outsideStepsBox').innerText = document.getElementById('steps').value || 'لم يتم تحديد إجراءات التنفيذ';
-    document.getElementById('outsideStrategiesBox').innerText = document.getElementById('strategies').value || 'لم يتم تحديد الاستراتيجيات';
-    document.getElementById('outsideStrengthsBox').innerText = document.getElementById('strengths').value || 'لم يتم تحديد نقاط القوة';
-    document.getElementById('outsideImproveBox').innerText = document.getElementById('improve').value || 'لم يتم تحديد نقاط التحسين';
-    document.getElementById('outsideRecommBox').innerText = document.getElementById('recomm').value || 'لم يتم تحديد التوصيات';
-    updateOutsideToolsList();
-}
-
-function updateAdminReport() {
-    document.getElementById('adminSchoolBox').innerText = document.getElementById('school').value || 'غير محدد';
-    document.getElementById('adminEducationBox').innerText = document.getElementById('education').value || 'غير محدد';
-    document.getElementById('adminTermBox').innerText = document.getElementById('term').value || 'غير محدد';
-    document.getElementById('adminPlaceBox').innerText = getDetailedPlaceValue() || 'غير محدد';
-    document.getElementById('adminTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('adminCountBox').innerText = document.getElementById('count').value || 'غير محدد';
-    document.getElementById('adminReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير إداري';
-    document.getElementById('adminGoalBox').innerText = document.getElementById('goal').value || '';
-    document.getElementById('adminStepsBox').innerText = document.getElementById('steps').value || '';
-    document.getElementById('adminSummaryBox').innerText = document.getElementById('summary').value || '';
-    document.getElementById('adminStrengthsBox').innerText = document.getElementById('strengths').value || '';
-    document.getElementById('adminImproveBox').innerText = document.getElementById('improve').value || '';
-    document.getElementById('adminRecommBox').innerText = document.getElementById('recomm').value || '';
-    document.getElementById('adminReporterNameBox').innerText = document.getElementById('reporterName').value || '';
-    document.getElementById('adminPrincipalBox').innerText = document.getElementById('principal').value || '';
-    document.getElementById('adminInitiativeBox').innerText = 'مبادرة ' + (document.getElementById('manualReportTitle').value || '');
-    document.getElementById('adminDurationBox').innerText = 'يوم واحد';
-    document.getElementById('adminFollowupBox').innerText = 'متابعة مستمرة';
-    document.getElementById('adminFieldBox').innerText = 'تربوي';
-}
-
-function updateSupervisorReport() {
-    document.getElementById('supervisorSchoolBox').innerText = document.getElementById('school').value || 'مكتب الإشراف';
-    document.getElementById('supervisorEducationBox').innerText = document.getElementById('education').value || 'غير محدد';
-    document.getElementById('supervisorTermBox').innerText = document.getElementById('term').value || 'غير محدد';
-    document.getElementById('supervisorPlaceBox').innerText = getDetailedPlaceValue() || 'غير محدد';
-    document.getElementById('supervisorTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('supervisorCountBox').innerText = document.getElementById('count').value || 'غير محدد';
-    document.getElementById('supervisorReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير إشرافي';
-    document.getElementById('supervisorGoalBox').innerText = document.getElementById('goal').value || '';
-    document.getElementById('supervisorStepsBox').innerText = document.getElementById('steps').value || '';
-    document.getElementById('supervisorPerformanceBox').innerText = document.getElementById('summary').value || ''; // نستخدم summary كمستوى أداء
-    document.getElementById('supervisorStrengthsBox').innerText = document.getElementById('strengths').value || '';
-    document.getElementById('supervisorImproveBox').innerText = document.getElementById('improve').value || '';
-    document.getElementById('supervisorRecommBox').innerText = document.getElementById('recomm').value || '';
-    document.getElementById('supervisorFollowupBox').innerText = 'متابعة مع المعلم';
-    document.getElementById('supervisorReporterNameBox').innerText = document.getElementById('reporterName').value || '';
-    document.getElementById('supervisorPrincipalBox').innerText = document.getElementById('principal').value || '';
-}
-
-function updateActivityReport() {
-    document.getElementById('activitySchoolBox').innerText = document.getElementById('school').value || 'مدرسة ................';
-    document.getElementById('activityEducationBox').innerText = document.getElementById('education').value || 'غير محدد';
-    document.getElementById('activityTermBox').innerText = document.getElementById('term').value || 'غير محدد';
-    document.getElementById('activityPlaceBox').innerText = getDetailedPlaceValue() || 'غير محدد';
-    document.getElementById('activityTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('activityCountBox').innerText = document.getElementById('count').value || 'غير محدد';
-    document.getElementById('activityReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير نشاط';
-    document.getElementById('activityGoalBox').innerText = document.getElementById('goal').value || '';
-    document.getElementById('activityStepsBox').innerText = document.getElementById('steps').value || '';
-    document.getElementById('activityInteractionBox').innerText = document.getElementById('summary').value || ''; // مستوى التفاعل
-    document.getElementById('activityStrengthsBox').innerText = document.getElementById('strengths').value || '';
-    document.getElementById('activityImproveBox').innerText = document.getElementById('improve').value || '';
-    document.getElementById('activityRecommBox').innerText = document.getElementById('recomm').value || '';
-    document.getElementById('activityFollowupBox').innerText = 'متابعة مستمرة';
-    document.getElementById('activityReporterNameBox').innerText = document.getElementById('reporterName').value || '';
-    document.getElementById('activityPrincipalBox').innerText = document.getElementById('principal').value || '';
-}
-
-function updateStudentReport() {
-    document.getElementById('studentSchoolBox').innerText = document.getElementById('school').value || 'اسم المدرسة';
-    document.getElementById('studentEducationBox').innerText = document.getElementById('education').value || 'غير محدد';
-    document.getElementById('studentTermBox').innerText = document.getElementById('term').value || 'غير محدد';
-    document.getElementById('studentPlaceBox').innerText = getDetailedPlaceValue() || 'غير محدد';
-    document.getElementById('studentTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('studentCountBox').innerText = document.getElementById('count').value || 'غير محدد';
-    document.getElementById('studentReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير توجيه طلابي';
-    document.getElementById('studentGoalBox').innerText = document.getElementById('goal').value || '';
-    document.getElementById('studentCareBox').innerText = document.getElementById('steps').value || ''; // الرعاية الطلابية
-    document.getElementById('studentAwarenessBox').innerText = document.getElementById('strategies').value || ''; // الوقاية
-    document.getElementById('studentInterventionBox').innerText = document.getElementById('strengths').value || ''; // التدخل
-    document.getElementById('studentSupportBox').innerText = document.getElementById('improve').value || ''; // التمكين
-    document.getElementById('studentFamilyBox').innerText = document.getElementById('recomm').value || ''; // الشراكة الأسرية
-    document.getElementById('studentEnvBox').innerText = document.getElementById('summary').value || ''; // البيئة
-    document.getElementById('studentReporterNameBox').innerText = document.getElementById('reporterName').value || '';
-    document.getElementById('studentPrincipalBox').innerText = document.getElementById('principal').value || '';
-    document.getElementById('studentInitiativeBox').innerText = 'مبادرة ' + (document.getElementById('manualReportTitle').value || '');
-    document.getElementById('studentDurationBox').innerText = 'أسبوع';
-}
-
-function updateHealthReport() {
-    document.getElementById('healthSchoolBox').innerText = document.getElementById('school').value || 'اسم المدرسة';
-    document.getElementById('healthEducationBox').innerText = document.getElementById('education').value || 'غير محدد';
-    document.getElementById('healthTermBox').innerText = document.getElementById('term').value || 'غير محدد';
-    document.getElementById('healthPlaceBox').innerText = getDetailedPlaceValue() || 'غير محدد';
-    document.getElementById('healthTargetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    document.getElementById('healthCountBox').innerText = document.getElementById('count').value || 'غير محدد';
-    document.getElementById('healthReportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير صحي';
-    document.getElementById('healthGoalBox').innerText = document.getElementById('goal').value || '';
-    document.getElementById('healthStepsBox').innerText = document.getElementById('steps').value || '';
-    document.getElementById('healthBenefitBox').innerText = document.getElementById('summary').value || ''; // مستوى الاستفادة
-    document.getElementById('healthResultsBox').innerText = document.getElementById('strengths').value || '';
-    document.getElementById('healthChallengesBox').innerText = document.getElementById('improve').value || '';
-    document.getElementById('healthRecommBox').innerText = document.getElementById('recomm').value || '';
-    document.getElementById('healthFollowupBox').innerText = 'متابعة صحية';
-    document.getElementById('healthReporterNameBox').innerText = document.getElementById('reporterName').value || '';
-    document.getElementById('healthPrincipalBox').innerText = document.getElementById('principal').value || '';
-    document.getElementById('healthFieldBox').innerText = 'توعوي';
-    document.getElementById('healthProgramBox').innerText = 'حملة توعوية';
-    document.getElementById('healthDurationBox').innerText = 'يوم واحد';
-}
-
-function updateReport() {
-    // تحديث القالب الداخلي
-    document.getElementById('educationBox').innerText = document.getElementById('education').value || 'غير محدد';
-    document.getElementById('schoolBox').innerText = document.getElementById('school').value || 'غير محدد';
-    const termValue = document.getElementById('term').value;
-    document.getElementById('termBox').innerText = termValue ? `الفصل الدراسي ${termValue}` : 'غير محدد';
-    document.getElementById('gradeBox').innerText = document.getElementById('grade').value || 'غير محدد';
-    document.getElementById('countBox').innerText = document.getElementById('count').value || 'غير محدد';
-    document.getElementById('reportTypeBox').innerText = document.getElementById('manualReportTitle').value || 'تقرير';
-    document.getElementById('targetBox').innerText = document.getElementById('target').value || 'غير محدد';
-    const placeValue = document.getElementById('place').value;
-    if (placeValue === 'داخل الصف') {
-        document.getElementById('placeBox').innerText = 'داخل الصف';
-    } else {
-        document.getElementById('placeBox').innerText = getDetailedPlaceValue() || 'خارج الصف';
-    }
-    document.getElementById('subjectBox').innerText = document.getElementById('subject').value || 'غير محدد';
-    document.getElementById('lessonBox').innerText = document.getElementById('lesson').value || 'غير محدد';
-    document.getElementById('reporterNameBox').innerText = document.getElementById('reporterName').value || 'غير محدد';
-    document.getElementById('principalBox').innerText = document.getElementById('principal').value || 'غير محدد';
-    document.getElementById('reporterTypeBox').innerText = document.getElementById('reporterType').value || 'مقدم التقرير';
-    document.getElementById('principalTypeBox').innerText = document.getElementById('principalTypeDisplay').value || 'المدير';
-    document.getElementById('goalBox').innerText = document.getElementById('goal').value || 'لم يتم تحديد الهدف التربوي';
-    document.getElementById('summaryBox').innerText = document.getElementById('summary').value || 'لم يتم إضافة نبذة مختصرة';
-    document.getElementById('stepsBox').innerText = document.getElementById('steps').value || 'لم يتم تحديد إجراءات التنفيذ';
-    document.getElementById('strategiesBox').innerText = document.getElementById('strategies').value || 'لم يتم تحديد الاستراتيجيات';
-    document.getElementById('strengthsBox').innerText = document.getElementById('strengths').value || 'لم يتم تحديد نقاط القوة';
-    document.getElementById('improveBox').innerText = document.getElementById('improve').value || 'لم يتم تحديد نقاط التحسين';
-    document.getElementById('recommBox').innerText = document.getElementById('recomm').value || 'لم يتم تحديد التوصيات';
-    updateToolsDisplay();
-    setTimeout(adaptSubjectLessonFontWithRetry, 10);
-    updateOutsideReport();
-    updateAdminReport();
-    updateSupervisorReport();
-    updateActivityReport();
-    updateStudentReport();
-    updateHealthReport();
-}
-
-function toggleTool(element) {
-    const checkbox = element.querySelector('input[type="checkbox"]');
-    checkbox.checked = !checkbox.checked;
-    if (checkbox.checked) element.classList.add('checked'); else element.classList.remove('checked');
-    updateToolsDisplay();
-}
-
-function updateToolsDisplay() {
-    const toolsListBox = document.getElementById('toolsListBox');
-    toolsListBox.innerHTML = '';
-    const selectedTools = [];
-    document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) selectedTools.push(cb.value); });
-    selectedTools.forEach(tool => {
-        const toolElement = document.createElement('div');
-        toolElement.className = 'tool';
-        toolElement.innerHTML = `<span>✓</span> ${tool}`;
-        toolsListBox.appendChild(toolElement);
-    });
-    if (selectedTools.length === 0) {
-        const noToolsMessage = document.createElement('div');
-        noToolsMessage.style.textAlign = 'center';
-        noToolsMessage.style.color = '#666';
-        noToolsMessage.style.fontSize = '9px';
-        noToolsMessage.style.padding = '4px';
-        noToolsMessage.textContent = 'لم يتم اختيار أي أدوات';
-        toolsListBox.appendChild(noToolsMessage);
-    }
-}
-
-function loadImage(input, ...targetIds) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            targetIds.forEach(id => {
-                const imgBox = document.getElementById(id);
-                if (imgBox) {
-                    imgBox.innerHTML = '';
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    imgBox.appendChild(img);
-                }
-            });
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-function saveTeacherData() {
-    saveCurrentReport();
-    const teacherData = {
-        education: document.getElementById('education').value,
-        school: document.getElementById('school').value,
-        grade: document.getElementById('grade').value,
-        subject: document.getElementById('subject').value,
-        target: document.getElementById('target').value,
-        place: document.getElementById('place').value,
-        detailedPlace: getDetailedPlaceValue(),
-        lesson: document.getElementById('lesson').value,
-        reporterName: document.getElementById('reporterName').value,
-        principal: document.getElementById('principal').value,
-        reporterType: document.getElementById('reporterType').value,
-        term: document.getElementById('term').value,
-        count: document.getElementById('count').value,
-        manualTitle: document.getElementById('manualReportTitle').value,
-        criterion: document.getElementById('criterionSelect').value,
-        subcategory: document.getElementById('subcategorySelect').value,
-        report: document.getElementById('reportSelect').value,
-        role: document.getElementById('role').value,
-        tools: []
-    };
-    const place = document.getElementById('place').value;
-    if (place === 'خارج الصف') {
-        document.querySelectorAll('#outsideToolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) teacherData.tools.push(cb.value); });
-        teacherData.tools = teacherData.tools.concat(window.otherTools);
-    } else {
-        document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) teacherData.tools.push(cb.value); });
-    }
-    ['goal','summary','steps','strategies','strengths','improve','recomm'].forEach(f => teacherData[f] = document.getElementById(f).value);
-    localStorage.setItem('teacherData', JSON.stringify(teacherData));
-    showNotification('تم حفظ بيانات مقدم التقرير بنجاح!');
-}
-
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.innerHTML = `<i class="fas fa-check-circle"></i><span>${message}</span>`;
-    document.body.appendChild(notification);
-    setTimeout(() => notification.classList.add('show'), 10);
-    setTimeout(() => { notification.classList.remove('show'); setTimeout(() => document.body.removeChild(notification), 400); }, 3000);
-}
-
-function loadTeacherData() {
-    const savedData = localStorage.getItem('teacherData');
-    if (savedData) {
-        const teacherData = JSON.parse(savedData);
-        document.getElementById('education').value = teacherData.education || '';
-        document.getElementById('school').value = teacherData.school || '';
-        document.getElementById('grade').value = teacherData.grade || '';
-        document.getElementById('subject').value = teacherData.subject || '';
-        document.getElementById('target').value = teacherData.target || '';
-        document.getElementById('place').value = teacherData.place || 'داخل الصف';
-        document.getElementById('lesson').value = teacherData.lesson || '';
-        document.getElementById('reporterName').value = teacherData.reporterName || '';
-        document.getElementById('principal').value = teacherData.principal || '';
-        document.getElementById('reporterType').value = teacherData.reporterType || 'المعلم';
-        document.getElementById('term').value = teacherData.term || '';
-        document.getElementById('count').value = teacherData.count || '';
-        document.getElementById('manualReportTitle').value = teacherData.manualTitle || '';
-        if (teacherData.role) {
-            document.getElementById('role').value = teacherData.role;
-            const backendRole = getBackendRole(teacherData.role);
-            loadDataFromBackend(backendRole);
-            // تحديث التسميات حسب الدور المحفوظ
-            updateFieldLabelsByRole(backendRole);
-        }
-        if (teacherData.detailedPlace) {
-            const detailedPlaceSelect = document.getElementById('detailedPlaceSelect');
-            const detailedPlaceInput = document.getElementById('detailedPlaceInput');
-            const options = Array.from(detailedPlaceSelect.options).map(opt => opt.value);
-            if (options.includes(teacherData.detailedPlace)) {
-                detailedPlaceSelect.value = teacherData.detailedPlace;
-                detailedPlaceInput.style.display = 'none';
-                detailedPlaceInput.value = '';
-            } else {
-                detailedPlaceSelect.value = 'أخرى';
-                detailedPlaceInput.style.display = 'block';
-                detailedPlaceInput.value = teacherData.detailedPlace;
-            }
-        }
-        ['goal','summary','steps','strategies','strengths','improve','recomm'].forEach(f => { if (teacherData[f]) document.getElementById(f).value = teacherData[f]; });
-        window.otherTools = teacherData.tools ? teacherData.tools.filter(t => !['مكبر صوت متنقل','أقماع تنظيم','صدريات فرق','بطاقات تعريف','أدوات رسم','حقيبة إسعافات أولية','جهاز لوحي للتوثيق'].includes(t)) : [];
-        updateOtherToolsList();
-        togglePlaceFields();
-        if (teacherData.place === 'خارج الصف') {
-            document.querySelectorAll('#outsideToolsGrid .tool-checkbox').forEach(toolElement => {
-                const checkbox = toolElement.querySelector('input[type="checkbox"]');
-                if (checkbox && teacherData.tools && teacherData.tools.includes(checkbox.value)) { checkbox.checked = true; toolElement.classList.add('checked'); }
-                else { checkbox.checked = false; toolElement.classList.remove('checked'); }
-            });
-        } else {
-            document.querySelectorAll('#toolsGrid .tool-checkbox').forEach(toolElement => {
-                const checkbox = toolElement.querySelector('input[type="checkbox"]');
-                if (checkbox && teacherData.tools && teacherData.tools.includes(checkbox.value)) { checkbox.checked = true; toolElement.classList.add('checked'); }
-                else { checkbox.checked = false; toolElement.classList.remove('checked'); }
-            });
-        }
-        updateReporterGender();
-        updateReport();
-    }
 }
 
 function parseAIResponseProfessional(response) {
@@ -4240,16 +4638,129 @@ function fallbackProfessionalAIParsing(response) {
     });
 }
 
+function saveTeacherData() {
+    saveCurrentReport();
+    const teacherData = {
+        education: document.getElementById('education').value,
+        school: document.getElementById('school').value,
+        grade: document.getElementById('grade')?.value || '',
+        subject: document.getElementById('subject')?.value || '',
+        target: document.getElementById('target').value,
+        place: document.getElementById('place').value,
+        detailedPlace: getDetailedPlaceValue(),
+        lesson: document.getElementById('lesson')?.value || '',
+        reporterName: document.getElementById('reporterName').value,
+        principal: document.getElementById('principal').value,
+        reporterType: document.getElementById('reporterType').value,
+        term: document.getElementById('term').value,
+        count: document.getElementById('count').value,
+        manualTitle: document.getElementById('manualReportTitle').value,
+        criterion: document.getElementById('criterionSelect').value,
+        subcategory: document.getElementById('subcategorySelect').value,
+        report: document.getElementById('reportSelect').value,
+        role: document.getElementById('role').value,
+        tools: []
+    };
+    const place = document.getElementById('place').value;
+    if (place === 'خارج الصف') {
+        document.querySelectorAll('#outsideToolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) teacherData.tools.push(cb.value); });
+        teacherData.tools = teacherData.tools.concat(window.otherTools);
+    } else {
+        document.querySelectorAll('#toolsGrid .tool-checkbox input[type="checkbox"]').forEach(cb => { if (cb.checked) teacherData.tools.push(cb.value); });
+    }
+    ['goal','summary','steps','strategies','strengths','improve','recomm'].forEach(f => teacherData[f] = document.getElementById(f).value);
+    // إضافة الحقول الخاصة
+    if (document.getElementById('fieldInput')) teacherData.field = document.getElementById('fieldInput').value;
+    if (document.getElementById('initiativeInput')) teacherData.initiative = document.getElementById('initiativeInput').value;
+    if (document.getElementById('durationInput')) teacherData.duration = document.getElementById('durationInput').value;
+    if (document.getElementById('programTypeInput')) teacherData.programType = document.getElementById('programTypeInput').value;
+    if (document.getElementById('careInput')) teacherData.care = document.getElementById('careInput').value;
+    if (document.getElementById('awarenessInput')) teacherData.awareness = document.getElementById('awarenessInput').value;
+    if (document.getElementById('interventionInput')) teacherData.intervention = document.getElementById('interventionInput').value;
+    if (document.getElementById('supportInput')) teacherData.support = document.getElementById('supportInput').value;
+    if (document.getElementById('familyInput')) teacherData.family = document.getElementById('familyInput').value;
+    if (document.getElementById('envInput')) teacherData.env = document.getElementById('envInput').value;
+    localStorage.setItem('teacherData', JSON.stringify(teacherData));
+    showNotification('تم حفظ بيانات مقدم التقرير بنجاح!');
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `<i class="fas fa-check-circle"></i><span>${message}</span>`;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.classList.add('show'), 10);
+    setTimeout(() => { notification.classList.remove('show'); setTimeout(() => document.body.removeChild(notification), 400); }, 3000);
+}
+
+function loadTeacherData() {
+    const savedData = localStorage.getItem('teacherData');
+    if (savedData) {
+        const teacherData = JSON.parse(savedData);
+        document.getElementById('education').value = teacherData.education || '';
+        document.getElementById('school').value = teacherData.school || '';
+        if (document.getElementById('grade')) document.getElementById('grade').value = teacherData.grade || '';
+        if (document.getElementById('subject')) document.getElementById('subject').value = teacherData.subject || '';
+        document.getElementById('target').value = teacherData.target || '';
+        document.getElementById('place').value = teacherData.place || 'داخل الصف';
+        if (document.getElementById('lesson')) document.getElementById('lesson').value = teacherData.lesson || '';
+        document.getElementById('reporterName').value = teacherData.reporterName || '';
+        document.getElementById('principal').value = teacherData.principal || '';
+        document.getElementById('reporterType').value = teacherData.reporterType || 'المعلم';
+        document.getElementById('term').value = teacherData.term || '';
+        document.getElementById('count').value = teacherData.count || '';
+        document.getElementById('manualReportTitle').value = teacherData.manualTitle || '';
+        if (teacherData.role) {
+            document.getElementById('role').value = teacherData.role;
+            const backendRole = getBackendRole(teacherData.role);
+            loadDataFromBackend(backendRole);
+        }
+        if (teacherData.detailedPlace) {
+            const detailedPlaceSelect = document.getElementById('detailedPlaceSelect');
+            const detailedPlaceInput = document.getElementById('detailedPlaceInput');
+            const options = Array.from(detailedPlaceSelect.options).map(opt => opt.value);
+            if (options.includes(teacherData.detailedPlace)) {
+                detailedPlaceSelect.value = teacherData.detailedPlace;
+                detailedPlaceInput.style.display = 'none';
+                detailedPlaceInput.value = '';
+            } else {
+                detailedPlaceSelect.value = 'أخرى';
+                detailedPlaceInput.style.display = 'block';
+                detailedPlaceInput.value = teacherData.detailedPlace;
+            }
+        }
+        ['goal','summary','steps','strategies','strengths','improve','recomm'].forEach(f => { if (teacherData[f]) document.getElementById(f).value = teacherData[f]; });
+        window.otherTools = teacherData.tools ? teacherData.tools.filter(t => !['مكبر صوت متنقل','أقماع تنظيم','صدريات فرق','بطاقات تعريف','أدوات رسم','حقيبة إسعافات أولية','جهاز لوحي للتوثيق'].includes(t)) : [];
+        updateOtherToolsList();
+        togglePlaceFields();
+        if (teacherData.place === 'خارج الصف') {
+            document.querySelectorAll('#outsideToolsGrid .tool-checkbox').forEach(toolElement => {
+                const checkbox = toolElement.querySelector('input[type="checkbox"]');
+                if (checkbox && teacherData.tools && teacherData.tools.includes(checkbox.value)) { checkbox.checked = true; toolElement.classList.add('checked'); }
+                else { checkbox.checked = false; toolElement.classList.remove('checked'); }
+            });
+        } else {
+            document.querySelectorAll('#toolsGrid .tool-checkbox').forEach(toolElement => {
+                const checkbox = toolElement.querySelector('input[type="checkbox"]');
+                if (checkbox && teacherData.tools && teacherData.tools.includes(checkbox.value)) { checkbox.checked = true; toolElement.classList.add('checked'); }
+                else { checkbox.checked = false; toolElement.classList.remove('checked'); }
+            });
+        }
+        updateReporterGender();
+        updateReport();
+    }
+}
+
 function clearData() {
     if (confirm("هل أنت متأكد من مسح بيانات مقدم التقرير والنصوص المولدة؟")) {
         document.getElementById('education').value = '';
         document.getElementById('school').value = '';
         document.getElementById('reporterName').value = '';
         document.getElementById('principal').value = '';
-        document.getElementById('grade').value = '';
+        if (document.getElementById('grade')) document.getElementById('grade').value = '';
         document.getElementById('term').value = '';
-        document.getElementById('subject').value = '';
-        document.getElementById('lesson').value = '';
+        if (document.getElementById('subject')) document.getElementById('subject').value = '';
+        if (document.getElementById('lesson')) document.getElementById('lesson').value = '';
         document.getElementById('target').value = '';
         document.getElementById('count').value = '';
         document.getElementById('place').value = 'داخل الصف';
@@ -4268,12 +4779,22 @@ function clearData() {
         document.getElementById('reportSelect').innerHTML = '<option value="">اختر التقرير</option>';
         document.getElementById('reportSelect').disabled = true;
         document.getElementById('criterionInfo').style.display = 'none';
+        // مسح الحقول الخاصة
+        const smallContainer = document.getElementById('smallRoleFields');
+        if (smallContainer) {
+            const inputs = smallContainer.querySelectorAll('input, textarea');
+            inputs.forEach(input => input.value = '');
+        }
+        const largeContainer = document.getElementById('largeExtraFields');
+        if (largeContainer) {
+            const inputs = largeContainer.querySelectorAll('input, textarea');
+            inputs.forEach(input => input.value = '');
+        }
         updateReport();
         showNotification('تم مسح بيانات مقدم التقرير والنصوص المولدة.');
     }
 }
 
-// ==================== دوال اختيار القالب ====================
 function getActiveReportTemplate() {
     const role = document.getElementById('role').value;
     const place = document.getElementById('place').value;
@@ -4299,7 +4820,6 @@ function getActiveReportTemplate() {
     return template;
 }
 
-// ==================== PDF وواتساب ====================
 async function downloadPDF() {
     await loadDates();
     document.querySelector('.top-small-buttons').style.visibility = 'hidden';
@@ -4386,7 +4906,6 @@ async function sharePDFWhatsApp() {
     });
 }
 
-// ==================== الإعدادات ====================
 function openSettings() {
     document.getElementById("settingsModal").style.display = "flex";
     loadSavedReportDate();
@@ -4428,7 +4947,6 @@ function loadSavedReportDate() {
     if (saved) document.getElementById("customReportDate").value = saved;
 }
 
-// ==================== التهيئة ====================
 document.addEventListener("DOMContentLoaded", async () => {
     const code = localStorage.getItem(ACTIVATION_KEY_NAME);
     if (!code) {
@@ -4454,8 +4972,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateReport();
     document.getElementById('reportSearch').addEventListener('input', handleReportSearch);
     document.addEventListener('click', function(e) { if (!e.target.closest('#reportSearchContainer')) document.getElementById('searchResults').style.display = 'none'; });
-    window.addEventListener('resize', adaptSubjectLessonFont);
-    document.addEventListener('input', function(e) { if (e.target.id === 'subject' || e.target.id === 'lesson') setTimeout(adaptSubjectLessonFont, 50); });
+    window.addEventListener('resize', () => {});
     document.getElementById('aiGuideBox').style.display = 'none';
 });
 </script>

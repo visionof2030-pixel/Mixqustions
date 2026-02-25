@@ -7,7 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ========== جميع الأنماط السابقة ========== */
+/* ========== جميع الأنماط كما هي دون تغيير ========== */
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
@@ -2620,7 +2620,7 @@ button[title]:hover::before {
 </div>
 
 <div class="box-objective">
-  <div class="box-title">الأهداف</div>
+  <div class="box-title">الأهداف الإدارية</div>
   <div class="box-content" id="adminGoalBox"></div>
 </div>
 
@@ -2630,12 +2630,12 @@ button[title]:hover::before {
 </div>
 
 <div class="row">
+  <div class="box"><div class="box-title">الاستراتيجيات المتبعة</div><div class="box-content" id="adminStrategiesBox"></div></div>
   <div class="box"><div class="box-title">نقاط القوة</div><div class="box-content" id="adminStrengthsBox"></div></div>
-  <div class="box"><div class="box-title">أولويات التطوير</div><div class="box-content" id="adminImproveBox"></div></div>
 </div>
 
 <div class="row">
-  <div class="box"><div class="box-title">التوصيات</div><div class="box-content" id="adminRecommBox"></div></div>
+  <div class="box"><div class="box-title">أولويات التطوير</div><div class="box-content" id="adminImproveBox"></div></div>
   <div class="box"><div class="box-title">خطة المتابعة</div><div class="box-content" id="adminFollowupBox"></div></div>
 </div>
 
@@ -2689,7 +2689,7 @@ button[title]:hover::before {
 </div>
 
 <div class="box-objective">
-  <div class="box-title">الأهداف</div>
+  <div class="box-title">الأهداف الإشرافية</div>
   <div class="box-content" id="supervisorGoalBox"></div>
 </div>
 
@@ -3404,7 +3404,7 @@ function updateFieldLabelsByRole(role) {
         labels.recommLabel = 'خطة الدعم والمتابعة';
     } else if (role === 'activity_leader') {
         labels.goalLabel = 'أهداف البرنامج';
-        labels.summaryLabel = 'مستوى التفاعل';
+        labels.summaryLabel = 'مستوى التفاعل والمشاركة';
         labels.stepsLabel = 'آلية التنفيذ';
         labels.strategiesLabel = 'أبرز الإنجازات';
         labels.strengthsLabel = 'أبرز الإنجازات';
@@ -3760,6 +3760,7 @@ function updateAdminReport() {
     const role = document.getElementById('role').value;
     if (role !== 'school_principal' && role !== 'vice_principal') return;
     
+    // الحقول الأساسية
     const schoolBox = document.getElementById('adminSchoolBox');
     if (schoolBox) schoolBox.innerText = document.getElementById('school').value || 'غير محدد';
     
@@ -3781,6 +3782,7 @@ function updateAdminReport() {
     const reportTypeBox = document.getElementById('adminReportTypeBox');
     if (reportTypeBox) reportTypeBox.innerText = document.getElementById('manualReportTitle').value || 'تقرير إداري';
     
+    // الحقول النصية الكبيرة
     const goalBox = document.getElementById('adminGoalBox');
     if (goalBox) goalBox.innerText = document.getElementById('goal').value || '';
     
@@ -3790,21 +3792,27 @@ function updateAdminReport() {
     const summaryBox = document.getElementById('adminSummaryBox');
     if (summaryBox) summaryBox.innerText = document.getElementById('summary').value || '';
     
+    // استراتيجيات
+    const strategiesBox = document.getElementById('adminStrategiesBox');
+    if (strategiesBox) strategiesBox.innerText = document.getElementById('strategies').value || '';
+    
     const strengthsBox = document.getElementById('adminStrengthsBox');
     if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || '';
     
     const improveBox = document.getElementById('adminImproveBox');
     if (improveBox) improveBox.innerText = document.getElementById('improve').value || '';
     
-    const recommBox = document.getElementById('adminRecommBox');
-    if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    const followupBox = document.getElementById('adminFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مستمرة';
     
+    // التوقيعات
     const reporterNameBox = document.getElementById('adminReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
     
     const principalBox = document.getElementById('adminPrincipalBox');
     if (principalBox) principalBox.innerText = document.getElementById('principal').value || '';
 
+    // الحقول الصغيرة
     const fieldInput = document.getElementById('fieldInput');
     const fieldBox = document.getElementById('adminFieldBox');
     if (fieldBox) fieldBox.innerText = fieldInput ? fieldInput.value || 'تربوي' : 'تربوي';
@@ -3816,9 +3824,6 @@ function updateAdminReport() {
     const durationInput = document.getElementById('durationInput');
     const durationBox = document.getElementById('adminDurationBox');
     if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'يوم واحد' : 'يوم واحد';
-    
-    const followupBox = document.getElementById('adminFollowupBox');
-    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مستمرة';
 }
 
 function updateSupervisorReport() {
@@ -3856,13 +3861,16 @@ function updateSupervisorReport() {
     if (performanceBox) performanceBox.innerText = document.getElementById('summary').value || '';
     
     const strengthsBox = document.getElementById('supervisorStrengthsBox');
-    if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || '';
+    if (strengthsBox) strengthsBox.innerText = document.getElementById('strategies').value || '';
     
     const improveBox = document.getElementById('supervisorImproveBox');
     if (improveBox) improveBox.innerText = document.getElementById('improve').value || '';
     
     const recommBox = document.getElementById('supervisorRecommBox');
     if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    
+    const followupBox = document.getElementById('supervisorFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مع المعلم';
     
     const reporterNameBox = document.getElementById('supervisorReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
@@ -3881,9 +3889,6 @@ function updateSupervisorReport() {
     const durationInput = document.getElementById('durationInput');
     const durationBox = document.getElementById('supervisorDurationBox');
     if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'حصة واحدة' : 'حصة واحدة';
-    
-    const followupBox = document.getElementById('supervisorFollowupBox');
-    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مع المعلم';
 }
 
 function updateActivityReport() {
@@ -3921,13 +3926,16 @@ function updateActivityReport() {
     if (interactionBox) interactionBox.innerText = document.getElementById('summary').value || '';
     
     const strengthsBox = document.getElementById('activityStrengthsBox');
-    if (strengthsBox) strengthsBox.innerText = document.getElementById('strengths').value || '';
+    if (strengthsBox) strengthsBox.innerText = document.getElementById('strategies').value || '';
     
     const improveBox = document.getElementById('activityImproveBox');
     if (improveBox) improveBox.innerText = document.getElementById('improve').value || '';
     
     const recommBox = document.getElementById('activityRecommBox');
     if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    
+    const followupBox = document.getElementById('activityFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مستمرة';
     
     const reporterNameBox = document.getElementById('activityReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
@@ -3946,9 +3954,6 @@ function updateActivityReport() {
     const durationInput = document.getElementById('durationInput');
     const durationBox = document.getElementById('activityDurationBox');
     if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'يوم واحد' : 'يوم واحد';
-    
-    const followupBox = document.getElementById('activityFollowupBox');
-    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مستمرة';
 }
 
 function updateStudentReport() {
@@ -3979,6 +3984,7 @@ function updateStudentReport() {
     const goalBox = document.getElementById('studentGoalBox');
     if (goalBox) goalBox.innerText = document.getElementById('goal').value || '';
 
+    // الحقول الكبيرة
     const careInput = document.getElementById('careInput');
     const careBox = document.getElementById('studentCareBox');
     if (careBox) careBox.innerText = careInput ? careInput.value || '' : '';
@@ -4003,12 +4009,14 @@ function updateStudentReport() {
     const envBox = document.getElementById('studentEnvBox');
     if (envBox) envBox.innerText = envInput ? envInput.value || '' : '';
 
+    // التوقيعات
     const reporterNameBox = document.getElementById('studentReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
     
     const principalBox = document.getElementById('studentPrincipalBox');
     if (principalBox) principalBox.innerText = document.getElementById('principal').value || '';
 
+    // الحقول الصغيرة
     const initiativeInput = document.getElementById('initiativeInput');
     const initiativeBox = document.getElementById('studentInitiativeBox');
     if (initiativeBox) initiativeBox.innerText = initiativeInput ? initiativeInput.value || ('مبادرة ' + (document.getElementById('manualReportTitle').value || '')) : ('مبادرة ' + (document.getElementById('manualReportTitle').value || ''));
@@ -4053,13 +4061,16 @@ function updateHealthReport() {
     if (benefitBox) benefitBox.innerText = document.getElementById('summary').value || '';
     
     const resultsBox = document.getElementById('healthResultsBox');
-    if (resultsBox) resultsBox.innerText = document.getElementById('strengths').value || '';
+    if (resultsBox) resultsBox.innerText = document.getElementById('strategies').value || '';
     
     const challengesBox = document.getElementById('healthChallengesBox');
     if (challengesBox) challengesBox.innerText = document.getElementById('improve').value || '';
     
     const recommBox = document.getElementById('healthRecommBox');
     if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
+    
+    const followupBox = document.getElementById('healthFollowupBox');
+    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة صحية';
     
     const reporterNameBox = document.getElementById('healthReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
@@ -4078,9 +4089,6 @@ function updateHealthReport() {
     const durationInput = document.getElementById('durationInput');
     const durationBox = document.getElementById('healthDurationBox');
     if (durationBox) durationBox.innerText = durationInput ? durationInput.value || 'يوم واحد' : 'يوم واحد';
-    
-    const followupBox = document.getElementById('healthFollowupBox');
-    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة صحية';
 }
 
 function toggleTool(element) {
@@ -4131,7 +4139,157 @@ function loadImage(input, ...targetIds) {
     }
 }
 
-// ==================== حفظ واستعراض التقارير (مختصر) ====================
+// ==================== دالة تعيين الحقول حسب الدور ====================
+function getFieldMappingByRole(role) {
+    // التعيين الافتراضي للمعلم وبقية الأدوار (ما عدا المدير والمشرف التربوي)
+    const defaultMapping = {
+        '1': 'goal',
+        '2': 'summary',
+        '3': 'steps',
+        '4': 'strategies',
+        '5': 'strengths',
+        '6': 'improve',
+        '7': 'recomm'
+    };
+
+    // تعيين خاص للمدير والوكيل
+    if (role === 'school_principal' || role === 'vice_principal') {
+        return {
+            '1': 'goal',      // الهدف القيادي
+            '2': 'summary',    // النتائج
+            '3': 'steps',      // الإجراءات المنفذة
+            '4': 'strategies', // الاستراتيجيات المتبعة
+            '5': 'strengths',  // نقاط القوة
+            '6': 'improve',    // أولويات التطوير
+            '7': 'recomm'      // خطة المتابعة
+        };
+    }
+    
+    // تعيين خاص للمشرف التربوي
+    if (role === 'educational_supervisor') {
+        return {
+            '1': 'goal',      // الأهداف الإشرافية
+            '2': 'summary',    // مستوى الأداء
+            '3': 'steps',      // الإجراءات
+            '4': 'strategies', // جوانب التميز
+            '5': 'strengths',  // جوانب التميز (قد يكون مكرراً، لكنه مقصود)
+            '6': 'improve',    // مجالات التحسين
+            '7': 'recomm'      // خطة الدعم والمتابعة
+        };
+    }
+
+    // تعيين خاص للموجه الطلابي
+    if (role === 'student_guide') {
+        return {
+            '1': 'goal',      // الأهداف
+            '2': 'summary',    // الرعاية الطلابية
+            '3': 'steps',      // الوقاية والتوعية
+            '4': 'strategies', // التدخل ومعالجة الحالات
+            '5': 'strengths',  // التمكين والدعم
+            '6': 'improve',    // الشراكة الأسرية
+            '7': 'recomm'      // تطوير البيئة المدرسية
+        };
+    }
+
+    // تعيين خاص للموجه الصحي
+    if (role === 'health_guide') {
+        return {
+            '1': 'goal',      // أهداف البرنامج الصحي
+            '2': 'summary',    // مستوى الاستفادة
+            '3': 'steps',      // الإجراءات المتخذة
+            '4': 'strategies', // أبرز النتائج
+            '5': 'strengths',  // أبرز النتائج (مكرر)
+            '6': 'improve',    // التحديات الصحية
+            '7': 'recomm'      // خطة المتابعة الصحية
+        };
+    }
+
+    // تعيين خاص لرائد النشاط
+    if (role === 'activity_leader') {
+        return {
+            '1': 'goal',      // أهداف البرنامج
+            '2': 'summary',    // مستوى التفاعل والمشاركة
+            '3': 'steps',      // آلية التنفيذ
+            '4': 'strategies', // أبرز الإنجازات
+            '5': 'strengths',  // أبرز الإنجازات (مكرر)
+            '6': 'improve',    // التحديات
+            '7': 'recomm'      // خطة المتابعة
+        };
+    }
+
+    return defaultMapping;
+}
+
+// ==================== دالة parseAIResponseProfessional المعدلة ====================
+function parseAIResponseProfessional(response) {
+    const role = document.getElementById('role').value;
+    const fieldMapping = getFieldMappingByRole(role);
+    
+    const lines = response.split('\n').filter(l => l.trim());
+    let found = 0;
+    
+    lines.forEach(line => {
+        const match = line.match(/^(\d+)[\.\-]\s*(.+)/);
+        if (match) {
+            const num = match[1];
+            let content = match[2].trim();
+            content = removeFieldTitles(content);
+            
+            if (fieldMapping[num]) {
+                content = ensureWordCount(content, 25);
+                document.getElementById(fieldMapping[num]).value = content;
+                found++;
+            }
+        }
+    });
+    
+    if (found < 3) fallbackProfessionalAIParsing(response, role);
+    updateReport();
+}
+
+// ==================== دالة fallbackProfessionalAIParsing المعدلة ====================
+function fallbackProfessionalAIParsing(response, role) {
+    const fieldMapping = getFieldMappingByRole(role);
+    const sentences = response.split(/[\.\n]/).filter(s => s.trim().length > 20 && !s.match(/الهدف|نبذة|إجراءات|الاستراتيجيات|نقاط القوة|نقاط التحسين|التوصيات|خطة المتابعة/i));
+    
+    // ترتيب الحقول حسب الأهمية (نفس ترتيب الأرقام)
+    const orderedFields = ['goal', 'summary', 'steps', 'strategies', 'strengths', 'improve', 'recomm'];
+    
+    let idx = 0;
+    orderedFields.forEach(field => {
+        if (idx < sentences.length) {
+            let content = sentences[idx].trim();
+            content = removeFieldTitles(content);
+            content = ensureWordCount(content, 25);
+            document.getElementById(field).value = content;
+            idx++;
+        }
+    });
+}
+
+function removeFieldTitles(content) {
+    const titles = ['الهدف التربوي','نبذة مختصرة','إجراءات التنفيذ','الاستراتيجيات','نقاط القوة','نقاط التحسين','التوصيات','هو:','تشمل:','يتضمن:','يتمثل في','يشمل','تحتوي','تتضمن'];
+    let cleaned = content;
+    titles.forEach(t => {
+        cleaned = cleaned.replace(new RegExp(`^${t}[:\\.\\-]?\\s*`,'i'), '');
+        cleaned = cleaned.replace(new RegExp(`\\s*${t}[:\\.\\-]?\\s*`,'gi'), ' ');
+    });
+    return cleaned.trim().replace(/\s+/g, ' ') || content;
+}
+
+function ensureWordCount(content, target) {
+    const words = content.split(' ');
+    if (words.length >= target-5 && words.length <= target+5) return content;
+    if (words.length < target-5) {
+        const phrases = ['مع التركيز على تحقيق أهداف التعلم وتنمية المهارات الأساسية','بما يسهم في رفع مستوى التحصيل الدراسي وتحسين المخرجات التعليمية','مع مراعاة الفروق الفردية وتنويع أساليب التدريس','لضمان تحقيق رؤية التعليم وتطوير العملية التعليمية','مع الاستفادة من أفضل الممارسات التربوية والتقنيات التعليمية الحديثة'];
+        let extended = content;
+        while (extended.split(' ').length < target) extended += ' ' + phrases[Math.floor(Math.random()*phrases.length)];
+        return extended;
+    }
+    return words.slice(0,target).join(' ');
+}
+
+// ==================== حفظ واستعراض التقارير ====================
 function saveCurrentReport() {
     const reportTitle = document.getElementById('manualReportTitle').value.trim();
     if (!reportTitle) { showNotification('الرجاء إدخال عنوان التقرير'); return false; }
@@ -4430,7 +4588,7 @@ function handleRoleChange() {
     document.getElementById('criterionInfo').style.display = 'none';
 }
 
-// ==================== القوائم المتتالية (مختصرة) ====================
+// ==================== القوائم المتتالية ====================
 function loadSubcategories() {
     const criterionId = document.getElementById('criterionSelect').value;
     const subcategorySelect = document.getElementById('subcategorySelect');
@@ -4527,7 +4685,7 @@ function handleReportSearch() {
     }
 }
 
-// ==================== التعبئة الذكية (مختصرة) ====================
+// ==================== التعبئة الذكية (المعدلة لإرسال الحقول الإضافية) ====================
 async function fillWithAI() {
     const activationCode = localStorage.getItem(ACTIVATION_KEY_NAME);
     if (!activationCode) { alert('الرجاء تفعيل الأداة أولاً باستخدام كود التفعيل'); return; }
@@ -4539,6 +4697,12 @@ async function fillWithAI() {
     const reportId = document.getElementById('reportSelect').value || null;
     const uiRole = document.getElementById('role').value;
     const backendRole = getBackendRole(uiRole);
+    
+    // قراءة الحقول الإضافية
+    const field = document.getElementById('fieldInput')?.value || '';
+    const initiative = document.getElementById('initiativeInput')?.value || '';
+    const duration = document.getElementById('durationInput')?.value || '';
+    
     const aiButton = document.getElementById('aiFillFloatingBtn');
     const originalText = aiButton.querySelector('.floating-ai-text').textContent;
     const originalIcon = aiButton.querySelector('.floating-ai-icon').className;
@@ -4550,7 +4714,24 @@ async function fillWithAI() {
         const response = await fetch(BACKEND_URL + "/api/generate-report-content", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'X-Activation-Code': activationCode },
-            body: JSON.stringify({ criterion_id: criterionId, subcategory_id: subcategoryId, report_id: reportId, role: backendRole, report_data: { subject: document.getElementById('subject')?.value || 'الموضوع', lesson: document.getElementById('lesson')?.value || 'الدرس', grade: document.getElementById('grade')?.value || 'الصف', target: document.getElementById('target').value || 'الطلاب', place: document.getElementById('place').value || 'المدرسة', count: document.getElementById('count').value || 'عدد الطلاب', title: reportTitle } })
+            body: JSON.stringify({ 
+                criterion_id: criterionId, 
+                subcategory_id: subcategoryId, 
+                report_id: reportId, 
+                role: backendRole, 
+                report_data: { 
+                    subject: document.getElementById('subject')?.value || '', 
+                    lesson: document.getElementById('lesson')?.value || '', 
+                    grade: document.getElementById('grade')?.value || '', 
+                    target: document.getElementById('target').value || '', 
+                    place: document.getElementById('place').value || '', 
+                    count: document.getElementById('count').value || '', 
+                    title: reportTitle,
+                    field: field,
+                    initiative: initiative,
+                    duration: duration
+                } 
+            })
         });
         if (!response.ok) throw new Error("تعذر تنفيذ الطلب");
         const data = await response.json();
@@ -4579,63 +4760,6 @@ function showGuideBox() {
     document.getElementById('guideDownloadBtn').onclick = function() { downloadPDF(); clearInterval(window.guideTimerInterval); guideBox.style.display = 'none'; };
     document.getElementById('guideCloseBtn').onclick = function() { clearInterval(window.guideTimerInterval); guideBox.style.display = 'none'; };
     guideBox.style.display = 'block';
-}
-
-function parseAIResponseProfessional(response) {
-    const lines = response.split('\n').filter(l => l.trim());
-    const fieldMapping = { '1':'goal','2':'summary','3':'steps','4':'strategies','5':'strengths','6':'improve','7':'recomm' };
-    let found = 0;
-    lines.forEach(line => {
-        const match = line.match(/^(\d+)[\.\-]\s*(.+)/);
-        if (match) {
-            let content = match[2].trim();
-            content = removeFieldTitles(content);
-            if (fieldMapping[match[1]]) {
-                content = ensureWordCount(content, 25);
-                document.getElementById(fieldMapping[match[1]]).value = content;
-                found++;
-            }
-        }
-    });
-    if (found < 3) fallbackProfessionalAIParsing(response);
-    updateReport();
-}
-
-function removeFieldTitles(content) {
-    const titles = ['الهدف التربوي','نبذة مختصرة','إجراءات التنفيذ','الاستراتيجيات','نقاط القوة','نقاط التحسين','التوصيات','هو:','تشمل:','يتضمن:','يتمثل في','يشمل','تحتوي','تتضمن'];
-    let cleaned = content;
-    titles.forEach(t => {
-        cleaned = cleaned.replace(new RegExp(`^${t}[:\\.\\-]?\\s*`,'i'), '');
-        cleaned = cleaned.replace(new RegExp(`\\s*${t}[:\\.\\-]?\\s*`,'gi'), ' ');
-    });
-    return cleaned.trim().replace(/\s+/g, ' ') || content;
-}
-
-function ensureWordCount(content, target) {
-    const words = content.split(' ');
-    if (words.length >= target-5 && words.length <= target+5) return content;
-    if (words.length < target-5) {
-        const phrases = ['مع التركيز على تحقيق أهداف التعلم وتنمية المهارات الأساسية','بما يسهم في رفع مستوى التحصيل الدراسي وتحسين المخرجات التعليمية','مع مراعاة الفروق الفردية وتنويع أساليب التدريس','لضمان تحقيق رؤية التعليم وتطوير العملية التعليمية','مع الاستفادة من أفضل الممارسات التربوية والتقنيات التعليمية الحديثة'];
-        let extended = content;
-        while (extended.split(' ').length < target) extended += ' ' + phrases[Math.floor(Math.random()*phrases.length)];
-        return extended;
-    }
-    return words.slice(0,target).join(' ');
-}
-
-function fallbackProfessionalAIParsing(response) {
-    const sentences = response.split(/[\.\n]/).filter(s => s.trim().length>20 && !s.match(/الهدف التربوي|نبذة مختصرة|إجراءات التنفيذ|الاستراتيجيات|نقاط القوة|نقاط التحسين|التوصيات/i));
-    const fields = ['goal','summary','steps','strategies','strengths','improve','recomm'];
-    let idx = 0;
-    fields.forEach((f,i) => {
-        if (idx < sentences.length) {
-            let content = sentences[idx].trim();
-            content = removeFieldTitles(content);
-            content = ensureWordCount(content,25);
-            document.getElementById(f).value = content;
-            idx++;
-        }
-    });
 }
 
 function saveTeacherData() {

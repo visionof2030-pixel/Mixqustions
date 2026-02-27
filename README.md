@@ -2906,8 +2906,8 @@ button[title]:hover::before {
 </div>
 
 <div class="row">
-  <div class="box"><div class="box-title">أبرز النتائج</div><div class="box-content" id="healthResultsBox"></div></div>
   <div class="box"><div class="box-title">التحديات الصحية</div><div class="box-content" id="healthChallengesBox"></div></div>
+  <div class="box"><div class="box-title">أبرز النتائج</div><div class="box-content" id="healthResultsBox"></div></div>
 </div>
 
 <div class="row">
@@ -3399,17 +3399,17 @@ function updateFieldLabelsByRole(role) {
         labels.summaryLabel = 'مستوى الأداء';
         labels.stepsLabel = 'الإجراءات';
         labels.strategiesLabel = 'جوانب التميز';
-        labels.strengthsLabel = 'جوانب التميز';
+        labels.strengthsLabel = 'خطة الدعم والمتابعة';
         labels.improveLabel = 'مجالات التحسين';
-        labels.recommLabel = 'خطة الدعم والمتابعة';
+        labels.recommLabel = 'التوصيات';
     } else if (role === 'activity_leader') {
         labels.goalLabel = 'أهداف البرنامج';
         labels.summaryLabel = 'مستوى التفاعل والمشاركة';
         labels.stepsLabel = 'آلية التنفيذ';
         labels.strategiesLabel = 'أبرز الإنجازات';
-        labels.strengthsLabel = 'أبرز الإنجازات';
+        labels.strengthsLabel = 'خطة المتابعة';
         labels.improveLabel = 'التحديات';
-        labels.recommLabel = 'خطة المتابعة';
+        labels.recommLabel = 'التوصيات التطويرية';
     } else if (role === 'student_guide') {
         labels.goalLabel = 'الأهداف';
         labels.summaryLabel = 'الرعاية الطلابية';
@@ -3423,9 +3423,9 @@ function updateFieldLabelsByRole(role) {
         labels.summaryLabel = 'مستوى الاستفادة';
         labels.stepsLabel = 'الإجراءات المتخذة';
         labels.strategiesLabel = 'أبرز النتائج';
-        labels.strengthsLabel = 'أبرز النتائج';
+        labels.strengthsLabel = 'خطة المتابعة الصحية';
         labels.improveLabel = 'التحديات الصحية';
-        labels.recommLabel = 'خطة المتابعة الصحية';
+        labels.recommLabel = 'التوصيات الوقائية';
     }
 
     document.getElementById('goalLabel').textContent = labels.goalLabel;
@@ -3869,8 +3869,9 @@ function updateSupervisorReport() {
     const recommBox = document.getElementById('supervisorRecommBox');
     if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
     
+    // خطة الدعم والمتابعة تأخذ من حقل strengths
     const followupBox = document.getElementById('supervisorFollowupBox');
-    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مع المعلم';
+    if (followupBox) followupBox.innerText = document.getElementById('strengths').value || '';
     
     const reporterNameBox = document.getElementById('supervisorReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
@@ -3935,7 +3936,7 @@ function updateActivityReport() {
     if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
     
     const followupBox = document.getElementById('activityFollowupBox');
-    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة مستمرة';
+    if (followupBox) followupBox.innerText = document.getElementById('strengths').value || '';
     
     const reporterNameBox = document.getElementById('activityReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
@@ -4060,17 +4061,17 @@ function updateHealthReport() {
     const benefitBox = document.getElementById('healthBenefitBox');
     if (benefitBox) benefitBox.innerText = document.getElementById('summary').value || '';
     
-    const resultsBox = document.getElementById('healthResultsBox');
-    if (resultsBox) resultsBox.innerText = document.getElementById('strategies').value || '';
-    
     const challengesBox = document.getElementById('healthChallengesBox');
     if (challengesBox) challengesBox.innerText = document.getElementById('improve').value || '';
+    
+    const resultsBox = document.getElementById('healthResultsBox');
+    if (resultsBox) resultsBox.innerText = document.getElementById('strategies').value || '';
     
     const recommBox = document.getElementById('healthRecommBox');
     if (recommBox) recommBox.innerText = document.getElementById('recomm').value || '';
     
     const followupBox = document.getElementById('healthFollowupBox');
-    if (followupBox) followupBox.innerText = document.getElementById('recomm').value || 'متابعة صحية';
+    if (followupBox) followupBox.innerText = document.getElementById('strengths').value || '';
     
     const reporterNameBox = document.getElementById('healthReporterNameBox');
     if (reporterNameBox) reporterNameBox.innerText = document.getElementById('reporterName').value || '';
@@ -4169,12 +4170,12 @@ function getFieldMappingByRole(role) {
     if (role === 'educational_supervisor') {
         return {
             '1': 'goal',      // الأهداف الإشرافية
-            '2': 'summary',    // مستوى الأداء
-            '3': 'steps',      // الإجراءات
+            '2': 'steps',     // الإجراءات
+            '3': 'summary',   // مستوى الأداء
             '4': 'strategies', // جوانب التميز
-            '5': 'strengths',  // جوانب التميز (قد يكون مكرراً، لكنه مقصود)
-            '6': 'improve',    // مجالات التحسين
-            '7': 'recomm'      // خطة الدعم والمتابعة
+            '5': 'improve',   // مجالات التحسين
+            '6': 'recomm',    // التوصيات
+            '7': 'strengths'  // خطة الدعم والمتابعة
         };
     }
 
@@ -4195,12 +4196,12 @@ function getFieldMappingByRole(role) {
     if (role === 'health_guide') {
         return {
             '1': 'goal',      // أهداف البرنامج الصحي
-            '2': 'summary',    // مستوى الاستفادة
-            '3': 'steps',      // الإجراءات المتخذة
-            '4': 'strategies', // أبرز النتائج
-            '5': 'strengths',  // أبرز النتائج (مكرر)
-            '6': 'improve',    // التحديات الصحية
-            '7': 'recomm'      // خطة المتابعة الصحية
+            '2': 'steps',     // الإجراءات المتخذة
+            '3': 'summary',   // مستوى الاستفادة
+            '4': 'improve',   // التحديات الصحية
+            '5': 'strategies', // أبرز النتائج
+            '6': 'recomm',    // التوصيات الوقائية
+            '7': 'strengths'  // خطة المتابعة الصحية
         };
     }
 
@@ -4208,12 +4209,12 @@ function getFieldMappingByRole(role) {
     if (role === 'activity_leader') {
         return {
             '1': 'goal',      // أهداف البرنامج
-            '2': 'summary',    // مستوى التفاعل والمشاركة
-            '3': 'steps',      // آلية التنفيذ
+            '2': 'steps',     // آلية التنفيذ
+            '3': 'summary',   // مستوى التفاعل والمشاركة
             '4': 'strategies', // أبرز الإنجازات
-            '5': 'strengths',  // أبرز الإنجازات (مكرر)
-            '6': 'improve',    // التحديات
-            '7': 'recomm'      // خطة المتابعة
+            '5': 'improve',   // التحديات
+            '6': 'recomm',    // التوصيات التطويرية
+            '7': 'strengths'  // خطة المتابعة
         };
     }
 
